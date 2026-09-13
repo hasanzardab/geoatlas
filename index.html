@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>GeoAtlas | İnteraktiv Coğrafiya Platforması</title>
+<link rel="icon" type="image/png" href="icon/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        <div class="logo-icon">🌍</div>
+        <div class="logo-text">
+            <strong>GeoAtlas</strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="index.html">Ana səhifə</a>
+        <a href="index.html#xeriteler" data-nav="maps">İnteraktiv Xəritələr</a>
+        <a href="testler/testler.html">Testlər</a>
+        <a href="haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="eyebrow">
+        İnteraktiv Xəritələr Platforması
+    </div>
+
+    <h1>
+        Dünyanı<br>
+        <span>xəritədə kəşf et.</span>
+    </h1>
+
+    <p>
+        Ölkələrin inzibati xəritələrini araşdır — hər bir rayon və şəhər
+        haqqında ətraflı coğrafi məlumat əldə et. Aşağıdan ölkə seç və
+        interaktiv xəritəyə keç.
+    </p>
+
+</section>
+
+
+<div class="stats-bar">
+
+    <div class="stat-box">
+        <strong id="statReady">1</strong>
+        <span>Hazır xəritə</span>
+    </div>
+
+    <div class="stat-box">
+        <strong id="statTotal">5</strong>
+        <span>Ölkə siyahıda</span>
+    </div>
+
+    <div class="stat-box">
+        <strong>77</strong>
+        <span>İnzibati ərazi (Azərbaycan)</span>
+    </div>
+
+    <div class="stat-box">
+        <strong>100%</strong>
+        <span>Pulsuz və açıq mənbə</span>
+    </div>
+
+</div>
+
+
+<section class="spotlight">
+
+    <a href="countries/azerbaijan.html" class="spotlight-card">
+
+        <div>
+            <div class="spotlight-tag">⭐ Seçilmiş xəritə</div>
+            <h3><span>🇦🇿</span> Azərbaycan</h3>
+            <p>
+                77 rayon və şəhərin tam inzibati sərhədləri, hər biri üçün
+                mərkəz, sahə, əhali və coğrafi xüsusiyyətlər — kliklə,
+                axtar, kəşf et.
+            </p>
+        </div>
+
+        <div class="spotlight-cta">
+            Xəritəyə bax →
+        </div>
+
+    </a>
+
+</section>
+
+
+<section class="features">
+
+    <div class="section-head">
+        <div class="eyebrow">Platforma haqqında</div>
+        <h2>Sadə, sürətli, dəqiq coğrafiya məlumatı.</h2>
+        <p>
+            GeoAtlas hər ölkənin inzibati bölgüsünü vizual şəkildə göstərir
+            və hər əraziyə aid faktları bir kliklə əlçatan edir.
+        </p>
+    </div>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+            <div class="f-icon">🗺️</div>
+            <strong>İnteraktiv xəritələr</strong>
+            <p>
+                Real inzibati sərhədlər üzərində klikləyərək hər rayonu,
+                şəhəri və ya vilayəti araşdır.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="f-icon">🔎</div>
+            <strong>Sürətli axtarış</strong>
+            <p>
+                İstər ölkə, istərsə də ölkə daxilində konkret ərazi
+                axtarışı — nəticələr anında görünür.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="f-icon">📊</div>
+            <strong>Ətraflı məlumat</strong>
+            <p>
+                Hər ərazi üçün inzibati mərkəz, sahə, əhali və əsas
+                coğrafi xüsusiyyətlər bir baxışda.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="listbox-section" id="xeriteler" style="margin-top:70px;">
+
+    <div class="listbox-head">
+        <div>
+            <h3>Bütün ölkələr</h3>
+            <p>Hazır olan ölkə xəritələrindən birini seç, ya da axtarış qutusundan istədiyini tap.</p>
+        </div>
+    </div>
+
+    <div id="countryListbox"></div>
+
+</section>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="assets/js/site.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ready = SITE_COUNTRIES.filter(c => c.status === "ready").length;
+        document.getElementById("statReady").textContent = ready;
+        document.getElementById("statTotal").textContent = SITE_COUNTRIES.length;
+    });
+</script>
+
+</body>
+</html>

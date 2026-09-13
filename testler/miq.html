@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>MİQ Sınaq Testi | Coğrafiya Müəllimliyi | GeoAtlas</title>
+<meta name="description" content="Coğrafiya müəllimi vəzifəsinə namizədlər üçün fənn bilgisi və qiymətləndirmə metodikasını birləşdirən, vaxt məhdudiyyətli MİQ sınaq testi.">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        <div class="logo-icon">🌍</div>
+        <div class="logo-text">
+            <strong>GeoAtlas</strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="testler.html" class="current">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <a href="testler.html">Testlər</a>
+        <span class="sep">/</span>
+        <span class="current">MİQ</span>
+    </div>
+</div>
+
+
+<div class="quiz-wrap">
+
+    <div class="quiz-intro" id="quizIntro">
+
+        <div class="quiz-intro-top">
+            <div class="quiz-intro-icon">🎓</div>
+            <div>
+                <div class="code">MİQ · Müəllimlərin İşə Qəbulu</div>
+                <h2>Coğrafiya müəllimliyi üzrə sınaq</h2>
+            </div>
+        </div>
+
+        <p>
+            Bu sınaq coğrafiya müəllimi vəzifəsinə namizədlər üçün nəzərdə
+            tutulub: dəqiq ədədi göstəricilər və az tanınan coğrafi
+            faktlarla yanaşı, məktəbdaxili qiymətləndirmə (KSQ, BSQ,
+            diaqnostik) üzrə əsas metodiki anlayışları da əhatə edir.
+            Real imtahan təcrübəsinə uyğun olaraq test vaxt
+            məhdudiyyətlidir — vaxt bitdikdə test avtomatik yekunlaşır.
+        </p>
+
+        <div class="quiz-intro-facts">
+            <div class="stat">
+                <small>Sual sayı</small>
+                <strong>15</strong>
+            </div>
+            <div class="stat">
+                <small>Vaxt limiti</small>
+                <strong>10:00</strong>
+            </div>
+            <div class="stat">
+                <small>Keçid balı</small>
+                <strong>11 / 15</strong>
+            </div>
+        </div>
+
+        <button class="quiz-start-btn">Sınağa başla →</button>
+
+    </div>
+
+
+    <div class="quiz-card" id="quizCard">
+
+        <div class="quiz-body">
+
+            <div class="quiz-top-row">
+                <div class="quiz-progress-label">Sual 1 / 15</div>
+                <div class="quiz-timer"></div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" style="width:0%"></div>
+            </div>
+
+            <div class="quiz-question"></div>
+            <div class="quiz-options"></div>
+
+            <button class="quiz-next-btn">Növbəti sual →</button>
+
+        </div>
+
+        <div class="quiz-result"></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/testler.js"></script>
+<script>
+
+    initQuiz({
+        introId: "quizIntro",
+        containerId: "quizCard",
+        passScore: 11,
+        timeLimit: 600,
+        shuffle: true,
+        passMessage: "Həm fənn bilgisi, həm də qiymətləndirmə metodikası üzrə keçid həddini üstələmisən — coğrafiya müəllimliyi sınağına yaxşı hazırsan.",
+        failMessage: "Keçid həddinə çatmadın. Az tanınan rayon faktlarını və KSQ/BSQ/diaqnostik qiymətləndirmə anlayışlarını bir daha nəzərdən keçirib yenidən sına.",
+        questions: [
+            {
+                q: "GeoAtlas-ın verilənlər bazasında Azərbaycan neçə iqtisadi rayona bölünüb?",
+                options: ["9", "10", "12", "14"],
+                correct: 2
+            },
+            {
+                q: "Verilən rayonlar arasında ərazicə ən kiçiyi hansıdır?",
+                options: ["Sumqayıt (83 km²)", "Şirvan (72 km²)", "Siyəzən (286 km²)", "Xızı (693 km²)"],
+                correct: 1
+            },
+            {
+                q: "Bakı şəhərinin ümumi sahəsi təxminən neçə km²-dir?",
+                options: ["920 km²", "1 350 km²", "2 140 km²", "2 430 km²"],
+                correct: 2
+            },
+            {
+                q: "Sədərək rayonu hansı xüsusiyyəti ilə seçilir?",
+                options: [
+                    "Naxçıvan MR-in ən kiçik ərazili rayonu və Türkiyə ilə sərhəddir",
+                    "Naxçıvanın ən böyük əkinçilik rayonudur",
+                    "Batabat gölünün yerləşdiyi rayondur",
+                    "Talış dağlarının ətəyindədir"
+                ],
+                correct: 0
+            },
+            {
+                q: "Zəngilan rayonu hansı nadir təbiət obyekti ilə tanınır?",
+                options: ["İstisu mineral bulaqları", "Nadir çinar meşə qoruğu", "Batabat gölü", "Duz mağaraları"],
+                correct: 1
+            },
+            {
+                q: "Culfa rayonu tarixən hansı ticarət yolu üzərində yerləşməsi ilə tanınır?",
+                options: ["Baharat yolu", "İpək yolu", "Kəhrəba yolu", "Duz yolu"],
+                correct: 1
+            },
+            {
+                q: "Xankəndi şəhəri təqdim olunan mətnə əsasən hansı ildən Azərbaycan nəzarətindədir?",
+                options: ["2020", "2021", "2023", "2025"],
+                correct: 2
+            },
+            {
+                q: "Qusar rayonunun qış turizmi mərkəzi hansı dağla bağlıdır?",
+                options: ["Bazardüzü", "Şahdağ", "Tufandağ", "Babadağ"],
+                correct: 1
+            },
+            {
+                q: "Şamaxı şəhəri tarixən hansı dövlətin paytaxtı olub?",
+                options: ["Şirvanşahlar dövləti", "Səfəvilər dövləti", "Qarabağ xanlığı", "Şəki xanlığı"],
+                correct: 0
+            },
+            {
+                q: "Ordubad rayonu meyvəçilikdə xüsusilə hansı məhsulla tanınır?",
+                options: ["Nar", "Ərik", "Fındıq", "Zeytun"],
+                correct: 1
+            },
+            {
+                q: "Kiçik summativ qiymətləndirmə (KSQ) adətən nə zaman keçirilir?",
+                options: [
+                    "Dərs ilinin əvvəlində, ilkin səviyyəni ölçmək üçün",
+                    "Bir mövzu və ya bölmənin sonunda",
+                    "Yalnız buraxılış sinifində",
+                    "Hər dərsin sonunda mütləq şəkildə"
+                ],
+                correct: 1
+            },
+            {
+                q: "Böyük summativ qiymətləndirmə (BSQ) tədris ili ərzində adətən neçə dəfə keçirilir?",
+                options: ["1 dəfə", "2 dəfə (yarımillərin sonunda)", "4 dəfə (rüblərin sonunda)", "Hər ay bir dəfə"],
+                correct: 1
+            },
+            {
+                q: "Diaqnostik qiymətləndirmənin əsas məqsədi nədir?",
+                options: [
+                    "Yeni mövzuya başlamazdan əvvəl şagirdlərin ilkin bilik səviyyəsini müəyyənləşdirmək",
+                    "Yarımillik yekun qiymət qoymaq",
+                    "Şagirdi intizam qaydalarına görə qiymətləndirmək",
+                    "Yalnız valideynləri məlumatlandırmaq"
+                ],
+                correct: 0
+            },
+            {
+                q: "Xaçmaz rayonunun sahəsi təxminən neçə km²-dir?",
+                options: ["705 km²", "869 km²", "1 070 km²", "1 730 km²"],
+                correct: 2
+            },
+            {
+                q: "Verilən rayonlardan hansı Naxçıvan MR-ə deyil, Aran iqtisadi rayonuna aiddir?",
+                options: ["Şərur", "Babək", "Mingəçevir", "Culfa"],
+                correct: 2
+            }
+        ]
+    });
+
+</script>
+
+</body>
+</html>

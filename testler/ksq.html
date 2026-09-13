@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>KSQ Testi | Coğrafi Mövqe və Sərhədlər | GeoAtlas</title>
+<meta name="description" content="Azərbaycanın coğrafi mövqeyi, sərhədləri və inzibati bölgüsü üzrə 8 suallıq kiçik summativ qiymətləndirmə (KSQ) testi.">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        <div class="logo-icon">🌍</div>
+        <div class="logo-text">
+            <strong>GeoAtlas</strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="testler.html" class="current">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <a href="testler.html">Testlər</a>
+        <span class="sep">/</span>
+        <span class="current">KSQ</span>
+    </div>
+</div>
+
+
+<div class="quiz-wrap">
+
+    <div class="quiz-intro" id="quizIntro">
+
+        <div class="quiz-intro-top">
+            <div class="quiz-intro-icon">📘</div>
+            <div>
+                <div class="code">KSQ · Kiçik Summativ Qiymətləndirmə</div>
+                <h2>Coğrafi mövqe və sərhədlər</h2>
+            </div>
+        </div>
+
+        <p>
+            Bu test Azərbaycanın coğrafi mövqeyi, qonşu ölkələri, əsas
+            şəhərləri və inzibati bölgüsü üzrə əsas anlayışları yoxlayır —
+            bir mövzunun və ya bölmənin sonunda keçirilən kiçik summativ
+            qiymətləndirmə formatına uyğundur.
+        </p>
+
+        <div class="quiz-intro-facts">
+            <div class="stat">
+                <small>Sual sayı</small>
+                <strong>8</strong>
+            </div>
+            <div class="stat">
+                <small>Təxmini vaxt</small>
+                <strong>~5 dəq</strong>
+            </div>
+            <div class="stat">
+                <small>Keçid balı</small>
+                <strong>6 / 8</strong>
+            </div>
+        </div>
+
+        <button class="quiz-start-btn">Testə başla →</button>
+
+    </div>
+
+
+    <div class="quiz-card" id="quizCard">
+
+        <div class="quiz-body">
+
+            <div class="quiz-top-row">
+                <div class="quiz-progress-label">Sual 1 / 8</div>
+                <div class="quiz-timer"></div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" style="width:0%"></div>
+            </div>
+
+            <div class="quiz-question"></div>
+            <div class="quiz-options"></div>
+
+            <button class="quiz-next-btn">Növbəti sual →</button>
+
+        </div>
+
+        <div class="quiz-result"></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/testler.js"></script>
+<script>
+
+    initQuiz({
+        introId: "quizIntro",
+        containerId: "quizCard",
+        passScore: 6,
+        shuffle: true,
+        passMessage: "Azərbaycanın coğrafi mövqeyi və sərhədləri üzrə əsas anlayışları yaxşı mənimsəmisən. İstəsən, növbəti addım olaraq BSQ testinə keçə bilərsən.",
+        failMessage: "Bəzi əsas anlayışlar üzərində yenidən işləmək faydalı olar — xəritə bölməsinə qayıdıb ölkənin sərhədlərini və şəhərlərini bir daha nəzərdən keçir.",
+        questions: [
+            {
+                q: "Azərbaycanın paytaxtı hansı şəhərdir?",
+                options: ["Gəncə", "Bakı", "Sumqayıt", "Naxçıvan şəhəri"],
+                correct: 1
+            },
+            {
+                q: "Azərbaycan hansı dənizin sahilində yerləşir?",
+                options: ["Qara dəniz", "Aralıq dənizi", "Xəzər dənizi", "Egey dənizi"],
+                correct: 2
+            },
+            {
+                q: "Aşağıdakılardan hansı Azərbaycanla quru sərhədi olan ölkə DEYİL?",
+                options: ["Gürcüstan", "İran", "Almaniya", "Rusiya"],
+                correct: 2
+            },
+            {
+                q: "Azərbaycanın tərkibindəki muxtar respublikanın adı nədir?",
+                options: ["Qarabağ MR", "Naxçıvan MR", "Lənkəran MR", "Şəki MR"],
+                correct: 1
+            },
+            {
+                q: "GeoAtlas-ın xəritəsində Azərbaycanın neçə inzibati ərazisi (rayon və şəhər) qeyd olunub?",
+                options: ["51", "66", "77", "82"],
+                correct: 2
+            },
+            {
+                q: "Azərbaycanın əhaliyə görə ikinci böyük şəhəri hansıdır?",
+                options: ["Sumqayıt", "Gəncə", "Mingəçevir", "Naxçıvan şəhəri"],
+                correct: 1
+            },
+            {
+                q: "Şəki şəhəri hansı iqtisadi rayona daxildir?",
+                options: ["Quba-Xaçmaz", "Şəki-Zaqatala", "Gəncə-Qazax", "Aran"],
+                correct: 1
+            },
+            {
+                q: "Naxçıvan Muxtar Respublikasının paytaxtı hansı şəhərdir?",
+                options: ["Şərur", "Ordubad", "Naxçıvan şəhəri", "Culfa"],
+                correct: 2
+            }
+        ]
+    });
+
+</script>
+
+</body>
+</html>

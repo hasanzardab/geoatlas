@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>Əlaqə | GeoAtlas</title>
+<meta name="description" content="GeoAtlas komandası ilə əlaqə saxla — sual, təklif və ya xəta bildirişlərini bizimlə paylaş.">
+<link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="icon/favicon.png">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-text">
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="../oyunlar/oyunlar.html">İnteraktiv oyunlar</a>
+        <a href="../testler/testler.html">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <span class="current">Əlaqə</span>
+    </div>
+</div>
+
+
+<section class="page-hero">
+
+    <div class="eyebrow">Bizimlə əlaqə</div>
+
+    <h1>
+        Sualın var?<br>
+        <span>Bizə yaz.</span>
+    </h1>
+
+    <p>
+        Yeni ölkə təklifi, xəritədə gördüyün xəta, yoxsa sadəcə rəy —
+        aşağıdakı formanı doldur, ya da birbaşa e-poçt vasitəsilə bizə
+        müraciət et.
+    </p>
+
+</section>
+
+
+<div class="contact-grid">
+
+    <div class="contact-info">
+
+        <div class="contact-info-card">
+            <div class="c-icon">✉️</div>
+            <div>
+                <strong>E-poçt</strong>
+                <a href="mailto:info@geoatlas.az">info@geoatlas.az</a>
+            </div>
+        </div>
+
+        <div class="contact-info-card">
+            <div class="c-icon">🗺️</div>
+            <div>
+                <strong>Yeni ölkə təklifi</strong>
+                <p>Növbəti hansı ölkənin xəritəsini görmək istədiyini bizə bildir.</p>
+            </div>
+        </div>
+
+        <div class="contact-info-card">
+            <div class="c-icon">🐞</div>
+            <div>
+                <strong>Xəta bildirişi</strong>
+                <p>Xəritədə, məlumatda və ya testlərdə səhv gördünsə, bizə yaz.</p>
+            </div>
+        </div>
+
+        <div class="contact-info-card">
+            <div class="c-icon">📍</div>
+            <div>
+                <strong>Ünvan</strong>
+                <p>Bakı, Azərbaycan — sayt tam statik olaraq GitHub Pages üzərindən yayımlanır.</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="contact-form-card">
+
+        <h2>Mesaj göndər</h2>
+        <p>Formu doldur — göndər düyməsinə basdıqda mesajın e-poçt tətbiqin vasitəsilə birbaşa bizə göndəriləcək.</p>
+
+        <form id="contactForm">
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="cName">Ad Soyad</label>
+                    <input type="text" id="cName" name="name" placeholder="Adın Soyadın" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cEmail">E-poçt</label>
+                    <input type="email" id="cEmail" name="email" placeholder="sen@nümunə.com" required>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="cTopic">Mövzu</label>
+                <select id="cTopic" name="topic">
+                    <option value="Ümumi sual">Ümumi sual</option>
+                    <option value="Yeni ölkə təklifi">Yeni ölkə təklifi</option>
+                    <option value="Xəta bildirişi">Xəta bildirişi</option>
+                    <option value="Əməkdaşlıq">Əməkdaşlıq</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cMessage">Mesaj</label>
+                <textarea id="cMessage" name="message" rows="5" placeholder="Mesajını bura yaz..." required></textarea>
+            </div>
+
+            <button type="submit" class="form-submit-btn">Mesajı göndər →</button>
+
+            <div class="form-note">
+                GeoAtlas server saxlamayan statik saytdır — mesajın birbaşa
+                e-poçt tətbiqin vasitəsilə göndərilir.
+            </div>
+
+        </form>
+
+        <div class="form-success" id="formSuccess">
+            <div class="s-icon">✓</div>
+            <strong>E-poçt tətbiqi açılır</strong>
+            <p>Mesajın hazır formada e-poçt proqramına ötürüldü — göndərmək üçün orada təsdiqləməyin kifayətdir.</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<section class="faq-section">
+
+    <div class="section-head">
+        <div class="eyebrow">Tez-tez verilən suallar</div>
+        <h2>Ola bilsin cavab artıq buradadır.</h2>
+    </div>
+
+    <div class="faq-list">
+
+        <div class="faq-item">
+            <div class="faq-q">
+                <span>Yeni ölkə xəritəsi nə vaxt əlavə olunacaq?</span>
+                <span class="chev">▾</span>
+            </div>
+            <div class="faq-a">
+                <p>
+                    Hazırda Gürcüstan, Türkiyə, İran və Rusiya siyahıda
+                    "Tezliklə" statusundadır. Hər xəritə əl ilə, diqqətlə
+                    hazırlandığı üçün konkret tarix vermirik, amma
+                    ölkə reyestri buna hazır quruluşdadır.
+                </p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">
+                <span>Testlərdəki nəticələr saxlanılırmı?</span>
+                <span class="chev">▾</span>
+            </div>
+            <div class="faq-a">
+                <p>
+                    Xeyr. GeoAtlas hesab və verilənlər bazası tələb etməyən
+                    statik saytdır, ona görə test nəticələri yalnız həmin
+                    seansda ekranda göstərilir və saxlanmır.
+                </p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">
+                <span>Platformadan istifadə pulsuzdurmu?</span>
+                <span class="chev">▾</span>
+            </div>
+            <div class="faq-a">
+                <p>
+                    Bəli, tamamilə. Qeydiyyat, abunə haqqı və gizli
+                    ödənişlər yoxdur — bütün xəritələr və testlər hər kəs
+                    üçün açıqdır.
+                </p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">
+                <span>Xəritədə səhv məlumat gördüm, nə etməliyəm?</span>
+                <span class="chev">▾</span>
+            </div>
+            <div class="faq-a">
+                <p>
+                    Yuxarıdakı formadan "Xəta bildirişi" mövzusunu seçib
+                    hansı rayon/şəhərdə hansı məlumatın səhv olduğunu
+                    qeyd et — ən qısa zamanda yoxlayıb düzəldəcəyik.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+<script>
+
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const name = document.getElementById("cName").value.trim();
+        const email = document.getElementById("cEmail").value.trim();
+        const topic = document.getElementById("cTopic").value;
+        const message = document.getElementById("cMessage").value.trim();
+
+        const subject = encodeURIComponent("GeoAtlas — " + topic);
+        const body = encodeURIComponent(
+            "Ad Soyad: " + name + "\n" +
+            "E-poçt: " + email + "\n\n" +
+            message
+        );
+
+        window.location.href = "mailto:info@geoatlas.az?subject=" + subject + "&body=" + body;
+
+        this.style.display = "none";
+        document.getElementById("formSuccess").classList.add("show");
+
+    });
+
+    document.querySelectorAll(".faq-item").forEach(item => {
+        item.querySelector(".faq-q").addEventListener("click", () => {
+            const isOpen = item.classList.contains("open");
+            document.querySelectorAll(".faq-item").forEach(i => i.classList.remove("open"));
+            if (!isOpen) item.classList.add("open");
+        });
+    });
+
+</script>
+
+</body>
+</html>

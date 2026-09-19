@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>Quiz Oyunu | İnteraktiv Oyunlar | GeoAtlas</title>
+<meta name="description" content="Azərbaycanın inzibati əraziləri üzrə vaxtla yarışan çoxvariantlı coğrafiya quiz-i — seriya bonusu ilə biliyini sına.">
+    <link rel="icon" type="image/png" href="icon/favicon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<style>
+/* =========================================
+   QUİZ — sual sayı sürüşdürücüsü və geri sayım
+========================================= */
+.q-slider-row{
+    margin-bottom:24px;
+}
+
+.q-slider-labels{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:10px;
+}
+
+.q-slider-labels #qSliderValue{
+    color:var(--gold2);
+    font-weight:600;
+    font-size:13px;
+}
+
+.q-slider{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    height:6px;
+    border-radius:10px;
+    background:rgba(255,255,255,.08);
+    outline:none;
+    cursor:pointer;
+}
+
+.q-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:var(--gold2);
+    border:3px solid var(--panel);
+    box-shadow:0 0 0 1px rgba(216,179,106,.5),0 4px 10px var(--shadow-color);
+    cursor:pointer;
+    transition:.15s;
+}
+
+.q-slider::-webkit-slider-thumb:hover{
+    transform:scale(1.1);
+}
+
+.q-slider::-moz-range-thumb{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:var(--gold2);
+    border:3px solid var(--panel);
+    box-shadow:0 0 0 1px rgba(216,179,106,.5),0 4px 10px var(--shadow-color);
+    cursor:pointer;
+}
+
+.q-slider::-moz-range-track{
+    height:6px;
+    border-radius:10px;
+    background:rgba(255,255,255,.08);
+}
+
+.countdown-card{
+    display:none;
+    text-align:center;
+    padding:70px 20px;
+}
+
+.countdown-card.active{
+    display:block;
+}
+
+.countdown-number{
+    font-family:"Playfair Display",serif;
+    font-size:88px;
+    color:var(--gold2);
+    line-height:1;
+    margin-bottom:12px;
+}
+
+.countdown-label{
+    color:var(--muted);
+    font-size:13px;
+    letter-spacing:.5px;
+}
+</style>
+</head>
+<body>
+
+<header>
+
+   <div class="logo">
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-text">
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="oyunlar.html" class="current">İnteraktiv oyunlar</a>
+        <a href="../testler/testler.html">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <a href="oyunlar.html">İnteraktiv oyunlar</a>
+        <span class="sep">/</span>
+        <span class="current">Quiz</span>
+    </div>
+</div>
+
+<div class="quiz-wrap">
+
+    <div class="quiz-intro" id="introCard">
+        <div class="quiz-intro-top">
+            <div class="quiz-intro-icon">🧠</div>
+            <div>
+                <div class="code">QUIZ · Sürətli Bilik Oyunu</div>
+                <h2>Coğrafiya Quiz-i</h2>
+            </div>
+        </div>
+
+        <p>
+            10 sual, hər biri üçün 10 saniyə. Sənə Azərbaycanın inzibati
+            əraziləri haqqında sual veriləcək — mərkəzini, ya da daxil
+            olduğu iqtisadi rayonu tap. Ardıcıl düzgün cavablar seriya
+            bonusu qazandırır.
+        </p>
+
+        <div class="quiz-intro-facts">
+            <div class="stat"><small>Sual sayı</small><strong id="qCountDisplay">10</strong></div>
+            <div class="stat"><small>Vaxt / sual</small><strong id="qTimeDisplay">10 san.</strong></div>
+            <div class="stat"><small>Bonus</small><strong>🔥 Seriya</strong></div>
+        </div>
+
+        <div class="q-slider-row">
+            <div class="q-slider-labels">
+                <span>1</span>
+                <span id="qSliderValue">10 sual</span>
+                <span>30</span>
+            </div>
+            <input type="range" min="1" max="30" value="10" step="1" id="qCountSlider" class="q-slider">
+        </div>
+
+        <button class="quiz-start-btn" id="startBtn">Quiz-ə başla →</button>
+    </div>
+
+    <div class="quiz-card countdown-card" id="countdownCard">
+        <div class="countdown-number" id="countdownNumber">3</div>
+        <div class="countdown-label">Hazırlaş...</div>
+    </div>
+
+
+    <div class="quiz-card" id="quizCard">
+
+        <div class="quiz-top-row">
+            <div class="quiz-progress-label" id="progressLabel">Sual 1 / 10</div>
+            <div class="quiz-timer active" id="timerLabel">⏱ 10</div>
+        </div>
+
+        <div class="quiz-progress-track">
+            <div class="quiz-progress-fill" id="progressFill" style="width:10%"></div>
+        </div>
+
+        <div class="quiz-question" id="questionText"></div>
+
+        <div class="quiz-options" id="optionsWrap"></div>
+
+        <button class="quiz-next-btn" id="nextBtn">Növbəti sual →</button>
+
+    </div>
+
+    <div class="quiz-result" id="resultCard">
+        <div class="quiz-result-score" id="scoreText">0<span>/10</span></div>
+        <div class="quiz-result-verdict" id="verdictText"></div>
+        <p class="desc" id="verdictDesc"></p>
+        <div class="quiz-result-actions">
+            <button class="quiz-start-btn" id="retryBtn">Yenidən başla</button>
+            <a href="carx.html" class="quiz-btn-secondary">Çarxı sına →</a>
+            <a href="oyunlar.html" class="quiz-btn-secondary">← Oyunlara qayıt</a>
+        </div>
+    </div>
+
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+
+<script>
+/* =========================================
+   GEOATLAS — inzibati ərazi məlumat bazası
+   [ad, inzibati mərkəz, iqtisadi rayon, sahə(km²)]
+   Mənbə: Azərbaycan Respublikasının Dövlət Statistika
+   Komitəsinin İnzibati Ərazi Bölgüsü Təsnifatı
+========================================= */
+const GEO = [
+["Abşeron","Xırdalan","Abşeron-Xızı",1360],
+["Ağcabədi","Ağcabədi","Qarabağ",1760],
+["Ağdam","Ağdam","Qarabağ",1076],
+["Ağdaş","Ağdaş","Mərkəzi Aran",1050],
+["Ağstafa","Ağstafa","Qazax-Tovuz",1500],
+["Ağsu","Ağsu","Dağlıq Şirvan",1020],
+["Şirvan","Şirvan","Şirvan-Salyan",30],
+["Astara","Astara","Lənkəran-Astara",620],
+["Bakı","Bakı","Bakı",2130],
+["Balakən","Balakən","Şəki-Zaqatala",920],
+["Bərdə","Bərdə","Qarabağ",960],
+["Beyləqan","Beyləqan","Mil-Muğan",1130],
+["Biləsuvar","Biləsuvar","Şirvan-Salyan",1400],
+["Cəbrayıl","Cəbrayıl","Şərqi Zəngəzur",1050],
+["Cəlilabad","Cəlilabad","Lənkəran-Astara",1440],
+["Daşkəsən","Daşkəsən","Gəncə-Daşkəsən",1050],
+["Şabran","Şabran","Quba-Xaçmaz",1090],
+["Füzuli","Füzuli","Qarabağ",1390],
+["Gədəbəy","Gədəbəy","Qazax-Tovuz",1290],
+["Gəncə","Gəncə","Gəncə-Daşkəsən",110],
+["Goranboy","Goranboy","Gəncə-Daşkəsən",1760],
+["Göyçay","Göyçay","Mərkəzi Aran",740],
+["Hacıqabul","Hacıqabul","Şirvan-Salyan",1640],
+["İmişli","İmişli","Mil-Muğan",1820],
+["İsmayıllı","İsmayıllı","Dağlıq Şirvan",2060],
+["Kəlbəcər","Kəlbəcər","Şərqi Zəngəzur",2314],
+["Kürdəmir","Kürdəmir","Mərkəzi Aran",1630],
+["Laçın","Laçın","Şərqi Zəngəzur",1840],
+["Lənkəran","Lənkəran","Lənkəran-Astara",1540],
+["Lerik","Lerik","Lənkəran-Astara",1080],
+["Masallı","Masallı","Lənkəran-Astara",720],
+["Mingəçevir","Mingəçevir","Mərkəzi Aran",130],
+["Naftalan","Naftalan","Gəncə-Daşkəsən",30],
+["Neftçala","Neftçala","Şirvan-Salyan",1450],
+["Oğuz","Oğuz","Şəki-Zaqatala",1220],
+["Qəbələ","Qəbələ","Şəki-Zaqatala",1550],
+["Qax","Qax","Şəki-Zaqatala",1490],
+["Qazax","Qazax","Qazax-Tovuz",700],
+["Qobustan","Qobustan","Dağlıq Şirvan",1370],
+["Quba","Quba","Quba-Xaçmaz",2580],
+["Qubadlı","Qubadlı","Şərqi Zəngəzur",800],
+["Qusar","Qusar","Quba-Xaçmaz",1540],
+["Saatlı","Saatlı","Mil-Muğan",1180],
+["Sabirabad","Sabirabad","Mil-Muğan",1470],
+["Şəki","Şəki","Şəki-Zaqatala",2430],
+["Salyan","Salyan","Şirvan-Salyan",1790],
+["Şamaxı","Şamaxı","Dağlıq Şirvan",1610],
+["Şəmkir","Şəmkir","Qazax-Tovuz",1660],
+["Samux","Samux","Gəncə-Daşkəsən",1450],
+["Siyəzən","Siyəzən","Quba-Xaçmaz",700],
+["Sumqayıt","Sumqayıt","Abşeron-Xızı",80],
+["Şuşa","Şuşa","Qarabağ",290],
+["Tərtər","Tərtər","Qarabağ",109],
+["Tovuz","Tovuz","Qazax-Tovuz",1900],
+["Ucar","Ucar","Mərkəzi Aran",850],
+["Xaçmaz","Xaçmaz","Quba-Xaçmaz",1050],
+["Xankəndi","Xankəndi","Qarabağ",8],
+["Göygöl","Göygöl","Gəncə-Daşkəsən",1030],
+["Xızı","Xızı","Abşeron-Xızı",1850],
+["Xocalı","Xocalı","Qarabağ",940],
+["Xocavənd","Xocavənd","Qarabağ",1460],
+["Yardımlı","Yardımlı","Lənkəran-Astara",670],
+["Yevlax","Yevlax","Mərkəzi Aran",1540],
+["Zəngilan","Zəngilan","Şərqi Zəngəzur",710],
+["Zaqatala","Zaqatala","Şəki-Zaqatala",1350],
+["Zərdab","Zərdab","Mərkəzi Aran",860],
+["Ağdərə","Ağdərə","Qarabağ",1161],
+["Babək","Babək","Naxçıvan",900],
+["Culfa","Culfa","Naxçıvan",1000],
+["Kəngərli","Qıvraq","Naxçıvan",680],
+["Naxçıvan","Naxçıvan","Naxçıvan",130],
+["Ordubad","Ordubad","Naxçıvan",970],
+["Sədərək","Sədərək","Naxçıvan",150],
+["Şahbuz","Şahbuz","Naxçıvan",920],
+["Şərur","Şərur","Naxçıvan",810]
+];
+
+let TOTAL_Q = 10;
+
+/* =========================================
+   VAXT TƏNZİMLƏMƏSİ
+   Hər sual üçün neçə saniyə veriləcəyini
+   bu ədədi dəyişməklə tənzimləyə bilərsən.
+   Məsələn: 10 saniyə istəyirsənsə TIME_PER_Q = 10,
+   15 saniyə istəyirsənsə TIME_PER_Q = 15 yaz.
+========================================= */
+const TIME_PER_Q = 10;
+
+let questions = [];
+let qIndex = 0;
+let score = 0;
+let streak = 0;
+let timer = null;
+let timeLeft = TIME_PER_Q;
+let answered = false;
+
+const introCard = document.getElementById('introCard');
+const quizCard = document.getElementById('quizCard');
+const resultCard = document.getElementById('resultCard');
+const countdownCard = document.getElementById('countdownCard');
+const countdownNumber = document.getElementById('countdownNumber');
+const startBtn = document.getElementById('startBtn');
+const nextBtn = document.getElementById('nextBtn');
+const retryBtn = document.getElementById('retryBtn');
+const qCountSlider = document.getElementById('qCountSlider');
+const qSliderValue = document.getElementById('qSliderValue');
+const qCountDisplay = document.getElementById('qCountDisplay');
+const qTimeDisplay = document.getElementById('qTimeDisplay');
+const progressLabel = document.getElementById('progressLabel');
+const progressFill = document.getElementById('progressFill');
+const timerLabel = document.getElementById('timerLabel');
+const questionText = document.getElementById('questionText');
+const optionsWrap = document.getElementById('optionsWrap');
+const scoreText = document.getElementById('scoreText');
+const verdictText = document.getElementById('verdictText');
+const verdictDesc = document.getElementById('verdictDesc');
+
+/* Giriş kartındakı "Vaxt / sual" rəqəmini TIME_PER_Q ilə uyğunlaşdırır */
+if(qTimeDisplay) qTimeDisplay.textContent = `${TIME_PER_Q} san.`;
+
+function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+qCountSlider.addEventListener('input', () => {
+    const v = qCountSlider.value;
+    qSliderValue.textContent = `${v} sual`;
+    qCountDisplay.textContent = v;
+});
+
+function buildQuestions(){
+    const pool = shuffle(GEO).slice(0, TOTAL_Q);
+    questions = pool.map(row => {
+        const [name, capital, region] = row;
+        const type = Math.random() < 0.55 ? 'capital' : 'region';
+
+        if(type === 'capital'){
+            const distractors = shuffle(GEO.filter(g => g[1] !== capital)).slice(0, 3).map(g => g[1]);
+            const options = shuffle([capital, ...distractors]);
+            return {
+                text: `"${name}" rayonunun inzibati mərkəzi hansıdır?`,
+                options,
+                correct: capital
+            };
+        }else{
+            const uniqueRegions = [...new Set(GEO.map(g => g[2]).filter(r => r !== region))];
+            const distractors = shuffle(uniqueRegions).slice(0, 3);
+            const options = shuffle([region, ...distractors]);
+            return {
+                text: `"${name}" hansı iqtisadi rayona daxildir?`,
+                options,
+                correct: region
+            };
+        }
+    });
+}
+
+function startQuiz(){
+    buildQuestions();
+    qIndex = 0;
+    score = 0;
+    streak = 0;
+    introCard.classList.remove('active');
+    introCard.style.display = 'none';
+    resultCard.classList.remove('active');
+    quizCard.classList.add('active');
+    showQuestion();
+}
+
+function showQuestion(){
+    answered = false;
+    const q = questions[qIndex];
+    progressLabel.textContent = `Sual ${qIndex + 1} / ${TOTAL_Q}` + (streak >= 2 ? ` · 🔥 x${streak}` : '');
+    progressFill.style.width = ((qIndex) / TOTAL_Q * 100) + '%';
+    questionText.textContent = q.text;
+    optionsWrap.innerHTML = '';
+
+    const letters = ['A','B','C','D'];
+    q.options.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'quiz-option';
+        div.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+        div.addEventListener('click', () => selectOption(div, opt, q.correct));
+        optionsWrap.appendChild(div);
+    });
+
+    nextBtn.classList.remove('ready');
+    nextBtn.textContent = qIndex === TOTAL_Q - 1 ? 'Nəticəni göstər →' : 'Növbəti sual →';
+
+    timeLeft = TIME_PER_Q;
+    timerLabel.textContent = `⏱ ${timeLeft}`;
+    timerLabel.classList.remove('warn');
+    clearInterval(timer);
+    timer = setInterval(() => {
+        timeLeft--;
+        timerLabel.textContent = `⏱ ${timeLeft}`;
+        if(timeLeft <= 5) timerLabel.classList.add('warn');
+        if(timeLeft <= 0){
+            clearInterval(timer);
+            if(!answered){
+                lockAnswers(null, q.correct);
+                /* Vaxt bitdikdə sual cavabsız sayılır və
+                   qısa fasilədən (düzgün cavabı göstərmək üçün)
+                   sonra avtomatik növbəti suala keçilir. */
+                setTimeout(goToNextQuestion, 900);
+            }
+        }
+    }, 1000);
+}
+
+function selectOption(el, chosen, correct){
+    if(answered) return;
+    lockAnswers(chosen, correct, el);
+}
+
+function lockAnswers(chosen, correct, chosenEl){
+    answered = true;
+    clearInterval(timer);
+    const opts = optionsWrap.querySelectorAll('.quiz-option');
+    opts.forEach(o => {
+        o.classList.add('is-disabled');
+        if(o.textContent.trim().endsWith(correct)) o.classList.add('correct');
+    });
+    if(chosenEl && chosen !== correct) chosenEl.classList.add('wrong');
+
+    if(chosen === correct){
+        score++;
+        streak++;
+    }else{
+        streak = 0;
+    }
+
+    nextBtn.classList.add('ready');
+}
+
+function goToNextQuestion(){
+    qIndex++;
+    if(qIndex >= TOTAL_Q){
+        finishQuiz();
+    }else{
+        showQuestion();
+    }
+}
+
+nextBtn.addEventListener('click', () => {
+    if(!nextBtn.classList.contains('ready')) return;
+    goToNextQuestion();
+});
+
+function finishQuiz(){
+    clearInterval(timer);
+    quizCard.classList.remove('active');
+    resultCard.classList.add('active');
+    progressFill.style.width = '100%';
+    scoreText.innerHTML = `${score}<span>/${TOTAL_Q}</span>`;
+
+    const pct = score / TOTAL_Q;
+    if(pct >= 0.8){
+        verdictText.textContent = 'Əla nəticə! 🏆';
+        verdictText.className = 'quiz-result-verdict pass';
+        verdictDesc.textContent = 'Azərbaycanın inzibati coğrafiyasını yaxşı bilirsən. Çarx oyununda daha sürətli sınaq üçün davam et.';
+    }else if(pct >= 0.5){
+        verdictText.textContent = 'Yaxşı nəticə 👍';
+        verdictText.className = 'quiz-result-verdict pass';
+        verdictDesc.textContent = 'Pis deyil — bir az daha məşq etsən, tam bal ala bilərsən.';
+    }else{
+        verdictText.textContent = 'Bir də cəhd et 🔁';
+        verdictText.className = 'quiz-result-verdict fail';
+        verdictDesc.textContent = 'Hər fırlanma yeni suallardır — təkrar sınayaraq nəticəni yaxşılaşdıra bilərsən.';
+    }
+}
+
+function runCountdown(onDone){
+    introCard.style.display = 'none';
+    resultCard.classList.remove('active');
+    quizCard.classList.remove('active');
+    countdownCard.classList.add('active');
+
+    let n = 3;
+    countdownNumber.textContent = n;
+    const iv = setInterval(() => {
+        n--;
+        if(n > 0){
+            countdownNumber.textContent = n;
+        }else if(n === 0){
+            countdownNumber.textContent = 'Başla!';
+        }else{
+            clearInterval(iv);
+            countdownCard.classList.remove('active');
+            onDone();
+        }
+    }, 700);
+}
+
+startBtn.addEventListener('click', () => {
+    TOTAL_Q = parseInt(qCountSlider.value, 10);
+    runCountdown(startQuiz);
+});
+retryBtn.addEventListener('click', () => {
+    resultCard.classList.remove('active');
+    runCountdown(startQuiz);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>Haqqımızda | GeoAtlas</title>
+<meta name="description" content="GeoAtlas — statik, pulsuz və açıq mənbəli interaktiv coğrafiya platformasının məqsədi, dəyərləri və inkişaf yolu.">
+    <link rel="icon" type="image/png" href="icon/favicon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header>
+
+  <div class="logo">
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-text">
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+       <a href="../oyunlar/oyunlar.html">İnteraktiv oyunlar</a> 
+        <a href="../testler/testler.html">Testlər</a>
+        <a href="haqqimizda.html" class="current">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <span class="current">Haqqımızda</span>
+    </div>
+</div>
+
+
+<section class="page-hero">
+
+    <div class="eyebrow">Missiyamız</div>
+
+    <h1>
+        Coğrafiyanı hər kəs üçün<br>
+        <span>əlçatan və vizual et.</span>
+    </h1>
+
+    <p>
+        GeoAtlas — ölkələrin inzibati xəritələrini interaktiv şəkildə
+        göstərən, tamamilə pulsuz və açıq mənbəli statik bir platformadır.
+        Məqsədimiz sadədir: hər bir ərazi haqqında məlumatı bir kliklə
+        əlçatan etmək.
+    </p>
+
+</section>
+
+
+<div class="about-grid">
+
+    <div class="about-story">
+
+        <h2>Hekayəmiz</h2>
+
+        <p>
+            GeoAtlas Azərbaycanın inzibati xəritəsi ilə başladı — 77 rayon
+            və şəhərin sərhədlərini, mərkəzlərini, sahəsini və əhalisini
+            bir yerə toplayan sadə bir vizual layihə kimi. Fikir aydın idi:
+            dərslikdə və ya axtarış motorunda dağınıq şəkildə yerləşən
+            coğrafi məlumatları bir xəritə üzərində, klikləməklə əlçatan
+            etmək.
+        </p>
+
+        <p>
+            Platforma bilərəkdən minimalist qurulub — server, verilənlər
+            bazası və ya hesab yaratma tələb etmir. Sadəcə HTML, CSS və
+            vanil JavaScript ilə işləyir, ona görə də istənilən cihazda
+            sürətli açılır və GitHub Pages kimi pulsuz xidmətlər üzərindən
+            yayımlana bilir.
+        </p>
+
+        <p>
+            Bu gün GeoAtlas Azərbaycanla məhdudlaşmır — məqsədimiz
+            tədricən qonşu və digər ölkələrin inzibati xəritələrini də
+            eyni dərinlikdə əlavə edərək platformanı bölgənin ən geniş
+            açıq coğrafiya resursuna çevirməkdir.
+        </p>
+
+    </div>
+
+
+    <div class="about-values">
+
+        <div class="value-card">
+            <div class="v-icon">🎯</div>
+            <div>
+                <strong>Dəqiqlik</strong>
+                <p>
+                    Hər rayon və şəhər üçün göstərilən mərkəz, sahə,
+                    əhali və təsvir məlumatları diqqətlə tərtib olunur.
+                </p>
+            </div>
+        </div>
+
+        <div class="value-card">
+            <div class="v-icon">🆓</div>
+            <div>
+                <strong>Açıq mənbə və pulsuzluq</strong>
+                <p>
+                    Platforma 100% pulsuzdur, reklamsızdır və heç bir
+                    qeydiyyat tələb etmir — hər kəs üçün açıqdır.
+                </p>
+            </div>
+        </div>
+
+        <div class="value-card">
+            <div class="v-icon">⚡</div>
+            <div>
+                <strong>Sadəlik və sürət</strong>
+                <p>
+                    Xarici kitabxana və ağır çərçivələr olmadan qurulub,
+                    ona görə səhifələr ani sürətlə yüklənir.
+                </p>
+            </div>
+        </div>
+
+        <div class="value-card">
+            <div class="v-icon">📈</div>
+            <div>
+                <strong>Davamlı böyümə</strong>
+                <p>
+                    Ölkə reyestri (<code>countries-data.js</code>) genişlənməyə
+                    hazır quruluşdadır — yeni ölkələr addım-addım əlavə olunur.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="about-timeline">
+
+    <div class="section-head">
+        <div class="eyebrow">Necə işləyir</div>
+        <h2>Bir xəritədən platformaya.</h2>
+    </div>
+
+    <div class="timeline-row">
+
+        <div class="timeline-step">
+            <div class="t-num">01</div>
+            <strong>Xəritə hazırlanır</strong>
+            <p>Ölkənin inzibati sərhədləri SVG formatında toplanır.</p>
+        </div>
+
+        <div class="timeline-step">
+            <div class="t-num">02</div>
+            <strong>Ərazi məlumatı yazılır</strong>
+            <p>Hər rayon/şəhər üçün mərkəz, sahə, əhali və təsvir əlavə olunur.</p>
+        </div>
+
+        <div class="timeline-step">
+            <div class="t-num">03</div>
+            <strong>Reyestrə qoşulur</strong>
+            <p>Ölkə <code>countries-data.js</code> siyahısına əlavə edilir.</p>
+        </div>
+
+        <div class="timeline-step">
+            <div class="t-num">04</div>
+            <strong>Saytda görünür</strong>
+            <p>Axtarış, menyu və "digər ölkələr" siyahısı avtomatik yenilənir.</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="info-block" style="margin-bottom:90px;">
+    <div class="info-block-inner">
+
+        <div class="info-block-item">
+            <strong>🗺️ Xəritə mənbəyi</strong>
+            <p>
+                İnzibati sərhədlərin SVG konturları
+                <a href="https://simplemaps.com" target="_blank" rel="noopener" style="color:var(--gold2);text-decoration:none;">SimpleMaps</a>
+                mənbəyindən götürülür və sayt daxilində əl ilə formatlanır.
+            </p>
+        </div>
+
+        <div class="info-block-item">
+            <strong>🧪 Testlər bölməsi</strong>
+            <p>
+                Xəritə məlumatları əsasında hazırlanan KSQ, BSQ və MİQ
+                testləri biliyi əyləncəli formada möhkəmləndirmək üçündür.
+            </p>
+        </div>
+
+        <div class="info-block-item">
+            <strong>💬 Rəy və təkliflər</strong>
+            <p>
+                Xəta gördün və ya yeni ölkə üçün təklifin var? Əlaqə
+                səhifəsindən bizə yazmaqdan çəkinmə.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

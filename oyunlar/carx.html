@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>Fırlanan Çarx | İnteraktiv Oyunlar | GeoAtlas</title>
+<meta name="description" content="Çarxı fırlat, təsadüfi çıxan mövzu üzrə sualı cavablandır — spin the wheel formatında coğrafiya bilik oyunu.">
+    <link rel="icon" type="image/png" href="icon/favicon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<style>
+/* =========================================
+   ÇARX (SPIN THE WHEEL) — səhifəyə məxsus stillər
+========================================= */
+.wheel-wrap{
+    max-width:900px;
+    margin:40px auto 0;
+    padding:0 5% 90px;
+}
+
+.wheel-intro{
+    border:1px solid var(--line);
+    border-radius:26px;
+    background:
+        linear-gradient(140deg,rgba(216,179,106,.08),transparent 60%),
+        var(--panel);
+    padding:36px;
+    margin-bottom:24px;
+}
+
+.wheel-intro-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:16px;
+}
+
+.wheel-intro-icon{
+    width:50px;
+    height:50px;
+    border-radius:14px;
+    background:rgba(216,179,106,.12);
+    display:grid;
+    place-items:center;
+    font-size:22px;
+    flex-shrink:0;
+}
+
+.wheel-intro h2{
+    font-family:"Playfair Display",serif;
+    font-size:26px;
+}
+
+.wheel-intro .code{
+    color:var(--gold);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.wheel-intro p{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.8;
+}
+
+.wheel-stage-card{
+    border:1px solid var(--line);
+    border-radius:26px;
+    background:var(--panel);
+    padding:36px;
+    text-align:center;
+}
+
+.wheel-round-label{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:22px;
+}
+
+.wheel-round-label strong{
+    color:var(--gold2);
+}
+
+.wheel-stage{
+    position:relative;
+    width:min(380px,84vw);
+    height:min(380px,84vw);
+    margin:0 auto 28px;
+}
+
+.wheel-pointer{
+    position:absolute;
+    top:-6px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:26px;
+    color:var(--gold2);
+    z-index:5;
+    filter:drop-shadow(0 2px 4px var(--shadow-color));
+}
+
+.wheel-outer{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    border:6px solid var(--panel2);
+    box-shadow:
+        0 0 0 1px var(--line),
+        0 20px 45px var(--shadow-color);
+    overflow:hidden;
+    position:relative;
+    background:var(--panel);
+}
+
+.wheel-disc{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    position:relative;
+    transition:transform 4.2s cubic-bezier(.14,.85,.24,1);
+    transform:rotate(0deg);
+    overflow:hidden;
+}
+
+.wheel-seg{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    transform-origin:50% 50%;
+}
+
+.wheel-seg-label{
+    position:relative;
+    top:20px;
+    width:92px;
+    max-width:92px;
+    font-size:11.5px;
+    font-weight:700;
+    color:#1a1508;
+    text-shadow:0 1px 0 rgba(255,255,255,.25);
+    text-align:center;
+    white-space:normal;
+    overflow-wrap:break-word;
+    word-break:normal;
+    line-height:1.15;
+    letter-spacing:.1px;
+}
+
+.wheel-hub{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--gold2);
+    color:#1a1508;
+    transform:translate(-50%,-50%);
+    display:grid;
+    place-items:center;
+    font-size:22px;
+    z-index:4;
+    box-shadow:0 0 0 5px var(--panel),0 8px 20px var(--shadow-color);
+}
+
+.spin-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    height:52px;
+    padding:0 34px;
+    border-radius:14px;
+    background:var(--gold2);
+    color:#1a1508;
+    font-weight:600;
+    font-size:14px;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    transition:.2s;
+}
+
+.spin-btn:hover{
+    filter:brightness(1.08);
+}
+
+.spin-btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    filter:none;
+}
+
+.wheel-score-row{
+    display:flex;
+    justify-content:center;
+    gap:26px;
+    margin-top:22px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.wheel-score-row strong{
+    display:block;
+    font-family:"Playfair Display",serif;
+    font-size:20px;
+    color:var(--text);
+}
+
+/* Sual pəncərəsi (çarx dayandıqda açılan modal) */
+.wheel-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:200;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+}
+
+.wheel-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.wheel-modal{
+    width:100%;
+    max-width:460px;
+    max-height:86vh;
+    overflow-y:auto;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 30px 70px var(--shadow-color);
+    transform:translateY(14px);
+    transition:transform .25s ease;
+}
+
+.wheel-overlay.show .wheel-modal{
+    transform:translateY(0);
+}
+
+.wheel-modal-cat{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 14px;
+    border-radius:20px;
+    background:rgba(216,179,106,.12);
+    color:var(--gold2);
+    font-size:12px;
+    font-weight:600;
+    margin-bottom:16px;
+}
+
+.wheel-modal-verdict{
+    margin-top:14px;
+    font-size:13.5px;
+    color:var(--muted);
+    min-height:18px;
+}
+
+.wheel-modal-actions{
+    margin-top:18px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+@media(max-width:650px){
+    .wheel-intro,
+    .wheel-stage-card{
+        padding:24px;
+        border-radius:20px;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<header>
+
+   <div class="logo">
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-text">
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="oyunlar.html" class="current">İnteraktiv oyunlar</a>
+        <a href="../testler/testler.html">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <a href="oyunlar.html">İnteraktiv oyunlar</a>
+        <span class="sep">/</span>
+        <span class="current">Çarx</span>
+    </div>
+</div>
+
+<div class="wheel-wrap">
+
+    <div class="wheel-intro">
+        <div class="wheel-intro-top">
+            <div class="wheel-intro-icon">🎡</div>
+            <div>
+                <div class="code">ÇARX · Fırlanan Bəxt Çarxı</div>
+                <h2>Spin the Wheel</h2>
+            </div>
+        </div>
+        <p>
+            Çarxı fırlat — göstərici hansı mövzunun üzərində dayanarsa,
+            sənə həmin mövzudan bir sual veriləcək. 8 fırlanma ərzində
+            neçə düzgün cavab verə biləcəksən?
+        </p>
+    </div>
+
+    <div class="wheel-stage-card">
+
+        <div class="wheel-round-label" id="roundLabel">Fırlanma <strong>1</strong> / 8 · Xal: <strong id="scoreInline">0</strong></div>
+
+        <div class="wheel-stage">
+            <div class="wheel-pointer">▼</div>
+            <div class="wheel-outer">
+                <div class="wheel-disc" id="wheelDisc"></div>
+            </div>
+            <div class="wheel-hub">🌍</div>
+        </div>
+
+        <button class="spin-btn" id="spinBtn">Çarxı fırlat 🎡</button>
+
+        <div class="wheel-score-row">
+            <div><small>Xal</small><strong id="scoreText">0</strong></div>
+            <div><small>Seriya</small><strong id="streakText">0 🔥</strong></div>
+            <div><small>Ən yaxşı</small><strong id="bestText">0</strong></div>
+        </div>
+
+    </div>
+
+    <div class="wheel-overlay" id="wheelOverlay">
+        <div class="wheel-modal">
+            <p class="wheel-modal-cat" id="modalCat">Mövzu</p>
+            <div class="quiz-question" id="questionText" style="margin-bottom:18px;"></div>
+            <div class="quiz-options" id="optionsWrap"></div>
+            <p class="wheel-modal-verdict" id="modalVerdict"></p>
+            <div class="wheel-modal-actions">
+                <button class="quiz-next-btn" id="nextBtn">Davam et</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-result" id="resultCard" style="margin-top:24px;">
+        <div class="quiz-result-score" id="finalScoreText">0<span>/8</span></div>
+        <div class="quiz-result-verdict" id="verdictText"></div>
+        <p class="desc" id="verdictDesc"></p>
+        <div class="quiz-result-actions">
+            <button class="quiz-start-btn" id="retryBtn">Yenidən fırlat</button>
+            <a href="tapmaca.html" class="quiz-btn-secondary">Tapmacanı sına →</a>
+            <a href="oyunlar.html" class="quiz-btn-secondary">← Oyunlara qayıt</a>
+        </div>
+    </div>
+
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+
+<script>
+/* =========================================
+   GEOATLAS — çarx üçün test bazası
+   Hər seqment: [mövzu adı, rəng, sual, variantlar, düzgün variantın indeksi]
+========================================= */
+const SEGMENTS = [
+    { label: "Coğrafiya elminin inkişafı", color: "#F2B705",
+      q: "Coğrafiya terminini elmi dövriyyəyə daxil edən və Yer kürəsinin ölçülərini ilk dəfə riyazi olaraq hesablayan qədim yunan alimi kimdir?",
+      options: ["Aristotel", "Herodot", "Eratosfen", "Ptolomey"], correct: 2 },
+    { label: "Səyyahlar və dənizçilər", color: "#FF6B5E",
+      q: "1498-ci ildə Afrikanın cənubundan (Ümid burnundan) keçərək Hindistana dəniz yolu açan portuqal səyyahı kimdir?",
+      options: ["Vasko da Qama", "Xristofor Kolumb", "Fernan Magellan", "Ameriqo Vespuççi"], correct: 0 },
+    { label: "Səyyahlar və dənizçilər", color: "#2EC4B6",
+      q: "1492-ci ildə Atlantik okeanını keçərək Baham adalarına çatan və yeni bir qitə kəşf etdiyini bilməyərək oranı Hindistan zənn edən səyyah kimdir?",
+      options: ["Ceyms Kuk", "Marko Polo", "Abel Tasman", "Xristofor Kolumb"], correct: 3 },
+    { label: "Səyyahlar və dənizçilər", color: "#7B5EA7",
+      q: "1519–1522-ci illərdə ilk dəfə olaraq Yer kürəsi ətrafında dəniz səyahəti (ekspedisiya) həyata keçirən ekspedisiyanın rəhbəri kim olmuşdur?",
+      options: ["Vasko da Gama", "Fernan Magellan", "David Livinqston", "Amundsen"], correct: 1 },
+    { label: "Səyyahlar və dənizçilər", color: "#F2B705",
+      q: "Avstraliyanın materik olduğunu və onun ətrafındakı adaları (Tasmaniya, Yeni Zelandiya) tədqiq edən hollandiyalı səyyah kimdir?",
+      options: ["Ceyms Kuk", "Fernan Magellan", "Abel Tasman", "Vasko da Qama"], correct: 2 },
+    { label: "Səyyahlar və dənizçilər", color: "#FF6B5E",
+      q: "XIII əsrdə uzun illər Asiyada səyahət edən, Böyük İpək yolu ilə bağlı qeydləri və \"Dünyanın müxtəlifliyi haqqında kitab\"ı ilə avropalılara Şərq ölkələrini tanıdan məşhur səyyah kimdir?",
+      options: ["Xristofor Kolumb", "Marko Polo", "Vasko da Qama", "Ferdinand Magellan"], correct: 1 },
+    { label: "İlkin coğrafi təsəvvürlər", color: "#2EC4B6",
+      q: "Qədim insanlar açıq dənizlərdə və ya geniş səhralarda hərəkət edərkən istiqamət (səmt) tapmaq üçün əsasən hansı təbii obyektlərdən və ya hadisələrdən istifadə edirdilər?",
+      options: ["Yalnız yeraltı çayların səsindən və torpağın qoxusundan", "Göy cisimlərindən, xüsusilə Günəşdən və ulduzlardan (məsələn, Qütb ulduzundan)", "Müasir peyk naviqasiya (GPS) cihazlarından", "Küləyin sürətini və istiqamətini dəqiq ölçən mexaniki cihazlardan"], correct: 1 },
+    { label: "Səyyahlar və dənizçilər", color: "#7B5EA7",
+      q: "1819-1821-ci illərdə F.F. Bellinshauzen və M.P. Lazaryevin rəhbərlik etdiyi rus dəniz ekspedisiyası hansı materiki kəşf etmişdir?",
+      options: ["Avstraliya", "Antarktida", "Şimali Amerika", "Afrika"], correct: 1 },
+];
+
+const TOTAL = SEGMENTS.length;
+let remaining = SEGMENTS.map((_, i) => i); // çarxda hələ qalan seqmentlərin indeksləri
+let round = 0;
+let score = 0;
+let streak = 0;
+let best = 0;
+let currentRotation = 0;
+let spinning = false;
+
+const wheelDisc = document.getElementById('wheelDisc');
+const spinBtn = document.getElementById('spinBtn');
+const roundLabel = document.getElementById('roundLabel');
+const scoreText = document.getElementById('scoreText');
+const streakText = document.getElementById('streakText');
+const bestText = document.getElementById('bestText');
+const overlay = document.getElementById('wheelOverlay');
+const modalCat = document.getElementById('modalCat');
+const questionText = document.getElementById('questionText');
+const optionsWrap = document.getElementById('optionsWrap');
+const modalVerdict = document.getElementById('modalVerdict');
+const nextBtn = document.getElementById('nextBtn');
+const resultCard = document.getElementById('resultCard');
+const finalScoreText = document.getElementById('finalScoreText');
+const verdictText = document.getElementById('verdictText');
+const verdictDesc = document.getElementById('verdictDesc');
+const retryBtn = document.getElementById('retryBtn');
+
+function buildWheel(){
+    const segAngle = 360 / remaining.length;
+
+    /* Rəngli seqmentlər conic-gradient ilə çəkilir (bütün brauzerlərdə etibarlı üsul) */
+    const stops = remaining.map((segIdx, i) => {
+        const start = i * segAngle;
+        const end = (i + 1) * segAngle;
+        return `${SEGMENTS[segIdx].color} ${start}deg ${end}deg`;
+    }).join(', ');
+    wheelDisc.style.background = remaining.length ? `conic-gradient(${stops})` : 'var(--panel2)';
+
+    /* Köhnə etiketləri sil, yenilərini hər seqmentin ortasına fırlanmış vəziyyətdə əlavə et */
+    wheelDisc.querySelectorAll('.wheel-seg').forEach(el => el.remove());
+    remaining.forEach((segIdx, i) => {
+        const segEl = document.createElement('div');
+        segEl.className = 'wheel-seg';
+        segEl.style.transform = `rotate(${i * segAngle + segAngle / 2}deg)`;
+
+        const label = document.createElement('div');
+        label.className = 'wheel-seg-label';
+        label.textContent = SEGMENTS[segIdx].label;
+        segEl.appendChild(label);
+
+        wheelDisc.appendChild(segEl);
+    });
+}
+buildWheel();
+
+function updateScoreUI(){
+    scoreText.textContent = score;
+    streakText.textContent = `${streak} 🔥`;
+    bestText.textContent = best;
+    roundLabel.innerHTML = `Fırlanma <strong>${Math.min(round, TOTAL)}</strong> / ${TOTAL} · Xal: <strong id="scoreInline">${score}</strong>`;
+}
+
+function spin(){
+    if(spinning || remaining.length === 0) return;
+    spinning = true;
+    spinBtn.disabled = true;
+
+    const segAngle = 360 / remaining.length;
+    const targetPos = Math.floor(Math.random() * remaining.length);
+    const targetIndex = remaining[targetPos];
+
+    // Göstərici yuxarıda (0deg) sabitdir. Seçilən seqmentin mərkəzi ora gəlməlidir.
+    const segCenter = targetPos * segAngle + segAngle / 2;
+    const extraSpins = 6; // effekt üçün tam dövrlər
+    const finalAngle = extraSpins * 360 + (360 - segCenter);
+
+    currentRotation += finalAngle;
+    wheelDisc.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+        spinning = false;
+        openQuestion(targetIndex);
+    }, 4300);
+}
+
+function openQuestion(segIdx){
+    round++;
+    const seg = SEGMENTS[segIdx];
+
+    modalCat.textContent = seg.label;
+    questionText.textContent = seg.q;
+    optionsWrap.innerHTML = '';
+    modalVerdict.textContent = '';
+    nextBtn.classList.remove('ready');
+    nextBtn.textContent = remaining.length <= 1 ? 'Nəticəni göstər →' : 'Davam et';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    seg.options.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'quiz-option';
+        div.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+        div.addEventListener('click', () => handleAnswer(i, seg, segIdx, div));
+        optionsWrap.appendChild(div);
+    });
+
+    overlay.classList.add('show');
+}
+
+function handleAnswer(idx, seg, segIdx, chosenEl){
+    const opts = optionsWrap.querySelectorAll('.quiz-option');
+    opts.forEach(o => o.classList.add('is-disabled'));
+
+    if(idx === seg.correct){
+        chosenEl.classList.add('correct');
+        modalVerdict.textContent = 'Doğru cavab! 🎉';
+        score++;
+        streak++;
+        if(streak > best) best = streak;
+    }else{
+        chosenEl.classList.add('wrong');
+        opts[seg.correct].classList.add('correct');
+        modalVerdict.textContent = 'Yanlış — doğru cavab işarələndi.';
+        streak = 0;
+    }
+
+    updateScoreUI();
+    remaining = remaining.filter(i => i !== segIdx);
+    nextBtn.classList.add('ready');
+}
+
+nextBtn.addEventListener('click', () => {
+    if(!nextBtn.classList.contains('ready')) return;
+    overlay.classList.remove('show');
+
+    currentRotation = 0;
+    wheelDisc.style.transition = 'none';
+    wheelDisc.style.transform = 'rotate(0deg)';
+    buildWheel();
+    requestAnimationFrame(() => {
+        wheelDisc.style.transition = '';
+    });
+
+    if(remaining.length === 0){
+        finishGame();
+    }else{
+        spinBtn.disabled = false;
+    }
+});
+
+function finishGame(){
+    document.querySelector('.wheel-stage-card').style.display = 'none';
+    resultCard.classList.add('active');
+    finalScoreText.innerHTML = `${score}<span>/${TOTAL}</span>`;
+
+    if(score >= 6){
+        verdictText.textContent = 'Bəxtin də, biliyin də yerindədir! 🏆';
+        verdictText.className = 'quiz-result-verdict pass';
+        verdictDesc.textContent = 'Çarx səni müxtəlif mövzulara çıxardı, amma öhdəsindən gəldin.';
+    }else if(score >= 3){
+        verdictText.textContent = 'Pis deyil 👍';
+        verdictText.className = 'quiz-result-verdict pass';
+        verdictDesc.textContent = 'Bir az da fırlat — hər dövrədə eyni suallar təkrarlanmır.';
+    }else{
+        verdictText.textContent = 'Bəxt bu dəfə səmimi olmadı 🔁';
+        verdictText.className = 'quiz-result-verdict fail';
+        verdictDesc.textContent = 'Yenidən fırlat, çarx sənə yenidən bütün mövzuları təqdim edəcək.';
+    }
+}
+
+spinBtn.addEventListener('click', spin);
+retryBtn.addEventListener('click', () => {
+    round = 0;
+    score = 0;
+    streak = 0;
+    currentRotation = 0;
+    remaining = SEGMENTS.map((_, i) => i);
+
+    wheelDisc.style.transition = 'none';
+    wheelDisc.style.transform = 'rotate(0deg)';
+    buildWheel();
+    requestAnimationFrame(() => {
+        wheelDisc.style.transition = '';
+    });
+
+    scoreText.textContent = '0';
+    streakText.textContent = '0 🔥';
+    bestText.textContent = best;
+    roundLabel.innerHTML = `Fırlanma <strong>1</strong> / ${TOTAL} · Xal: <strong id="scoreInline">0</strong>`;
+    overlay.classList.remove('show');
+    resultCard.classList.remove('active');
+    document.querySelector('.wheel-stage-card').style.display = '';
+    spinBtn.disabled = false;
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>İnteraktiv Oyunlar | Coğrafiya Bilik Yoxlaması | GeoAtlas</title>
+<meta name="description" content="Azərbaycan coğrafiyası üzrə quiz, fırlanan çarx və xəritə tapmacası formatında interaktiv oyunlar — əylənərək öyrən, biliyini sına.">
+    <link rel="icon" type="image/png" href="icon/favicon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header>
+
+   <div class="logo">
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-text">
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="oyunlar.html" class="current">İnteraktiv oyunlar</a>
+        <a href="../testler/testler.html">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <span class="current">İnteraktiv oyunlar</span>
+    </div>
+</div>
+
+
+<section class="page-hero">
+
+    <div class="eyebrow">Əylənərək Öyrən</div>
+
+    <h1>
+        Coğrafiyanı oyun<br>
+        <span>formatında mənimsə.</span>
+    </h1>
+
+    <p>
+        Rəsmi testlərdən fərqli olaraq, bu bölmədəki oyunlar sürət, təsadüfilik
+        və əyləncə üzərində qurulub. Sual bankı eynidir — 77 inzibati ərazi
+        üzrə real coğrafi məlumatlar — sadəcə təqdimat forması dəyişir. Aşağıdan
+        bir oyun seç və başla.
+    </p>
+
+</section>
+
+
+<div class="test-type-grid">
+
+    <div class="test-type-card" data-code="QUIZ">
+
+        <div class="test-type-top">
+            <div class="test-type-icon">🧠</div>
+            <div class="test-type-level">Klassik</div>
+        </div>
+
+        <div>
+            <div class="code">QUIZ · Sürətli Bilik Oyunu</div>
+            <h3>Klassik coğrafiya quiz-i</h3>
+        </div>
+
+        <p>
+            Ard-arda gələn çoxvariantlı suallara qarşı vaxtla yarış. Hər
+            düzgün cavab xal qazandırır, ardıcıl seriya bonus əmsalını
+            artırır — məqsəd ən yüksək nəticəni əldə etməkdir.
+        </p>
+
+        <div class="test-type-meta">
+            <div><strong>∞</strong>sual bankı</div>
+            <div><strong>⏱</strong>vaxtla yarış</div>
+            <div><strong>🔥</strong>seriya bonusu</div>
+        </div>
+
+        <a href="quiz.html" class="test-type-cta">Oyuna başla →</a>
+
+    </div>
+
+
+    <div class="test-type-card" data-code="ÇARX">
+
+        <div class="test-type-top">
+            <div class="test-type-icon">🎡</div>
+            <div class="test-type-level mid">Təsadüfi</div>
+        </div>
+
+        <div>
+            <div class="code">ÇARX · Fırlanan Bəxt Çarxı</div>
+            <h3>Spin the Wheel</h3>
+        </div>
+
+        <p>
+            Çarxı fırlat, taleyin sənə hansı inzibati ərazini və ya
+            mövzunu (relyef, əhali, sərhəd, mərkəz) çıxaracağını gör,
+            sonra həmin sualı cavablandır. Hər fırlanma yeni sürpriz.
+        </p>
+
+        <div class="test-type-meta">
+            <div><strong>77</strong>bölgə sektoru</div>
+            <div><strong>1</strong>fırlanma / sual</div>
+            <div><strong>🎯</strong>cəld cavab</div>
+        </div>
+
+        <a href="carx.html" class="test-type-cta">Çarxı fırlat →</a>
+
+    </div>
+
+
+    <div class="test-type-card" data-code="TAP">
+
+        <div class="test-type-top">
+            <div class="test-type-icon">🗺️</div>
+            <div class="test-type-level hard">Sürət</div>
+        </div>
+
+        <div>
+            <div class="code">TAPMACA · Sürətli Xəritə Oyunu</div>
+            <h3>Xəritədə tap</h3>
+        </div>
+
+        <p>
+            Ekranda adı göstərilən inzibati ərazini saat işləyərkən
+            xəritə üzərində tıqla. Səhv klik saniyələr itirir, düzgün
+            klik növbəti bölgəyə keçirir — reaksiya sürətini sına.
+        </p>
+
+        <div class="test-type-meta">
+            <div><strong>60</strong>saniyə</div>
+            <div><strong>77</strong>bölgə</div>
+            <div><strong>🏆</strong>ən yaxşı nəticə</div>
+        </div>
+
+        <a href="tapmaca.html" class="test-type-cta">Oyuna başla →</a>
+
+    </div>
+
+</div>
+
+
+<div class="info-block">
+    <div class="info-block-inner">
+
+        <div class="info-block-item">
+            <strong>🎮 Testdən fərqi nədir?</strong>
+            <p>
+                Testlər bölməsi məktəb formatına (KSQ/BSQ/MİQ) uyğun rəsmi
+                qiymətləndirmədir. Oyunlar isə eyni bilik bazasından istifadə
+                edir, lakin sürət, təsadüfilik və xal sistemi ilə əylənərək
+                öyrənməyə yönəlib.
+            </p>
+        </div>
+
+        <div class="info-block-item">
+            <strong>📚 Sual bankı haradandır?</strong>
+            <p>
+                Suallar GeoAtlas-ın Azərbaycan xəritəsindəki 77 inzibati
+                ərazi üzrə real coğrafi məlumatlar (mərkəz, sahə, əhali,
+                təbii xüsusiyyətlər) əsasında tərtib olunub.
+            </p>
+        </div>
+
+        <div class="info-block-item">
+            <strong>🔁 Neçə dəfə oynana bilər?</strong>
+            <p>
+                İstənilən qədər — hər oyun sualları və ya çarx nəticələrini
+                təsadüfi qaydada yenidən qarışdırır, ona görə hər cəhd
+                fərqli təcrübə təqdim edir.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

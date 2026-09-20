@@ -45,7 +45,11 @@ body,
 *{
     transition:background-color .25s,border-color .25s,color .25s;
 }
-
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 .theme-toggle{
     display:flex;
     align-items:center;

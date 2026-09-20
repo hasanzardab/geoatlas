@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'light'){
+            document.documentElement.setAttribute('data-theme','light');
+        }
+    }catch(e){}
+})();
+</script>
+
+<title>Test | Fiziki-Coğrafi Rayonlar | GeoAtlas</title>
+<meta name="description" content="Azərbaycanın fiziki-coğrafi rayonları üzrə 10 suallıq test.">
+<link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="icon/favicon.png">
+</head>
+<body>
+
+<header>
+
+   <div class="logo">
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-text">
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <span>Coğrafiya platforması</span>
+        </div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="../index.html">Ana səhifə</a>
+        <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
+        <a href="../oyunlar/oyunlar.html">İnteraktiv oyunlar</a>
+        <a href="testler.html" class="current">Testlər</a>
+        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+    </nav>
+
+    <div class="header-right">
+        <div id="countrySwitcher"></div>
+    </div>
+
+</header>
+
+<div class="breadcrumb-bar">
+    <div class="breadcrumb">
+        <a href="../index.html">Ana səhifə</a>
+        <span class="sep">/</span>
+        <a href="testler.html">Testlər</a>
+        <span class="sep">/</span>
+        <span class="current">Fiziki-Coğrafi Rayonlar SINAQ 7</span>
+    </div>
+</div>
+
+
+<div class="quiz-wrap">
+
+    <div class="quiz-intro" id="quizIntro">
+
+        <div class="quiz-intro-top">
+            <div class="quiz-intro-icon">📘</div>
+            <div>
+                <div class="code">BİLİYİNİ YOXLA</div>
+                <h2>Azərbaycanın Fiziki-Coğrafi Rayonları</h2>
+            </div>
+        </div>
+
+       <p>
+    Bu test Azərbaycanın təbii vilayətləri, fiziki-coğrafi rayonları, relyefi,
+    daxili suları və landşaft xüsusiyyətləri üzrə əsas anlayışları yoxlayır və 
+    mövzuların mənimsənilməsini qiymətləndirir. Test 10 sualdan ibarətdir və 
+    təxminən 5 dəqiqə ərzində tamamlanır. Testi uğurla başa vurmaq üçün ən azı 
+    8 düzgün cavab tələb olunur.
+        </p>
+
+        <div class="quiz-intro-facts">
+            <div class="stat">
+                <small>Sual sayı</small>
+                <strong>10</strong>
+            </div>
+            <div class="stat">
+                <small>Təxmini vaxt</small>
+                <strong>~5 dəq</strong>
+            </div>
+            <div class="stat">
+                <small>Keçid balı</small>
+                <strong>8 / 10</strong>
+            </div>
+        </div>
+
+        <button class="quiz-start-btn">Testə başla →</button>
+
+    </div>
+
+
+    <div class="quiz-card" id="quizCard">
+
+        <div class="quiz-body">
+
+            <div class="quiz-top-row">
+                <div class="quiz-progress-label">Sual 1 / 10</div>
+                <div class="quiz-timer"></div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" style="width:0%"></div>
+            </div>
+
+            <div class="quiz-question"></div>
+            <div class="quiz-options"></div>
+
+            <button class="quiz-next-btn">Növbəti sual →</button>
+
+        </div>
+
+        <div class="quiz-result"></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+        </div>
+        <div class="footer-links">
+            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="../elaqe/elaqe.html">Əlaqə</a>
+            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+        </div>
+    </div>
+</footer>
+
+
+<script src="../assets/js/countries-data.js"></script>
+<script>
+    window.SITE_BASE = "../";
+    window.CURRENT_COUNTRY = null;
+</script>
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/testler.js"></script>
+<script>
+
+    initQuiz({
+        introId: "quizIntro",
+        containerId: "quizCard",
+        passScore: 8,
+        shuffle: true,
+        passMessage: "Azərbaycanın təbii vilayətləri, fiziki-coğrafi rayonları və onların xüsusiyyətlərini əla mənimsəmisən. İmtahana tam hazırsan!",
+        failMessage: "Fiziki-coğrafi rayonlar, göllər, çaylar və landşaftlar üzrə bəzi mövzularda çətinlik çəkirsən. Təbii vilayətlər bölməsini və xəritəni bir daha nəzərdən keçirməyin faydalı olar.",
+        questions: [
+            {
+        q: "Meşələrin daha az yayıldığı təbii vilayət:",
+        options: ["Orta Araz", "Lənkəran", "Kiçik Qafqaz", "Böyük Qafqaz"],
+        correct: 0
+    },
+    {
+        q: "Xəzər dənizinə birbaşa çıxışı olan təbii vilayətlər:",
+        options: ["Böyük Qafqaz, Kiçik Qafqaz, Kür çökəkliyi", "Kür çökəkliyi, Böyük Qafqaz, Lənkəran", "Kiçik Qafqaz, Kür çökəkliyi, Lənkəran", "Lənkəran, Orta Araz, Kür çökəkliyi"],
+        correct: 1
+    },
+    {
+        q: "Darıdağ və Xaltan mineral bulaqlarının yerləşdiyi müvafiq təbii vilayətlər:",
+        options: ["Orta Araz və Lənkəran", "Kiçik Qafqaz və Böyük Qafqaz", "Orta Araz və Böyük Qafqaz", "Lənkəran və Kiçik Qafqaz"],
+        correct: 2
+    },
+    {
+        q: "Kür çökəkliyi təbii vilayətinə aid olan əlamətlər:\n1. Yarımsəhra və quru çöl iqlimi hakimdir\n2. Kaynazoy yaşlı süxurlar üstünlük təşkil edir\n3. Filiz faydalı qazıntıları ilə zəngindir\n4. Meşə ehtiyatı ilə yaxşı təmin olunmuşdur\n5. Qrunt suları səthə yaxın yerləşir",
+        options: ["1, 2, 3", "2, 3, 4", "3, 4, 5", "1, 2, 5"],
+        correct: 3
+    },
+    {
+        q: "Filiz faydalı qazıntıları olmayan fiziki-coğrafi rayonlar:",
+        options: ["Həkəri, Gəncə", "Vulkanik Yayla, Qanıx-Əyriçay", "Lənkəran, Zaqatala-Lahıc", "Samur-Dəvəçi (Şabran), Lənkəran"],
+        correct: 3
+    },
+    {
+        q: "Talış fiziki-coğrafi rayonunun yerləşdiyi tektonik zona:",
+        options: ["Ön Qafqaz", "Kiçik Qafqaz", "Böyük Qafqaz", "Kür çökəkliyi"],
+        correct: 1
+    },
+    {
+        q: "Azərbaycanda dəmyə əkinçiliyinin çox zəif inkişaf etdiyi fiziki-coğrafi rayonlar:",
+        options: ["Dağlıq Şirvan, Gəncə", "Zaqatala-Lahıc, Lənkəran", "Qonaqkənd, Zaqatala-Lahıc", "Küdrü-Şirvan, Kür-Araz"],
+        correct: 3
+    },
+    {
+        q: "Xəzər dənizinin səviyyəsinin qalxmasının problem yaratdığı fiziki-coğrafi rayonlar:\n1. Samur-Dəvəçi (Şabran)\n2. Küdrü-Şirvan\n3. Qobustan-Abşeron\n4. Lənkəran\n5. Talış\n6. Kür-Araz",
+        options: ["2, 3, 5, 6", "1, 2, 5, 6", "3, 4, 5, 6", "1, 3, 4, 6"],
+        correct: 3
+    },
+    {
+        q: "İki fiziki-coğrafi rayona bölünən təbii vilayətlər:",
+        options: ["Kiçik Qafqaz və Böyük Qafqaz", "Lənkəran və Kiçik Qafqaz", "Kür çökəkliyi və Böyük Qafqaz", "Orta Araz və Lənkəran"],
+        correct: 3
+    },
+    {
+        q: "Kür çökəkliyində axımı tənzimlənən çaylar:",
+        options: ["Kür və Araz", "Tərtər və Şinçay", "Araz və Kişçay", "Kür və Dəmiraparan"],
+        correct: 0
+    }
+        ]
+    });
+
+</script>
+
+</body>
+</html>

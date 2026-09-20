@@ -1103,6 +1103,35 @@ header{
 }
 
 /* =========================================
+   ANA SƏHİFƏ — CANLI SAYT STATİSTİKASI
+========================================= */
+
+.live-stats{
+    max-width:1500px;
+    margin:70px auto 0;
+    padding:0 5% 60px;
+}
+
+.live-stats .live-stats-bar{
+    padding:0;
+    grid-template-columns:repeat(2,1fr);
+    max-width:520px;
+}
+
+.live-stats-note{
+    margin-top:14px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+@media (max-width:640px){
+    .live-stats .live-stats-bar{
+        grid-template-columns:1fr;
+        max-width:100%;
+    }
+}
+
+/* =========================================
    ANA SƏHİFƏ — XÜSUSİYYƏTLƏR
 ========================================= */
 
@@ -2274,4 +2303,21 @@ footer{
     .form-row{
         grid-template-columns:1fr;
     }
+}
+.youtube-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: #ff0000;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.youtube-btn:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
 }

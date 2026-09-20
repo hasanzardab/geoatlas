@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
+ 
 <header>
 
    <div class="logo">
@@ -38,7 +38,13 @@
         <a href="index.html#xeriteler" data-nav="maps">İnteraktiv Xəritələr</a>
         <a href="oyunlar/oyunlar.html">İnteraktiv oyunlar</a>
         <a href="testler/testler.html">Testlər</a>
-        <a href="haqqimizda/haqqimizda.html">Haqqımızda</a>
+       <!-- <a href="haqqimizda/haqqimizda.html">Haqqımızda</a>-->
+        <a href="https://www.youtube.com/@COĞRAFİYAHT"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="youtube-btn">
+    ▶ YouTube kanalım
+</a>
     </nav>
 
     <div class="header-right">
@@ -175,6 +181,30 @@
 </section>
 
 
+<section class="live-stats" id="saytStatistikasi">
+
+    <div class="section-head">
+        <div class="eyebrow">Canlı statistika</div>
+        <h2>Sayt statistikası</h2>
+        <p>Cloudflare Web Analytics əsasında, son <span id="liveStatsDays">30</span> günün rəqəmləri.</p>
+    </div>
+
+    <div class="stats-bar live-stats-bar" id="liveStatsBar">
+        <div class="stat-box">
+            <strong id="liveStatViews">—</strong>
+            <span>Səhifə baxışı</span>
+        </div>
+        <div class="stat-box">
+            <strong id="liveStatVisits">—</strong>
+            <span>Ziyarət</span>
+        </div>
+    </div>
+
+    <p class="live-stats-note" id="liveStatsNote"></p>
+
+</section>
+
+
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
@@ -267,7 +297,52 @@
         document.getElementById("statReady").textContent = ready;
         document.getElementById("statTotal").textContent = SITE_COUNTRIES.length;
     });
+    
 </script>
-    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "62cc604539e244ea8d38405c76998fd8"}'></script><!-- End Cloudflare Web Analytics -->
+<script>
+    // === SAYT STATİSTİKASI (Cloudflare Web Analytics vasitəçi Worker-dən) ===
+    // AŞAĞIDAKI ÜNVANI ÖZ WORKER URL-nizlə əvəz edin, məsələn:
+    // "https://geoatlas-stats.SIZIN-SUBDOMAIN.workers.dev"
+    const STATS_WORKER_URL = "https://blue-tooth-d236.cografiya.workers.dev/";
+    const STATS_DAYS = 30;
+
+    (function loadLiveStats() {
+        const viewsEl = document.getElementById("liveStatViews");
+        const visitsEl = document.getElementById("liveStatVisits");
+        const noteEl = document.getElementById("liveStatsNote");
+        const daysEl = document.getElementById("liveStatsDays");
+        if (!viewsEl || !visitsEl) return;
+
+        daysEl.textContent = STATS_DAYS;
+
+        fetch(`${STATS_WORKER_URL}?days=${STATS_DAYS}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Worker cavab vermədi");
+                return res.json();
+            })
+            .then(data => {
+                if (data.error) throw new Error(data.error);
+                viewsEl.textContent = Number(data.pageviews || 0).toLocaleString("az-AZ");
+                visitsEl.textContent = Number(data.visits || 0).toLocaleString("az-AZ");
+                if (noteEl) {
+                    const updated = new Date(data.updatedAt);
+                    noteEl.textContent = "Son yeniləmə: " + updated.toLocaleString("az-AZ");
+                }
+            })
+            .catch(err => {
+                viewsEl.textContent = "—";
+                visitsEl.textContent = "—";
+                if (noteEl) noteEl.textContent = "Statistika hazırda əlçatan deyil.";
+                console.warn("Sayt statistikası yüklənmədi:", err);
+            });
+    })();
+</script>
+<!-- Cloudflare Web Analytics -->
+ <script type='module' 
+ src='https://static.cloudflareinsights.com/beacon.min.js' 
+ data-cf-beacon='{"token": "62cc604539e244ea8d38405c76998fd8"}'>
+</script>
+
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>

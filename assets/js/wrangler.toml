@@ -1,0 +1,7 @@
+name = "blue-tooth-d236"
+main = "cloudflare-worker.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "TEST_STATS"
+id = "96d2246688d34fd8a62516bf0792c080"

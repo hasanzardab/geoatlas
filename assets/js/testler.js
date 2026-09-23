@@ -7,6 +7,7 @@
  * initQuiz(config) funksiyasını çağırır.
  *
  * config formatı:
+ *   testId        – testin unikal kodu (statistika üçün, məs. "sinaq1")
  *   containerId   – quiz-card elementinin id-si
  *   introId       – quiz-intro elementinin id-si
  *   questions     – [{ q, options:[...4], correct: index, note }]
@@ -16,10 +17,46 @@
  *   failMessage   – kəsilmə mesajı
  */
 
+// Statistika Worker-inin ünvanı (eyni worker "cloudflare-worker.js" faylıdır)
+const TRACK_WORKER_URL = "https://blue-tooth-d236.cografiya.workers.dev/track";
+
+// Testin başlanması/bitməsini Worker-ə bildirir. Şəbəkə xətası olsa belə
+// istifadəçinin təcrübəsinə mane olmamaq üçün nəticəni gözləmirik.
+function trackQuizEvent(testId, action, extra) {
+    if (!testId) return;
+    const params = new URLSearchParams({ test: testId, action });
+    if (extra) {
+        Object.keys(extra).forEach(k => params.set(k, extra[k]));
+    }
+    fetch(`${TRACK_WORKER_URL}?${params.toString()}`, { method: "POST" })
+        .catch(() => { /* statistika uğursuz olsa, testi pozmasın */ });
+}
+
+// "Testə başla" düyməsinin altında "X nəfər sınayıb" statistikasını göstərir
+function loadUsageCount(testId, introEl) {
+    const countEl = introEl && introEl.querySelector("#quizUsageCount");
+    if (!countEl || !testId) return;
+
+    fetch(TRACK_WORKER_URL)
+        .then(res => res.json())
+        .then(data => {
+            const stat = data.perTest && data.perTest[testId];
+            const count = stat ? stat.started : 0;
+            countEl.textContent = count.toLocaleString("az-AZ");
+        })
+        .catch(() => {
+            // Statistika çəkilməsə, sətri gizlət ki, boş "—" görünməsin
+            const wrap = countEl.closest(".quiz-usage-stat");
+            if (wrap) wrap.style.display = "none";
+        });
+}
+
 function initQuiz(config) {
 
     const intro = document.getElementById(config.introId);
     const card = document.getElementById(config.containerId);
+
+    loadUsageCount(config.testId, intro);
 
     const startBtn = card.parentElement.querySelector(".quiz-start-btn");
 
@@ -141,6 +178,12 @@ function initQuiz(config) {
         const total = config.questions.length;
         const passed = score >= config.passScore;
 
+        trackQuizEvent(config.testId, "complete", {
+            score: score,
+            total: total,
+            passed: passed ? "1" : "0"
+        });
+
         resultEl.innerHTML = `
             <div class="quiz-result-score">${score}<span> / ${total}</span></div>
             <div class="quiz-result-verdict ${passed ? "pass" : "fail"}">
@@ -196,6 +239,7 @@ function initQuiz(config) {
     startBtn.addEventListener("click", () => {
         intro.style.display = "none";
         card.classList.add("active");
+        trackQuizEvent(config.testId, "start");
         resetQuiz();
     });
 

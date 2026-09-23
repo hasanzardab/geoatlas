@@ -12,6 +12,15 @@
  *   CF_SITE_TAG     – Web Analytics saytının "Site tag" dəyəri
  *   ALLOWED_ORIGIN  – (məcburi deyil) yalnız bu domenə CORS icazəsi,
  *                      default "*" (hər yerdən açıla bilər)
+ *
+ * TEST SAYĞACI (KV):
+ *   TEST_STATS      – KV namespace binding (Workers → Settings → Variables
+ *                      → KV Namespace Bindings bölməsində əlavə edin)
+ *
+ *   Endpointlər:
+ *     POST /track?test=sinaq1&action=start
+ *     POST /track?test=sinaq1&action=complete&score=8&total=10&passed=1
+ *     GET  /track            → bütün testlər üzrə cəmi ədədlər (JSON)
  */
 
 const GRAPHQL_ENDPOINT = "https://api.cloudflare.com/client/v4/graphql";
@@ -26,6 +35,12 @@ export default {
     // CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders(env) });
+    }
+
+    // Test sayğacı endpoint-i (analytics keşindən ayrı saxlanılır,
+    // çünki bu, canlı say olmalıdır, 5 dəqiqəlik keşdə yox)
+    if (url.pathname === "/track") {
+      return handleTrack(request, env);
     }
 
     // Keşi yoxla
@@ -99,6 +114,100 @@ export default {
     }
   },
 };
+
+// Bilinən test id-ləri — GET cavabında bütün siyahının həmişə görünməsi üçün.
+// Yeni test əlavə etsəniz, bura da testId-ni əlavə edin (məcburi deyil,
+// olmasa belə POST /track o testi avtomatik yaradacaq).
+const KNOWN_TESTS = [
+  "sinaq1", "sinaq2", "sinaq3", "sinaq4",
+  "sinaq5", "sinaq6", "sinaq7", "sinaq8",
+  "ksq", "bsq", "miq",
+];
+
+async function handleTrack(request, env) {
+  if (!env.TEST_STATS) {
+    return jsonResponse(
+      { error: "TEST_STATS KV namespace bağlı deyil. Worker Settings → Bindings-dən əlavə edin." },
+      500,
+      env
+    );
+  }
+
+  const url = new URL(request.url);
+
+  if (request.method === "POST") {
+    const testId = (url.searchParams.get("test") || "").trim();
+    const action = (url.searchParams.get("action") || "").trim(); // "start" | "complete"
+
+    if (!testId || !["start", "complete"].includes(action)) {
+      return jsonResponse({ error: "test və ya action parametri yanlışdır" }, 400, env);
+    }
+
+    const key = `${action}:${testId}`;
+    const current = parseInt(await env.TEST_STATS.get(key), 10) || 0;
+    await env.TEST_STATS.put(key, String(current + 1));
+
+    // "complete" hadisəsində keçid/kəsilmə sayını da ayrıca saxlayaq
+    if (action === "complete") {
+      const passed = url.searchParams.get("passed") === "1";
+      const passKey = `${passed ? "passed" : "failed"}:${testId}`;
+      const passCurrent = parseInt(await env.TEST_STATS.get(passKey), 10) || 0;
+      await env.TEST_STATS.put(passKey, String(passCurrent + 1));
+    }
+
+    return jsonResponse({ ok: true, test: testId, action, count: current + 1 }, 200, env);
+  }
+
+  if (request.method === "GET") {
+    // Bütün açarları oxu (test sayı az olduğu üçün tam siyahı çəkmək kifayətdir)
+    const list = await env.TEST_STATS.list();
+    const raw = {};
+    for (const k of list.keys) {
+      raw[k.name] = parseInt(await env.TEST_STATS.get(k.name), 10) || 0;
+    }
+
+    const testIds = new Set(KNOWN_TESTS);
+    Object.keys(raw).forEach((k) => testIds.add(k.split(":")[1]));
+
+    const perTest = {};
+    let totalStarted = 0;
+    let totalCompleted = 0;
+    let totalPassed = 0;
+    let totalFailed = 0;
+
+    testIds.forEach((id) => {
+      const started = raw[`start:${id}`] || 0;
+      const completed = raw[`complete:${id}`] || 0;
+      const passed = raw[`passed:${id}`] || 0;
+      const failed = raw[`failed:${id}`] || 0;
+
+      perTest[id] = { started, completed, passed, failed };
+
+      totalStarted += started;
+      totalCompleted += completed;
+      totalPassed += passed;
+      totalFailed += failed;
+    });
+
+    return jsonResponse(
+      {
+        totals: {
+          started: totalStarted,
+          completed: totalCompleted,
+          passed: totalPassed,
+          failed: totalFailed,
+        },
+        perTest,
+        updatedAt: new Date().toISOString(),
+      },
+      200,
+      env,
+      60 // 60 saniyə keş — hər səhifə açılışında KV-yə yüklənməsin
+    );
+  }
+
+  return jsonResponse({ error: "Dəstəklənməyən metod" }, 405, env);
+}
 
 function clampDays(raw) {
   const n = parseInt(raw, 10);

@@ -94,6 +94,8 @@
 
         <button class="quiz-start-btn">Sınağa başla →</button>
 
+        <p class="quiz-usage-stat" id="quizUsageStat">👥 <strong id="quizUsageCount">—</strong> nəfər bu testi sınayıb</p>
+
     </div>
 
 
@@ -148,6 +150,7 @@
 <script>
 
     initQuiz({
+        testId: "miq",
         introId: "quizIntro",
         containerId: "quizCard",
         passScore: 11,

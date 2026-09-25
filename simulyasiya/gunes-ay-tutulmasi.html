@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Real Günəş və Ay Tutulması Simulyasiyası</title>
+<style>
+  :root {
+    --panel-bg: rgba(15, 18, 35, 0.9);
+    --text: #e8ecf7;
+    --muted: #9aa3c0;
+    --accent: #ffd166;
+    --accent2: #7fd8ff;
+    --border: rgba(255,255,255,0.09);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%; margin: 0;
+    background: radial-gradient(ellipse at center, #0a0e24 0%, #04050f 70%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow: hidden;
+  }
+  #stars { position: fixed; inset: 0; z-index: 0; }
+  #stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  svg#scene { width: 100%; height: 100%; max-width: 1000px; max-height: 1000px; }
+
+  #hud {
+    position: fixed; top: calc(14px + env(safe-area-inset-top,0px)); left: 14px; z-index: 3;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 16px; backdrop-filter: blur(8px); max-width: 230px;
+  }
+  #hud h1 { font-size: 14px; margin: 0 0 6px 0; color: var(--accent); font-weight: 600; }
+  #hud p { margin: 0; font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+  #status {
+    position: fixed; top: calc(14px + env(safe-area-inset-top,0px)); right: 14px; z-index: 3;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 16px; backdrop-filter: blur(8px); width: 210px;
+  }
+  #status h2 { margin: 0 0 5px 0; font-size: 14px; color: var(--accent2); }
+  #status p { margin: 3px 0; font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+  #skyPanel {
+    position: fixed; bottom: calc(120px + env(safe-area-inset-bottom,0px)); right: 14px; z-index: 3;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 14px;
+    padding: 10px; backdrop-filter: blur(8px); width: 150px; text-align: center;
+  }
+  #skyPanel h3 { margin: 0 0 6px 0; font-size: 11px; color: var(--muted); font-weight: 500; }
+  #skyCanvas { width: 100%; aspect-ratio: 1; border-radius: 8px; background: #000; }
+
+  #controls {
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom,0px)); left: 50%;
+    transform: translateX(-50%); z-index: 3;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 10px 20px; display: flex; flex-direction: column; align-items: center; gap: 7px;
+    backdrop-filter: blur(8px); width: min(92vw, 480px);
+  }
+  .row { display: flex; align-items: center; gap: 10px; width: 100%; }
+  button.ctrl {
+    background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text);
+    border-radius: 999px; padding: 7px 13px; font-size: 12.5px; cursor: pointer; white-space: nowrap;
+  }
+  button.ctrl.active { background: rgba(255,209,102,0.25); border-color: var(--accent); }
+  button.ctrl:hover { background: rgba(255,255,255,0.16); }
+  input[type=range] { flex: 1; }
+  .lbl { font-size: 11.5px; color: var(--muted); min-width: 44px; text-align: right; }
+  .lbl-small { font-size: 11px; color: var(--muted); min-width: 72px; }
+
+  @media (max-width: 640px) {
+    #hud { max-width: 150px; padding: 9px 11px; }
+    #hud h1 { font-size: 12px; } #hud p { font-size: 10px; }
+    #status { width: 140px; padding: 9px 11px; }
+    #status h2 { font-size: 12px; } #status p { font-size: 10px; }
+    #skyPanel { width: 90px; bottom: calc(110px + env(safe-area-inset-bottom,0px)); }
+    #controls { padding: 8px 12px; }
+    button.ctrl { padding: 6px 9px; font-size: 11px; }
+    .lbl-small { min-width: 54px; font-size: 9.5px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div id="hud">
+  <h1>🌘 Real Tutulma Modeli</h1>
+  <p>Ayın orbiti Yerin orbit müstəvisinə görə 5.14° əyilib — buna görə tutulmalar hər ay yox, yalnız Ay "düyün" nöqtəsindən keçəndə baş verir.</p>
+</div>
+
+<div id="status">
+  <h2 id="statusTitle">Tutulma yoxdur</h2>
+  <p id="statusDesc">Ay öz orbitindədir.</p>
+  <p id="nodeInfo" style="color:var(--accent);"></p>
+</div>
+
+<div id="skyPanel">
+  <h3>Yerdən görünüş</h3>
+  <canvas id="skyCanvas" width="200" height="200"></canvas>
+</div>
+
+<div id="stage">
+  <svg id="scene" viewBox="-500 -320 1000 640"></svg>
+</div>
+
+<div id="controls">
+  <div class="row">
+    <span class="lbl-small">Ayın bucağı</span>
+    <input type="range" id="angleRange" min="0" max="360" step="0.5" value="180" oninput="setAngleManual(this.value)">
+    <span class="lbl" id="angleLabel">180°</span>
+  </div>
+  <div class="row">
+    <button class="ctrl" id="playBtn" onclick="togglePlay()">⏸ Dayandır</button>
+    <button class="ctrl active" id="tiltBtn" onclick="toggleTilt()">📐 Əyilmə: Real</button>
+    <span class="lbl-small">Sürət</span>
+    <input type="range" id="speedRange" min="0" max="4" step="0.1" value="1" oninput="setSpeed(this.value)">
+    <span class="lbl" id="speedLabel">1.0x</span>
+  </div>
+</div>
+
+<script>
+// ---------- Ulduz fonu ----------
+const starsCanvas = document.getElementById('stars');
+const sctx = starsCanvas.getContext('2d');
+function resizeStars() {
+  starsCanvas.width = window.innerWidth; starsCanvas.height = window.innerHeight;
+  drawStars();
+}
+function drawStars() {
+  sctx.fillStyle = '#04050f'; sctx.fillRect(0,0,starsCanvas.width, starsCanvas.height);
+  for (let i = 0; i < 200; i++) {
+    const x = Math.random()*starsCanvas.width, y = Math.random()*starsCanvas.height, r = Math.random()*1.3;
+    sctx.fillStyle = `rgba(255,255,255,${Math.random()*0.8+0.2})`;
+    sctx.beginPath(); sctx.arc(x,y,r,0,Math.PI*2); sctx.fill();
+  }
+}
+window.addEventListener('resize', resizeStars);
+resizeStars();
+
+// ---------- Səhnə ----------
+const NS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById('scene');
+const defs = document.createElementNS(NS, "defs");
+defs.innerHTML = `
+  <radialGradient id="sunGrad" cx="45%" cy="40%" r="60%">
+    <stop offset="0%" stop-color="#fff8dd"/><stop offset="45%" stop-color="#ffd166"/>
+    <stop offset="100%" stop-color="#ff8c42" stop-opacity="0.2"/>
+  </radialGradient>
+  <radialGradient id="earthGrad" cx="35%" cy="32%" r="68%">
+    <stop offset="0%" stop-color="#8fd0ff"/><stop offset="55%" stop-color="#3d7fd6"/>
+    <stop offset="100%" stop-color="#153e7a"/>
+  </radialGradient>
+  <radialGradient id="moonGrad" cx="35%" cy="32%" r="68%">
+    <stop offset="0%" stop-color="#efece5"/><stop offset="60%" stop-color="#b8b4ac"/>
+    <stop offset="100%" stop-color="#7d7a72"/>
+  </radialGradient>
+`;
+svg.appendChild(defs);
+
+const SUN_X = -420, SUN_Y = 0, SUN_R = 55;
+const EARTH_X = 60, EARTH_Y = 0, EARTH_R = 26;
+const MOON_ORBIT_R = 110;
+const MOON_R = 7;
+const REAL_TILT = 5.14; // dərəcə, Ayın orbit əyilməsi
+
+// Ecliptic plane (reference) line
+const eclipticLine = document.createElementNS(NS, "line");
+eclipticLine.setAttribute("x1", -480); eclipticLine.setAttribute("y1", 0);
+eclipticLine.setAttribute("x2", 480); eclipticLine.setAttribute("y2", 0);
+eclipticLine.setAttribute("stroke", "rgba(255,255,255,0.06)");
+eclipticLine.setAttribute("stroke-width", "1");
+svg.appendChild(eclipticLine);
+
+const sun = document.createElementNS(NS, "circle");
+sun.setAttribute("cx", SUN_X); sun.setAttribute("cy", SUN_Y); sun.setAttribute("r", SUN_R);
+sun.setAttribute("fill", "url(#sunGrad)");
+svg.appendChild(sun);
+
+const shadowGroup = document.createElementNS(NS, "g");
+svg.appendChild(shadowGroup);
+
+const moonOrbit = document.createElementNS(NS, "ellipse");
+moonOrbit.setAttribute("cx", EARTH_X); moonOrbit.setAttribute("cy", EARTH_Y);
+moonOrbit.setAttribute("rx", MOON_ORBIT_R); moonOrbit.setAttribute("ry", MOON_ORBIT_R * 0.32);
+moonOrbit.setAttribute("fill", "none");
+moonOrbit.setAttribute("stroke", "rgba(255,255,255,0.16)");
+moonOrbit.setAttribute("stroke-width", "1");
+svg.appendChild(moonOrbit);
+
+// Node markers (where tilted orbit crosses ecliptic plane) at angle 0 and 180
+const nodeA = document.createElementNS(NS, "circle");
+nodeA.setAttribute("r", 3); nodeA.setAttribute("fill", "#ffd166"); nodeA.setAttribute("opacity", "0.7");
+nodeA.setAttribute("cx", EARTH_X + MOON_ORBIT_R); nodeA.setAttribute("cy", EARTH_Y);
+svg.appendChild(nodeA);
+const nodeB = document.createElementNS(NS, "circle");
+nodeB.setAttribute("r", 3); nodeB.setAttribute("fill", "#ffd166"); nodeB.setAttribute("opacity", "0.7");
+nodeB.setAttribute("cx", EARTH_X - MOON_ORBIT_R); nodeB.setAttribute("cy", EARTH_Y);
+svg.appendChild(nodeB);
+
+const earth = document.createElementNS(NS, "circle");
+earth.setAttribute("cx", EARTH_X); earth.setAttribute("cy", EARTH_Y); earth.setAttribute("r", EARTH_R);
+earth.setAttribute("fill", "url(#earthGrad)");
+svg.appendChild(earth);
+
+const earthLabel = document.createElementNS(NS, "text");
+earthLabel.setAttribute("x", EARTH_X); earthLabel.setAttribute("y", EARTH_Y + EARTH_R + 18);
+earthLabel.setAttribute("text-anchor","middle"); earthLabel.setAttribute("fill","#9aa3c0"); earthLabel.setAttribute("font-size","12");
+earthLabel.textContent = "Yer";
+svg.appendChild(earthLabel);
+
+const sunLabel = document.createElementNS(NS, "text");
+sunLabel.setAttribute("x", SUN_X); sunLabel.setAttribute("y", SUN_Y + SUN_R + 20);
+sunLabel.setAttribute("text-anchor","middle"); sunLabel.setAttribute("fill","#9aa3c0"); sunLabel.setAttribute("font-size","12");
+sunLabel.textContent = "Günəş";
+svg.appendChild(sunLabel);
+
+const moon = document.createElementNS(NS, "circle");
+moon.setAttribute("r", MOON_R); moon.setAttribute("fill", "url(#moonGrad)");
+svg.appendChild(moon);
+
+const moonLabel = document.createElementNS(NS, "text");
+moonLabel.setAttribute("text-anchor","middle"); moonLabel.setAttribute("fill","#9aa3c0"); moonLabel.setAttribute("font-size","10");
+moonLabel.textContent = "Ay";
+svg.appendChild(moonLabel);
+
+// ---------- Vəziyyət ----------
+let angleDeg = 180, playing = true, speedMultiplier = 1, useTilt = true;
+const baseAngularSpeed = 32;
+
+function togglePlay(){ playing=!playing; document.getElementById('playBtn').textContent = playing?"⏸ Dayandır":"▶ Başlat"; }
+function setSpeed(v){ speedMultiplier=parseFloat(v); document.getElementById('speedLabel').textContent=speedMultiplier.toFixed(1)+"x"; }
+function setAngleManual(v){ angleDeg=parseFloat(v); document.getElementById('angleLabel').textContent=Math.round(angleDeg)+"°"; updateScene(); }
+function toggleTilt(){
+  useTilt = !useTilt;
+  const btn = document.getElementById('tiltBtn');
+  btn.textContent = useTilt ? "📐 Əyilmə: Real" : "📐 Əyilmə: Yox";
+  btn.classList.toggle('active', useTilt);
+  updateScene();
+}
+
+function updateScene(){
+  const rad = angleDeg * Math.PI/180;
+  const tiltRad = (useTilt ? REAL_TILT : 0) * Math.PI/180;
+
+  // Moon 3D position relative to earth: orbit in a plane tilted by tiltRad around the line-of-nodes (x-axis)
+  const orbX = Math.cos(rad) * MOON_ORBIT_R;
+  const orbY0 = Math.sin(rad) * MOON_ORBIT_R;
+  // Perspective-projected position (view is edge-on-ish, squashed in y already by ellipse ratio 0.32,
+  // plus vertical displacement from tilt)
+  const perspective = 0.32;
+  const mx = EARTH_X + orbX;
+  const depthOffset = orbY0 * perspective; // apparent up/down from being in front/behind
+  const tiltOffset = orbY0 * Math.sin(tiltRad) * 1.8; // apparent vertical shift from orbital tilt
+  const my = EARTH_Y + depthOffset - tiltOffset;
+
+  moon.setAttribute("cx", mx); moon.setAttribute("cy", my);
+  moonLabel.setAttribute("x", mx); moonLabel.setAttribute("y", my - MOON_R - 8);
+
+  // Real alignment requires BOTH: near syzygy (angle near 0/180) AND near a node (orbY0 near 0, i.e. angle near 0/180 too in this simplified model)
+  // Since our tilt is applied around the line connecting angle=0/180, nodes ARE at angle 0/180 -
+  // so we instead check the *vertical distance* the tilt creates away from ecliptic at those points using a secondary "inclination phase"
+  // Simplified realistic proxy: eclipse likelihood depends on how close moon's tilted latitude is to 0 AT the moment of syzygy.
+  let diffFromSolar = Math.min(Math.abs(angleDeg-180), 360-Math.abs(angleDeg-180));
+  let diffFromLunar = Math.min(Math.abs(angleDeg-0), 360-Math.abs(angleDeg-0));
+  const latitudeOffset = Math.abs(tiltOffset); // how far off the ecliptic plane the moon appears
+  const nodeThreshold = 6; // px tolerance representing being near a node
+
+  shadowGroup.innerHTML = "";
+  let statusTitle = "Tutulma yoxdur", statusDesc = "Ay öz orbitindədir, düyün nöqtəsindən uzaqdır və ya düzxətlilik yoxdur.";
+  let nodeInfo = "";
+
+  const angleThreshold = 12;
+  const nearNode = latitudeOffset < nodeThreshold;
+
+  if (diffFromSolar < angleThreshold) {
+    if (nearNode) {
+      const strength = 1 - (diffFromSolar/angleThreshold);
+      drawShadowCone(mx, my, MOON_R, EARTH_X, EARTH_Y, strength, "#000000");
+      statusTitle = "🌑 Günəş Tutulması"; 
+      statusDesc = "Ay Günəşlə Yer arasına düşür VƏ düyün nöqtəsinə yaxındır — Ayın kölgəsi Yerə düşür.";
+    } else {
+      statusTitle = "Uyğunluq var, amma tutulma yoxdur";
+      statusDesc = "Ay Yerlə Günəş arasındadır, amma orbitin əyilməsi ona görə kölgə Yerin üstündən keçir.";
+      nodeInfo = useTilt ? "↕ Ay düyündən kənardadır" : "";
+    }
+  } else if (diffFromLunar < angleThreshold) {
+    if (nearNode) {
+      const strength = 1 - (diffFromLunar/angleThreshold);
+      drawShadowCone(EARTH_X, EARTH_Y, EARTH_R, mx, my, strength, "#3a1f10");
+      statusTitle = "🌕 Ay Tutulması";
+      statusDesc = "Yer Günəşlə Ay arasına düşür VƏ düyün nöqtəsinə yaxındır — Yerin kölgəsi Aya düşür.";
+    } else {
+      statusTitle = "Uyğunluq var, amma tutulma yoxdur";
+      statusDesc = "Yer Günəşlə Ay arasındadır, amma orbitin əyilməsi ona görə kölgə Ayın yanından keçir.";
+      nodeInfo = useTilt ? "↕ Ay düyündən kənardadır" : "";
+    }
+  }
+
+  document.getElementById('statusTitle').textContent = statusTitle;
+  document.getElementById('statusDesc').textContent = statusDesc;
+  document.getElementById('nodeInfo').textContent = nodeInfo;
+
+  drawSky(diffFromSolar, diffFromLunar, nearNode, angleThreshold);
+}
+
+function drawShadowCone(fromX, fromY, fromR, toX, toY, strength, tintColor){
+  const dx=toX-fromX, dy=toY-fromY;
+  const line = document.createElementNS(NS,"line");
+  line.setAttribute("x1",SUN_X); line.setAttribute("y1",SUN_Y);
+  line.setAttribute("x2", toX+dx*0.3); line.setAttribute("y2", toY+dy*0.3);
+  line.setAttribute("stroke","rgba(255,255,255,0.08)"); line.setAttribute("stroke-width","1");
+  line.setAttribute("stroke-dasharray","3,4");
+  shadowGroup.appendChild(line);
+
+  const targetR = (toX===EARTH_X && toY===EARTH_Y) ? EARTH_R : MOON_R;
+  const tint = document.createElementNS(NS,"circle");
+  tint.setAttribute("cx",toX); tint.setAttribute("cy",toY); tint.setAttribute("r", targetR*1.05);
+  tint.setAttribute("fill", tintColor); tint.setAttribute("opacity",(strength*0.75).toFixed(2));
+  shadowGroup.appendChild(tint);
+
+  const glow = document.createElementNS(NS,"circle");
+  glow.setAttribute("cx",fromX); glow.setAttribute("cy",fromY); glow.setAttribute("r", fromR*1.4);
+  glow.setAttribute("fill","none"); glow.setAttribute("stroke","#ffd166");
+  glow.setAttribute("stroke-width",(1.5*strength).toFixed(2)); glow.setAttribute("opacity",(strength*0.9).toFixed(2));
+  shadowGroup.appendChild(glow);
+}
+
+// ---------- Sky view (Yerdən görünüş) ----------
+const skyCanvas = document.getElementById('skyCanvas');
+const skyCtx = skyCanvas.getContext('2d');
+function drawSky(diffSolar, diffLunar, nearNode, threshold){
+  const w = skyCanvas.width, h = skyCanvas.height;
+  skyCtx.clearRect(0,0,w,h);
+  skyCtx.fillStyle = "#04050f"; skyCtx.fillRect(0,0,w,h);
+
+  const cx = w/2, cy = h/2;
+  const sunR = 42, moonR = 40; // near-equal apparent size like real total eclipse
+
+  if (diffSolar < threshold*1.4) {
+    // Solar eclipse view: sun disc with moon sliding across, distance controlled by diffSolar
+    const offset = nearNode ? (diffSolar/threshold)*90 : 70;
+    // sun glow
+    const grad = skyCtx.createRadialGradient(cx,cy,sunR*0.3,cx,cy,sunR*1.6);
+    grad.addColorStop(0,"#fff8dd"); grad.addColorStop(0.5,"#ffd166"); grad.addColorStop(1,"rgba(255,140,66,0)");
+    skyCtx.fillStyle = grad;
+    skyCtx.beginPath(); skyCtx.arc(cx,cy,sunR*1.6,0,Math.PI*2); skyCtx.fill();
+    skyCtx.fillStyle = "#fff2c2";
+    skyCtx.beginPath(); skyCtx.arc(cx,cy,sunR,0,Math.PI*2); skyCtx.fill();
+    // moon overlay
+    skyCtx.fillStyle = "#050505";
+    skyCtx.beginPath(); skyCtx.arc(cx+offset*0.8,cy,moonR,0,Math.PI*2); skyCtx.fill();
+  } else if (diffLunar < threshold*1.4) {
+    const shadowStrength = nearNode ? 1-(diffLunar/threshold) : 0.15;
+    skyCtx.fillStyle = "#e8e6e0";
+    skyCtx.beginPath(); skyCtx.arc(cx,cy,moonR,0,Math.PI*2); skyCtx.fill();
+    skyCtx.fillStyle = `rgba(120,25,15,${(shadowStrength*0.85).toFixed(2)})`;
+    skyCtx.beginPath(); skyCtx.arc(cx,cy,moonR,0,Math.PI*2); skyCtx.fill();
+  } else {
+    // Normal sky: small sun far away, no alignment shown, just stars
+    skyCtx.fillStyle = "#8fa3c0"; skyCtx.font = "11px sans-serif"; skyCtx.textAlign = "center";
+    skyCtx.fillText("Uyğunluq yoxdur", cx, cy);
+  }
+}
+
+// ---------- Animasiya ----------
+let lastTime = performance.now();
+function animate(now){
+  const dt = (now-lastTime)/1000; lastTime = now;
+  if (playing){
+    angleDeg = (angleDeg + baseAngularSpeed*speedMultiplier*dt) % 360;
+    document.getElementById('angleRange').value = angleDeg;
+    document.getElementById('angleLabel').textContent = Math.round(angleDeg)+"°";
+    updateScene();
+  }
+  requestAnimationFrame(animate);
+}
+updateScene();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

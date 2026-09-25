@@ -18,6 +18,40 @@
 <meta name="description" content="Azərbaycan coğrafiyası üzrə KSQ, BSQ və MİQ formatında interaktiv testlər — bilik səviyyəni pulsuz yoxla.">
     <link rel="icon" type="image/png" href="icon/favicon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
+<style>
+    .test-filter-bar{
+        display:flex;
+        flex-wrap:wrap;
+        gap:.6rem;
+        justify-content:center;
+        margin:0 auto 1.8rem;
+        max-width:900px;
+        padding:0 1rem;
+    }
+    .test-filter-btn{
+        font:inherit;
+        cursor:pointer;
+        border:1px solid rgba(0,0,0,.15);
+        background:transparent;
+        color:inherit;
+        padding:.5rem 1.1rem;
+        border-radius:999px;
+        font-size:.9rem;
+        font-weight:600;
+        transition:background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .test-filter-btn:hover{
+        border-color:rgba(0,0,0,.35);
+    }
+    .test-filter-btn.active{
+        background:#1a73e8;
+        border-color:#1a73e8;
+        color:#fff;
+    }
+    .test-type-card.filtered-out{
+        display:none !important;
+    }
+</style>
 </head>
 <body>
 
@@ -36,7 +70,12 @@
         <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
         <a href="../oyunlar/oyunlar.html">İnteraktiv oyunlar</a>
         <a href="testler.html" class="current">Testlər</a>
-        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+        <a href="https://www.youtube.com/@COĞRAFİYAHT"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="youtube-btn">
+    ▶ YouTube
+</a>
     </nav>
 
     <div class="header-right">
@@ -73,7 +112,14 @@
 </section>
 
 
-<div class="test-type-grid">
+<div class="test-filter-bar" id="testFilterBar">
+    <button class="test-filter-btn active" data-filter="all">Hamısı</button>
+    <button class="test-filter-btn" data-filter="sınaq">Sınaq testləri</button>
+    <button class="test-filter-btn" data-filter="BSQ">BSQ</button>
+    <button class="test-filter-btn" data-filter="MİQ">MİQ</button>
+</div>
+
+<div class="test-type-grid" id="testTypeGrid">
 
     <div class="test-type-card compact" data-code="sınaq">
 
@@ -300,7 +346,7 @@
             <div><strong>11/16</strong>keçid balı</div>
         </div>
 
-       <a   class="test-type-cta disabled">Testə başla →</a>
+       <a   class="test-type-cta">Testə başla →</a>
 
     </div>
 
@@ -329,7 +375,7 @@
             <div><strong>11/15</strong>keçid balı</div>
         </div>
 
-       <a   class="test-type-cta disabled">Testə başla →</a>
+       <a href="miq.html" class="test-type-cta">Testə başla →</a>
 
     </div>
 
@@ -390,6 +436,34 @@
     window.CURRENT_COUNTRY = null;
 </script>
 <script src="../assets/js/site.js"></script>
+
+<script>
+(function(){
+    var bar = document.getElementById("testFilterBar");
+    var grid = document.getElementById("testTypeGrid");
+    if (!bar || !grid) return;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll(".test-type-card"));
+    var buttons = Array.prototype.slice.call(bar.querySelectorAll(".test-filter-btn"));
+
+    buttons.forEach(function(btn){
+        btn.addEventListener("click", function(){
+
+            buttons.forEach(function(b){ b.classList.remove("active"); });
+            btn.classList.add("active");
+
+            var filter = btn.dataset.filter;
+
+            cards.forEach(function(card){
+                var code = card.dataset.code;
+                var show = (filter === "all" || code === filter);
+                card.classList.toggle("filtered-out", !show);
+            });
+
+        });
+    });
+})();
+</script>
 
 </body>
 </html>

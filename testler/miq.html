@@ -36,7 +36,12 @@
         <a href="../index.html#xeriteler">İnteraktiv Xəritələr</a>
         <a href="../oyunlar/oyunlar.html">İnteraktiv oyunlar</a>
         <a href="testler.html" class="current">Testlər</a>
-        <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
+        <a href="https://www.youtube.com/@COĞRAFİYAHT"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="youtube-btn">
+    ▶ YouTube
+</a>
     </nav>
 
     <div class="header-right">
@@ -94,7 +99,29 @@
 
         <button class="quiz-start-btn">Sınağa başla →</button>
 
+        <form class="quiz-user-form" id="quizUserForm">
+            <div class="form-group">
+                <label for="miqAd">Ad</label>
+                <input type="text" id="miqAd" name="ad" placeholder="Adınız" autocomplete="given-name" required>
+            </div>
+            <div class="form-group">
+                <label for="miqSoyad">Soyad</label>
+                <input type="text" id="miqSoyad" name="soyad" placeholder="Soyadınız" autocomplete="family-name" required>
+            </div>
+            <div class="form-group">
+                <label for="miqEmail">Gmail ünvanı</label>
+                <input type="email" id="miqEmail" name="email" placeholder="[email protected]" autocomplete="email" required>
+            </div>
+            <p class="quiz-form-error"></p>
+            <button type="submit" class="quiz-start-btn">Təsdiqlə və başla →</button>
+        </form>
+
         <p class="quiz-usage-stat" id="quizUsageStat">👥 <strong id="quizUsageCount">—</strong> nəfər bu testi sınayıb</p>
+
+        <div class="quiz-leaderboard-wrap" id="quizLeaderboardWrap">
+            <div class="leaderboard-title">🏆 Liderlik lövhəsi</div>
+            <div class="quiz-leaderboard" id="quizLeaderboard"></div>
+        </div>
 
     </div>
 
@@ -156,6 +183,8 @@
         passScore: 11,
         timeLimit: 600,
         shuffle: true,
+        collectUserInfo: true,
+        leaderboard: true,
         passMessage: "Həm fənn bilgisi, həm də qiymətləndirmə metodikası üzrə keçid həddini üstələmisən — coğrafiya müəllimliyi sınağına yaxşı hazırsan.",
         failMessage: "Keçid həddinə çatmadın. Az tanınan rayon faktlarını və KSQ/BSQ/diaqnostik qiymətləndirmə anlayışlarını bir daha nəzərdən keçirib yenidən sına.",
         questions: [

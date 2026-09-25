@@ -20,6 +20,74 @@
 // Statistika Worker-inin ünvanı (eyni worker "cloudflare-worker.js" faylıdır)
 const TRACK_WORKER_URL = "https://blue-tooth-d236.cografiya.workers.dev/track";
 
+// Ad/Soyad/Gmail tələb olunan testlərin nəticələrini yazan Google Apps Script
+// Web App ünvanı. Qurulma təlimatı üçün "apps-script-leaderboard.gs" faylına bax.
+// Deploy etdikdən sonra aldığın ".../exec" ünvanını aşağıya yapışdır.
+const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzgs1iQFyBlLYT72WkYlk58S3hJ34eyjW78-ejV9ikc4rm7yQl-3Q8M9Fnps0HJTi1C/exec";
+
+function isSheetConfigured() {
+    return SHEET_WEBAPP_URL && SHEET_WEBAPP_URL.indexOf("YOUR_") !== 0;
+}
+
+// Gmail formatını sadə şəkildə yoxlayır (ad@gmail.com)
+function isValidGmail(email) {
+    return /^[^\s@]+@gmail\.com$/i.test(String(email || "").trim());
+}
+
+function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+}
+
+// Nəticəni (ad, soyad, gmail, bal) Google Sheet-ə göndərir. Sheet tərəfi
+// preflight (CORS) problemi yaranmasın deyə "text/plain" başlığı ilə
+// göndərilir və Apps Script tərəfində JSON kimi oxunur.
+function submitResultToSheet(payload) {
+    if (!isSheetConfigured()) return;
+    fetch(SHEET_WEBAPP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    }).catch(() => { /* göndərilməsə də testi pozmasın */ });
+}
+
+// Liderlik lövhəsini həmin testin id-sinə görə Sheet-dən çəkib göstərir
+function renderLeaderboard(containerEl, entries) {
+    if (!entries || !entries.length) {
+        containerEl.innerHTML = `<div class="leaderboard-empty">Hələ nəticə yoxdur — ilk olan sən ol!</div>`;
+        return;
+    }
+    const medals = ["🥇", "🥈", "🥉"];
+    containerEl.innerHTML = entries.map((e, i) => `
+        <div class="leaderboard-row">
+            <span class="lb-rank">${medals[i] || (i + 1)}</span>
+            <span class="lb-name">${escapeHtml(e.name)} ${escapeHtml(e.surname)}</span>
+            <span class="lb-score">${escapeHtml(e.score)} / ${escapeHtml(e.total)}</span>
+        </div>
+    `).join("");
+}
+
+function loadLeaderboard(testId, wrapEl) {
+    if (!wrapEl || !testId) return;
+    const containerEl = wrapEl.querySelector(".quiz-leaderboard");
+    if (!containerEl) return;
+
+    if (!isSheetConfigured()) {
+        wrapEl.style.display = "none";
+        return;
+    }
+
+    containerEl.innerHTML = `<div class="leaderboard-loading">Yüklənir...</div>`;
+
+    fetch(`${SHEET_WEBAPP_URL}?leaderboard=${encodeURIComponent(testId)}`)
+        .then(res => res.json())
+        .then(data => renderLeaderboard(containerEl, data.entries))
+        .catch(() => {
+            wrapEl.style.display = "none";
+        });
+}
+
 // Testin başlanması/bitməsini Worker-ə bildirir. Şəbəkə xətası olsa belə
 // istifadəçinin təcrübəsinə mane olmamaq üçün nəticəni gözləmirik.
 function trackQuizEvent(testId, action, extra) {
@@ -58,7 +126,13 @@ function initQuiz(config) {
 
     loadUsageCount(config.testId, intro);
 
+    if (config.leaderboard) {
+        loadLeaderboard(config.testId, intro.querySelector(".quiz-leaderboard-wrap"));
+    }
+
     const startBtn = card.parentElement.querySelector(".quiz-start-btn");
+    const userForm = intro.querySelector(".quiz-user-form");
+    const userInfo = { name: "", surname: "", email: "" };
 
     const progressFill = card.querySelector(".quiz-progress-fill");
     const progressLabel = card.querySelector(".quiz-progress-label");
@@ -184,6 +258,24 @@ function initQuiz(config) {
             passed: passed ? "1" : "0"
         });
 
+        if (config.collectUserInfo) {
+            submitResultToSheet({
+                testId: config.testId,
+                name: userInfo.name,
+                surname: userInfo.surname,
+                email: userInfo.email,
+                score: score,
+                total: total,
+                passed: passed
+            });
+
+            if (config.leaderboard) {
+                setTimeout(() => {
+                    loadLeaderboard(config.testId, intro.querySelector(".quiz-leaderboard-wrap"));
+                }, 1500);
+            }
+        }
+
         resultEl.innerHTML = `
             <div class="quiz-result-score">${score}<span> / ${total}</span></div>
             <div class="quiz-result-verdict ${passed ? "pass" : "fail"}">
@@ -236,11 +328,57 @@ function initQuiz(config) {
 
     });
 
-    startBtn.addEventListener("click", () => {
+    function launchQuiz() {
         intro.style.display = "none";
         card.classList.add("active");
         trackQuizEvent(config.testId, "start");
         resetQuiz();
+    }
+
+    startBtn.addEventListener("click", () => {
+
+        if (config.collectUserInfo && userForm) {
+            startBtn.style.display = "none";
+            userForm.style.display = "flex";
+            const firstInput = userForm.querySelector("input");
+            if (firstInput) firstInput.focus();
+            return;
+        }
+
+        launchQuiz();
     });
+
+    if (userForm) {
+
+        const formError = userForm.querySelector(".quiz-form-error");
+
+        userForm.addEventListener("submit", (e) => {
+
+            e.preventDefault();
+
+            const name = userForm.querySelector('[name="ad"]').value.trim();
+            const surname = userForm.querySelector('[name="soyad"]').value.trim();
+            const email = userForm.querySelector('[name="email"]').value.trim();
+
+            if (!name || !surname) {
+                formError.textContent = "Zəhmət olmasa ad və soyadınızı daxil edin.";
+                formError.style.display = "block";
+                return;
+            }
+
+            if (!isValidGmail(email)) {
+                formError.textContent = "Zəhmət olmasa etibarlı bir Gmail ünvanı daxil edin (məs: [email protected]).";
+                formError.style.display = "block";
+                return;
+            }
+
+            formError.style.display = "none";
+            userInfo.name = name;
+            userInfo.surname = surname;
+            userInfo.email = email;
+
+            launchQuiz();
+        });
+    }
 
 }

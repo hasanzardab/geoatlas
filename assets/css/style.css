@@ -2339,3 +2339,94 @@ footer{
     background: #cc0000;
     transform: translateY(-2px);
 }
+
+/* =========================================
+   QUIZ: AD/SOYAD/GMAIL FORMU VƏ LİDERLİK LÖVHƏSİ
+========================================= */
+
+.quiz-user-form{
+    display:none;
+    flex-direction:column;
+    gap:14px;
+    max-width:440px;
+    margin-top:22px;
+}
+
+.quiz-user-form .form-group{
+    margin-bottom:0;
+}
+
+.quiz-user-form .quiz-start-btn{
+    width:100%;
+    justify-content:center;
+    margin-top:4px;
+}
+
+.quiz-form-error{
+    display:none;
+    color:var(--red);
+    font-size:12.5px;
+    line-height:1.6;
+    margin-top:-4px;
+}
+
+.quiz-leaderboard-wrap{
+    margin-top:26px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+}
+
+.leaderboard-title{
+    font-family:"Playfair Display",serif;
+    font-size:16px;
+    margin-bottom:14px;
+}
+
+.quiz-leaderboard{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.leaderboard-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 15px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(255,255,255,.02);
+    font-size:13px;
+}
+
+.leaderboard-row .lb-rank{
+    width:26px;
+    flex-shrink:0;
+    text-align:center;
+    font-weight:600;
+    color:var(--gold2);
+}
+
+.leaderboard-row .lb-name{
+    flex:1;
+    font-weight:500;
+}
+
+.leaderboard-row .lb-score{
+    color:var(--muted);
+    font-weight:600;
+    font-size:12.5px;
+}
+
+.leaderboard-empty,
+.leaderboard-loading{
+    color:var(--muted);
+    font-size:13px;
+    padding:6px 0;
+}
+
+@media(max-width:650px){
+    .quiz-user-form{
+        max-width:100%;
+    }
+}

@@ -57,7 +57,7 @@
         const mount = document.querySelector(".header-right");
         if (!mount) return;
 
-        const current = document.documentElement.getAttribute("data-theme") || "dark";
+        const current = document.documentElement.getAttribute("data-theme") || "light";
 
         const btn = document.createElement("button");
         btn.type = "button";
@@ -70,7 +70,7 @@
         );
 
         btn.addEventListener("click", function () {
-            const now = document.documentElement.getAttribute("data-theme") || "dark";
+            const now = document.documentElement.getAttribute("data-theme") || "light";
             const next = now === "light" ? "dark" : "light";
             applyTheme(next);
             storeTheme(next);

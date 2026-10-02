@@ -7,8 +7,8 @@
 (function(){
     try{
         var t = localStorage.getItem('geoatlas-theme');
-        if(t === 'light'){
-            document.documentElement.setAttribute('data-theme','light');
+        if(t === 'dark'){
+            document.documentElement.setAttribute('data-theme','dark');
         }
     }catch(e){}
 })();
@@ -17,14 +17,27 @@
 <title>BSQ Testi | Relyef, Çaylar və İqtisadi Rayonlar | GeoAtlas</title>
 <meta name="description" content="Azərbaycan coğrafiyası üzrə relyef, çaylar, göllər, iqlim və iqtisadi rayonları əhatə edən 16 suallıq böyük summativ qiymətləndirmə (BSQ) testi.">
 <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="icon" type="image/png" href="icon/favicon.png">
+<link rel="icon" type="image/png" href="../icon/favicon.png">
+<style>
+    /* Sualın mətnində sətir keçidləri (\n) işləsin */
+    .quiz-question{ white-space: pre-line; }
+    /* Sualın şəkli */
+    .quiz-question-img{
+        display:block;
+        max-width:100%;
+        height:auto;
+        margin:14px auto 0;
+        border-radius:8px;
+        background:#fff;
+    }
+</style>
 </head>
 <body>
 
 <header>
 
     <div class="logo">
-        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
+        <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a></div>
         <div class="logo-text">
             <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
             <span>Coğrafiya platforması</span>
@@ -68,35 +81,58 @@
             <div class="quiz-intro-icon">📗</div>
             <div>
                 <div class="code">BSQ · Böyük Summativ Qiymətləndirmə</div>
-                <h2>Relyef, sular və iqtisadi rayonlar</h2>
+                <h2>7-ci sinif I yarımil</h2>
             </div>
         </div>
 
         <p>
-            Daha əhatəli bu test dağları, çayları, gölləri, iqlim
-            xüsusiyyətlərini, əhalini və Azərbaycanın iqtisadi rayonlarını
-            bir yerə toplayır — yarımilliyin sonunda keçirilən
-            yekunlaşdırıcı qiymətləndirməni simulyasiya edir.
+            Bu summativ qiymətləndirmə testi Coğrafiya fənni 
+            üzrə Böyük Coğrafi Kəşflərdən Yerin 
+            kainatdakı mövqeyi və planetaryar quruluşuna, 
+            exogen proseslərdən relyef formaları və 
+            xəritə miqyasına qədər geniş mövzuları əhatə edir.
         </p>
 
         <div class="quiz-intro-facts">
             <div class="stat">
                 <small>Sual sayı</small>
-                <strong>16</strong>
+                <strong>15</strong>
             </div>
             <div class="stat">
-                <small>Təxmini vaxt</small>
-                <strong>~12 dəq</strong>
+                <small>Vaxt limiti</small>
+                <strong>15:00</strong>
             </div>
             <div class="stat">
                 <small>Keçid balı</small>
-                <strong>11 / 16</strong>
+                <strong>11 / 15</strong>
             </div>
         </div>
 
         <button class="quiz-start-btn">Testə başla →</button>
 
+        <form class="quiz-user-form" id="quizUserForm">
+            <div class="form-group">
+                <label for="bsqAd">Ad</label>
+                <input type="text" id="bsqAd" name="ad" placeholder="Adınız" autocomplete="given-name" required>
+            </div>
+            <div class="form-group">
+                <label for="bsqSoyad">Soyad</label>
+                <input type="text" id="bsqSoyad" name="soyad" placeholder="Soyadınız" autocomplete="family-name" required>
+            </div>
+            <div class="form-group">
+                <label for="bsqEmail">Gmail ünvanı</label>
+                <input type="email" id="bsqEmail" name="email" placeholder="[email protected]" autocomplete="email" required>
+            </div>
+            <p class="quiz-form-error"></p>
+            <button type="submit" class="quiz-start-btn">Təsdiqlə və başla →</button>
+        </form>
+
         <p class="quiz-usage-stat" id="quizUsageStat">👥 <strong id="quizUsageCount">—</strong> nəfər bu testi sınayıb</p>
+
+        <div class="quiz-leaderboard-wrap" id="quizLeaderboardWrap">
+            <div class="leaderboard-title">🏆 Liderlik lövhəsi</div>
+            <div class="quiz-leaderboard" id="quizLeaderboard"></div>
+        </div>
 
     </div>
 
@@ -106,7 +142,7 @@
         <div class="quiz-body">
 
             <div class="quiz-top-row">
-                <div class="quiz-progress-label">Sual 1 / 16</div>
+                <div class="quiz-progress-label">Sual 1 / 15</div>
                 <div class="quiz-timer"></div>
             </div>
 
@@ -156,88 +192,143 @@
         introId: "quizIntro",
         containerId: "quizCard",
         passScore: 11,
+        timeLimit: 900,
         shuffle: true,
+        navigator: true,
+        collectUserInfo: true,
+        leaderboard: true,
         passMessage: "Relyef, sular və iqtisadi rayonlar üzrə biliyin möhkəmdir. MİQ testi ilə özünü daha peşəkar səviyyədə sınamağa hazırsan.",
         failMessage: "Yaxşı nəticəyə çatmaq üçün Azərbaycan xəritəsindəki rayon kartlarını (çay, dağ, göl və iqtisadi rayon məlumatlarını) bir daha nəzərdən keçirməyi tövsiyə edirik.",
         questions: [
+            
             {
-                q: "Kür çayı hansı dənizə tökülür?",
-                options: ["Qara dəniz", "Xəzər dənizi", "Aral dənizi", "Aralıq dənizi"],
-                correct: 1
-            },
-            {
-                q: "Mingəçevir şəhəri hansı iqtisadi rayona aiddir?",
-                options: ["Gəncə-Qazax", "Aran", "Şəki-Zaqatala", "Quba-Xaçmaz"],
-                correct: 1
-            },
-            {
-                q: "Qış turizmi mərkəzi Şahdağ hansı rayonun ərazisində yerləşir?",
-                options: ["Quba", "Qusar", "Xaçmaz", "Qəbələ"],
-                correct: 1
-            },
-            {
-                q: "Göygöl adını verdiyi göl hansı iqtisadi rayonda yerləşir?",
-                options: ["Gəncə-Qazax", "Aran", "Naxçıvan MR", "Şirvan-Hacıqabul"],
+                q: "Vasko Da Qamanın səyahətinin əhəmiyyəti nədir?",
+                options: [
+                    "Hindistana dəniz yolu açıldı",
+                    "Yeni dünya kəşf olundu",
+                    "Yerin kürə formasında olması sübut olundu",
+                    "Vahid dünya okeanının varlığı məlum oldu"
+                ],
                 correct: 0
             },
             {
-                q: "Qobustan qaya təsvirləri hansı beynəlxalq təşkilatın Ümumdünya İrs siyahısına daxildir?",
-                options: ["UNESCO", "UNICEF", "NATO", "UEFA"],
-                correct: 0
-            },
-            {
-                q: "Azərbaycanın 'nar paytaxtı' kimi tanınan, hər il Nar Festivalı keçirilən rayon hansıdır?",
-                options: ["Şamaxı", "Göyçay", "Quba", "Ordubad"],
+                q: "Bir nöqtənin digər nöqtəyə nisbətən şaquli xətt üzrə hündürlük fərqi necə adlanır?",
+                options: ["mütləq hündürlük", "nisbi hündürlük", "azimutal hündürlük", "dəqiq hündürlük"],
                 correct: 1
             },
             {
-                q: "Uzunömürlülüyü ilə məşhur, Talış dağlarında yerləşən rayon hansıdır?",
-                options: ["Lerik", "Astara", "Masallı", "Yardımlı"],
-                correct: 0
-            },
-            {
-                q: "Bakı şəhəri GeoAtlas-ın bölgüsündə hansı iqtisadi rayona aiddir?",
-                options: ["Abşeron-Xızı", "Bakı", "Şirvan-Hacıqabul", "Aran"],
-                correct: 1
-            },
-            {
-                q: "Sumqayıt şəhəri ənənəvi olaraq hansı sənaye sahəsi ilə tanınır?",
-                options: ["Toxuculuq", "Kimya sənayesi", "Neft emalı avadanlığı", "Ağac emalı"],
-                correct: 1
-            },
-            {
-                q: "Vaxtilə Şirvanşahlar dövlətinin paytaxtı olmuş, indi Astrofizika Rəsədxanası ilə tanınan şəhər hansıdır?",
-                options: ["Şamaxı", "Şəki", "Naxçıvan şəhəri", "Gəncə"],
-                correct: 0
-            },
-            {
-                q: "Muğan düzündə aparıcı təsərrüfat sahələrindən biri hansıdır?",
-                options: ["Taxılçılıq", "Balıqçılıq", "Mədənçilik", "Meşəçilik"],
-                correct: 0
-            },
-            {
-                q: "Kür çayı üzərindəki iri su elektrik stansiyası hansı şəhərdə yerləşir?",
-                options: ["Yevlax", "Mingəçevir", "Ucar", "Bərdə"],
-                correct: 1
-            },
-            {
-                q: "Subtropik iqlimi və çayçılığı ilə tanınan, Xəzər sahilindəki iqtisadi rayon hansıdır?",
-                options: ["Quba-Xaçmaz", "Lənkəran-Astara", "Muğan-Salyan", "Abşeron-Xızı"],
-                correct: 1
-            },
-            {
-                q: "Azərbaycanın ən hündür zirvəsi Bazardüzü hansı dağ sistemində yerləşir?",
-                options: ["Kiçik Qafqaz", "Talış dağları", "Böyük Qafqaz", "Zəngəzur dağları"],
+                q: "Yer kürəsinin öz xəyali oxu ətrafında tam dövretmə müddəti nə qədərdir?",
+                options: ["20 saat", "12 saat", "24 saat", "72 saat"],
                 correct: 2
             },
             {
-                q: "Qazax və Ağstafa rayonları hansı iqtisadi rayona daxildir?",
-                options: ["Gəncə-Qazax", "Aran", "Şəki-Zaqatala", "Yuxarı Qarabağ"],
+                q: "Dağları seçin:",
+                options: [
+                    "Himalay, Alp, Qafqaz",
+                    "Kotopaxi, Lənkəran, Kolxida",
+                    "Amazon, Qafqaz, Kotopaxi",
+                    "Alp, Kolxida, Lənkəran"
+                ],
                 correct: 0
             },
             {
-                q: "Batabat gölü ilə tanınan, Naxçıvanın dağlıq şimal hissəsindəki rayon hansıdır?",
-                options: ["Babək", "Şahbuz", "Culfa", "Kəngərli"],
+                q: "Günəş sisteminin daxili planetlər qrupunu müəyyən edin:",
+                options: [
+                    "Merkuri, Venera, Yer",
+                    "Saturn, Uran, Neptun",
+                    "Merkuri, Saturn, Uran",
+                    "Venera, Yupiter, Neptun"
+                ],
+                correct: 0
+            },
+            {
+                q: "Üzvi aşınma nəyə deyilir?",
+                options: [
+                    "Süxurların suda həll olaraq tərkibini dəyişməsinə",
+                    "Küləyin təsirindən süxurların parçalanmasına",
+                    "Canlı orqanizmlərin təsirilə süxurların parçalanmasına",
+                    "Temperatur dəyişməsindən süxurların parçalanmasına"
+                ],
+                correct: 2
+            },
+            {
+                q: "Ekzogen proseslərə hansılar aiddir?",
+                options: [
+                    "Aşınma, eroziya",
+                    "Eroziya, zəlzələ",
+                    "Vulkanizm, denudasiya",
+                    "Aşınma, tavaların hərəkəti"
+                ],
+                correct: 0
+            },
+            {
+                q: "Materik dayazlığı (şelf) nəyə deyilir?",
+                options: [
+                    "Materikin sualtı davamında 200 metrə qədər dərinlikdəki əraziyə",
+                    "Yer səthinin çökmüş hissələrinə",
+                    "Okeanda 3000 metrə qədər dərinlikdə olan ərazilərə",
+                    "Çökmə süxurların nazik olduğu ərazilərə"
+                ],
+                correct: 0
+            },
+            {
+                q: "Yer hansı planetlərin orbitləri arasında hərəkət edir?",
+                options: [
+                    "Merkuri və Venera",
+                    "Venera və Mars",
+                    "Yupiter və Saturn",
+                    "Mars və Saturn"
+                ],
+                correct: 1
+            },
+            {
+                q: "Yeni dünya dedikdə hansı qitə nəzərdə tutulur?",
+                options: ["Avropa", "Amerika", "Asiya", "Afrika"],
+                correct: 1
+            },
+            {
+                q: "1:400000 ədədi miqyasını izahlı miqyasa çevirin:",
+                options: ["1 sm-də 400 m", "1 sm-də 40 km", "1 sm-də 4 km", "1 sm-də 400 km"],
+                correct: 2
+            },
+            {
+                q: "Azərbaycandan qərbdə yerləşən ölkələr hansılardır?",
+                options: [
+                    "Portuqaliya, Qazaxıstan, Çin",
+                    "Türkiyə, İtaliya, Türkmənistan",
+                    "İran, İspaniya, Yunanıstan",
+                    "Türkiyə, İtaliya, İspaniya"
+                ],
+                correct: 3
+            },
+            {
+                q: "Yerin öz oxu ətrafında hərəkəti zamanı yaranan hadisələrdən DEYİL:",
+                options: [
+                    "Gecə-gündüz növbələşir",
+                    "Fəsillər yaranır",
+                    "Brizlər əmələ gəlir",
+                    "Coğrafi uzunluqlar arasında yerli vaxt fərqi yaranır"
+                ],
+                correct: 1
+            },
+            {
+                q: "Akkumulyativ düzənlikləri seçin:",
+                options: [
+                    "Qərbi Sibir, Turan, Amazon",
+                    "Böyük Səhra, Qərbi Avstraliya, Braziliya",
+                    "Qərbi Avstraliya, Amazon, Braziliya",
+                    "Böyük Səhra, Qərbi Sibir, Turan"
+                ],
+                correct: 0
+            },
+            {
+                q: "Fəsillərin əmələ gəlməsinin ikinci səbəbini göstərin:",
+                options: [
+                    "Ayın cazibə qüvvəsi",
+                    "Yer oxunun orbit müstəvisinə meyilli olması",
+                    "Yerin Günəşdən məsafəsinin dəyişməsi",
+                    "Günəş şüalarının düşmə bucağının sabit qalması"
+                ],
                 correct: 1
             }
         ]

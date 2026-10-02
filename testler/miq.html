@@ -7,17 +7,30 @@
 (function(){
     try{
         var t = localStorage.getItem('geoatlas-theme');
-        if(t === 'light'){
-            document.documentElement.setAttribute('data-theme','light');
+        if(t === 'dark'){
+            document.documentElement.setAttribute('data-theme','dark');
         }
     }catch(e){}
 })();
 </script>
 
 <title>MİQ Sınaq Testi | Coğrafiya Müəllimliyi | GeoAtlas</title>
-<meta name="description" content="Coğrafiya müəllimi vəzifəsinə namizədlər üçün fənn bilgisi və qiymətləndirmə metodikasını birləşdirən, vaxt məhdudiyyətli MİQ sınaq testi.">
+<meta name="description" content="Coğrafiya müəllimi vəzifəsinə namizədlər üçün 2023-cü il MİQ coğrafiya suallarından ibarət vaxt məhdudiyyətli sınaq testi.">
 <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="icon" type="image/png" href="icon/favicon.png">
+    <link rel="icon" type="image/png" href="../icon/favicon.png">
+<style>
+    /* Sualın mətnində sətir keçidləri (\n) işləsin */
+    .quiz-question{ white-space: pre-line; }
+    /* Sualın şəkli */
+    .quiz-question-img{
+        display:block;
+        max-width:100%;
+        height:auto;
+        margin:14px auto 0;
+        border-radius:8px;
+        background:#fff;
+    }
+</style>
 </head>
 <body>
 
@@ -75,25 +88,24 @@
 
         <p>
             Bu sınaq coğrafiya müəllimi vəzifəsinə namizədlər üçün nəzərdə
-            tutulub: dəqiq ədədi göstəricilər və az tanınan coğrafi
-            faktlarla yanaşı, məktəbdaxili qiymətləndirmə (KSQ, BSQ,
-            diaqnostik) üzrə əsas metodiki anlayışları da əhatə edir.
-            Real imtahan təcrübəsinə uyğun olaraq test vaxt
+            tutulub və 2023-cü il MİQ coğrafiya suallarından ibarətdir:
+            xəritə-sxemlər, diaqramlar, cədvəllər və fənn üzrə mürəkkəb
+            tapşırıqlar. Real imtahan təcrübəsinə uyğun olaraq test vaxt
             məhdudiyyətlidir — vaxt bitdikdə test avtomatik yekunlaşır.
         </p>
 
         <div class="quiz-intro-facts">
             <div class="stat">
                 <small>Sual sayı</small>
-                <strong>15</strong>
+                <strong>40</strong>
             </div>
             <div class="stat">
                 <small>Vaxt limiti</small>
-                <strong>10:00</strong>
+                <strong>60:00</strong>
             </div>
             <div class="stat">
                 <small>Keçid balı</small>
-                <strong>11 / 15</strong>
+                <strong>28 / 40</strong>
             </div>
         </div>
 
@@ -131,7 +143,7 @@
         <div class="quiz-body">
 
             <div class="quiz-top-row">
-                <div class="quiz-progress-label">Sual 1 / 15</div>
+                <div class="quiz-progress-label">Sual 1 / 40</div>
                 <div class="quiz-timer"></div>
             </div>
 
@@ -176,108 +188,389 @@
 <script src="../assets/js/testler.js"></script>
 <script>
 
+    /*
+      ŞƏKİL QAYDASI:
+      Şəkli olan suallarda  img: "img/miq/sualN.png"  sahəsi var.
+      Şəkilləri kəsib həmin adlarla img/miq/ qovluğuna əlavə et.
+      (testler.js-də img sahəsini göstərmək üçün ayrıca kiçik əlavə lazımdır.)
+    */
+
     initQuiz({
         testId: "miq",
         introId: "quizIntro",
         containerId: "quizCard",
-        passScore: 11,
-        timeLimit: 600,
+        passScore: 28,
+        timeLimit: 3600,
         shuffle: true,
+        navigator: true,
         collectUserInfo: true,
         leaderboard: true,
-        passMessage: "Həm fənn bilgisi, həm də qiymətləndirmə metodikası üzrə keçid həddini üstələmisən — coğrafiya müəllimliyi sınağına yaxşı hazırsan.",
-        failMessage: "Keçid həddinə çatmadın. Az tanınan rayon faktlarını və KSQ/BSQ/diaqnostik qiymətləndirmə anlayışlarını bir daha nəzərdən keçirib yenidən sına.",
+        passMessage: "Keçid həddini üstələmisən — coğrafiya müəllimliyi sınağına yaxşı hazırsan.",
+        failMessage: "Keçid həddinə çatmadın. Xəritə, diaqram və hesablama tipli tapşırıqları bir daha nəzərdən keçirib yenidən sına.",
         questions: [
+
+            // 1
             {
-                q: "GeoAtlas-ın verilənlər bazasında Azərbaycan neçə iqtisadi rayona bölünüb?",
-                options: ["9", "10", "12", "14"],
+                q: "Xəritə-sxemə əsasən 1 və 3 rəqəmləri ilə göstərilmiş iqtisadi rayonları 2 və 4 rəqəmləri ilə göstərilən iqtisadi rayonlardan fərqləndirən əlaməti müəyyən edin:",
+                img: "../img/miq/sual1.png",
+                options: [
+                    "İnzibati rayon mərkəzi olmayan şəhərə malikdirlər",
+                    "Yay və qış otlaqlarına malikdirlər",
+                    "İki fiziki-coğrafi vilayətdə yerləşirlər",
+                    "Çayları daxili axarsız (qapalı) hövzəyə aiddir",
+                    "Qışı quraq keçən mülayim-isti iqlim yarımtipinə rast gəlir"
+                ],
                 correct: 2
             },
+
+            // 2
             {
-                q: "Verilən rayonlar arasında ərazicə ən kiçiyi hansıdır?",
-                options: ["Sumqayıt (83 km²)", "Şirvan (72 km²)", "Siyəzən (286 km²)", "Xızı (693 km²)"],
+                q: "Xəritə-sxemə əsasən türkdilli dövlət qurumlarını müəyyən edin:",
+                img: "../img/miq/sual2.png",
+                options: ["2, 3", "3, 5", "2, 4", "1, 5", "2, 6"],
+                correct: 0
+            },
+
+            // 3
+            {
+                q: "A məntəqəsində Günəş 06:20-də çıxırsa, gündüzlə gecənin uzunluqları arasındakı fərqi hesablayın:",
+                options: ["40 dəqiqə", "20 dəqiqə", "100 dəqiqə", "160 dəqiqə", "80 dəqiqə"],
+                correct: 4
+            },
+
+            // 4
+            {
+                q: "Doğru olmayan fikirləri müəyyən edin:\n1. Rütubətlənmə əmsalının vahiddən kiçik olduğu ərazidə səhra və yarımsəhralar yaranır\n2. Podzol torpaqlar qütb işıqlanma qurşağında daha geniş yayılmışdır\n3. Qırmızı-qonur torpaqların yayıldığı ərazilərdə orta illik temperatur qəhvəyi torpaqların yayıldığı ərazilərdəkindən yüksəkdir\n4. Afrikada ekvatorial iqlim qurşağı qərbdən şərqə doğru tam zolaq əmələ gətirir\n5. Böyük Suayrıcı dağlarının qərb ətəkləri boyu səhra təbii zonası rast gəlir\n6. Cənubi Amerika subtropik iqlim qurşağı daxilində yalnız iki iqlim vilayəti (tipi) yayılmışdır",
+                options: ["2, 3, 5", "2, 5, 6", "1, 3, 5", "2, 4, 6", "1, 3, 6"],
+                correct: 3
+            },
+
+            // 5
+            {
+                q: "Verilmiş iqlim diaqramına aid olduğu iqlim qurşağı üçün doğru fikirləri müəyyən edin:\n1. Florida yarımadası bütövlükdə bu iqlim qurşağında yerləşir\n2. Avrasiyada yayılmış bütün tiplərində qış daha rütubətli keçir\n3. Cənubi Azərbaycana rast gəlir\n4. Kanar adalarında rast gəlməsə də, bu adaların aid olduğu ölkədə yayılmışdır\n5. Yayıldığı bütün materiklərin yalnız cənub hissəsində rast gəlir",
+                img: "../img/miq/sual5.png",
+                options: ["3, 4", "1, 3", "2, 4", "1, 5", "2, 5"],
+                correct: 0
+            },
+
+            // 6
+            {
+                q: "Eyler-Venn diaqramına və xəritə-sxemə əsasən uyğunluğu müəyyən edin:\na. Federativ inzibati-ərazi quruluşuna malikdir\nb. Əhalinin əksəriyyəti Ural dil ailəsinə məxsusdur\nc. Neytral ölkə olub, NATO təşkilatına üzv deyil\nd. Ərazisindən Dunay çayı keçir\ne. Slovakiya və Sloveniya ilə quru sərhədinə malikdir",
+                img: "../img/miq/sual6.png",
+                options: ["I – 4, II – 3", "I – 4, II – 5", "I – 1, II – 2", "I – 1, II – 3", "I – 2, II – 5"],
+                correct: 0
+            },
+
+            // 7
+            {
+                q: "Ərazisi üç yarımkürədə yerləşən hansı ölkələrin xəritələrinin silindirik proyeksiyada tərtib edilməsi daha məqsədəuyğundur?\n1. Qabon\n2. Keniya\n3. Nigeriya\n4. Kolumbiya\n6. P.Y.Qvineya",
+                options: ["1, 4", "1, 2, 6", "2, 3, 6", "2, 3, 4", "2, 5, 6"],
                 correct: 1
             },
+
+            // 8
             {
-                q: "Bakı şəhərinin ümumi sahəsi təxminən neçə km²-dir?",
-                options: ["920 km²", "1 350 km²", "2 140 km²", "2 430 km²"],
+                q: "Kiçik Qafqaz tektonik zonasında yerləşən mineral bulaqları müəyyən edin:\n1. Donuzütən\n2. Şirlan\n3. Şıx\n4. Xaşı\n5. Aşağı Ağköprü\n6. Cimi",
+                options: ["1, 3, 4", "2, 3, 5", "2, 4, 6", "1, 5, 6", "1, 2, 3"],
+                correct: 1
+            },
+
+            // 9
+            {
+                q: "Cənubi və Şimali Amerika üçün ümumi əlamətləri müəyyən edin:\n1. NAFTA təşkilatına üzv ölkələr yerləşir\n2. Səhralar digər materiklərə nisbətən daha az sahə tutur\n3. Çaylarının tökülüşü dörd okeana aiddir\n4. Daxili (axarsız) hövzə Afrikaya nisbətən daha kiçik sahə tutur\n5. Suburbanizasiya prosesi səciyyəvidir\n6. Təbii qaz hasil edən ölkələr mövcuddur",
+                options: ["1, 3, 5", "1, 4, 6", "2, 4, 6", "1, 2, 4", "2, 3, 5"],
                 correct: 2
             },
+
+            // 10
             {
-                q: "Sədərək rayonu hansı xüsusiyyəti ilə seçilir?",
+                q: "Doğru olmayan fikirləri müəyyən edin:\n1. Monqollar və Ahıska türkləri eyni dil ailəsinə məxsubdur\n2. İvanpa Solar stansiyası yerləşdiyi ölkə Şimal qütb dairəsi ilə kəsişir\n3. Salvador respublikasının sahillərini iki okean suları yuyur\n4. Yer səthinin hər kvadrat santimetr sahəsinə ildə 800 mm yağıntı düşür\n5. Fransanın ərazisi üç yarımkürədə yerləşir və bu ölkənin ərazisində mülayim-kontinental iqlim tipi yayılmışdır\n6. Araz çayının qidalanmasında ən az payı yağış suları, Kür çayında isə yeraltı sular təşkil edir",
+                options: ["3, 4, 6", "2, 3, 5", "1, 3, 5", "2, 4, 6", "3, 4, 5"],
+                correct: 2
+            },
+
+            // 11
+            {
+                q: "Eyni materikdə yerləşən, lakin eroziya bazisi müxtəlif okeanlar olan çayları müəyyən edin:",
+                options: ["Saluin və Fərat", "Don və Taxo", "Tuqela və İravadi", "Şm.Dvina və Luara", "Maqdalena və San-Fransisko"],
+                correct: 3
+            },
+
+            // 12
+            {
+                q: "Əgər Yer kürəsi sxemdəki vəziyyəti alsaydı, aşağıdakı fikirlərdən hansını demək olmazdı?",
+                img: "../img/miq/sual12.png",
                 options: [
-                    "Naxçıvan MR-in ən kiçik ərazili rayonu və Türkiyə ilə sərhəddir",
-                    "Naxçıvanın ən böyük əkinçilik rayonudur",
-                    "Batabat gölünün yerləşdiyi rayondur",
-                    "Talış dağlarının ətəyindədir"
+                    "Günəşin zenitdə olduğu ərazinin sahəsi azalardı",
+                    "Qütb işıqlanma qurşağının sahəsi artardı",
+                    "Mülayim işıqlanma qurşağının sahəsi azalardı",
+                    "Qış gündönümündə Bakı şəhərinə günəş şüalarının düşmə bucağı daha kiçik olardı",
+                    "Yay gündönümündə Bakıda günorta vaxtı şaquli dirəyin kölgəsi daha qısa olardı"
                 ],
                 correct: 0
             },
+
+            // 13
             {
-                q: "Zəngilan rayonu hansı nadir təbiət obyekti ilə tanınır?",
-                options: ["İstisu mineral bulaqları", "Nadir çinar meşə qoruğu", "Batabat gölü", "Duz mağaraları"],
-                correct: 1
-            },
-            {
-                q: "Culfa rayonu tarixən hansı ticarət yolu üzərində yerləşməsi ilə tanınır?",
-                options: ["Baharat yolu", "İpək yolu", "Kəhrəba yolu", "Duz yolu"],
-                correct: 1
-            },
-            {
-                q: "Xankəndi şəhəri təqdim olunan mətnə əsasən hansı ildən Azərbaycan nəzarətindədir?",
-                options: ["2020", "2021", "2023", "2025"],
-                correct: 2
-            },
-            {
-                q: "Qusar rayonunun qış turizmi mərkəzi hansı dağla bağlıdır?",
-                options: ["Bazardüzü", "Şahdağ", "Tufandağ", "Babadağ"],
-                correct: 1
-            },
-            {
-                q: "Şamaxı şəhəri tarixən hansı dövlətin paytaxtı olub?",
-                options: ["Şirvanşahlar dövləti", "Səfəvilər dövləti", "Qarabağ xanlığı", "Şəki xanlığı"],
+                q: "Doğru fikirləri müəyyən edin:\n1. Filippin arxipelaqı subekvatorial və ekvatorial iqlim qurşağında yerləşir\n2. Siciliya adasında yağıntılar əsasən iyun, iyul, avqust aylarında düşür\n3. Şimal yarımkürəsində səth örtüyünün istilik tutumu Cənub yarımkürəsinə nisbətən daha çoxdur\n4. Orta Sibirdə sutkalıq temperatur amplitudu illik temperatur amplitudundan çoxdur\n5. Braziliya ərazisində ekvatorial, subekvatorial və tropik iqlim qurşaqları yayılmışdır\n6. Karpat dağları əhalinin təbii artımının II tipinə aid olan ölkələrin və İƏO-ların ərazisində yerləşir",
+                options: ["1, 5, 6", "4, 5, 6", "2, 3, 4", "1, 3, 5", "1, 2, 3"],
                 correct: 0
             },
+
+            // 14
             {
-                q: "Ordubad rayonu meyvəçilikdə xüsusilə hansı məhsulla tanınır?",
-                options: ["Nar", "Ərik", "Fındıq", "Zeytun"],
-                correct: 1
+                q: "Xəritə-sxemdə Qarabağ iqtisadi rayonuna aid olan və olmayan inzibati rayonlar göstərilmişdir. Bu iqtisadi rayona aid olmayan inzibati rayonların ümumi xüsusiyyətlərini müəyyən edin:\n1. Kürün sağ sahilində yerləşirlər, pambıqçılıq inkişaf etmişdir\n2. Arazın sol sahilində yerləşirlər, payızlıq buğda əkin sahələri var\n3. Eyni iqtisadi rayona aiddirlər\n4. Həm suvarma, həm də dəmyə əkinçiliyi inkişaf etmişdir\n5. 2020-ci il Vətən müharibəsi zamanı işğaldan azad edilibdir",
+                img: "../img/miq/sual14.png",
+                options: ["2, 3, 5", "1, 5, 6", "1, 2, 3", "1, 4, 6", "2, 3, 4"],
+                correct: 0
             },
+
+            // 15
             {
-                q: "Kiçik summativ qiymətləndirmə (KSQ) adətən nə zaman keçirilir?",
+                q: "Xocavənd inzibati rayonuna aid olan əlamətləri müəyyən edin:\n1. Gəlinqaya zirvəsi yerləşir\n2. Ərazisindən Zəfər yolu keçir\n3. Hadrut qəsəbəsi bu inzibati rayonundadır\n4. Ərazisindən Həkəri çayı keçir\n5. Köndələnçayın mənbəyi yerləşir\n6. Laçın, Qubadlı və Şuşa inzibati rayonları ilə həmsərhəddir",
+                options: ["2, 3, 5", "1, 5, 6", "1, 2, 3", "1, 4, 6", "2, 3, 4"],
+                correct: 0
+            },
+
+            // 16
+            {
+                q: "Doğru fikirləri müəyyən edin:\n1. Quru səthindən buxarlanan suyun miqdarı yağıntıların miqdarından çox olmaz\n2. Vettern gölünün yerləşdiyi ölkə Rusiya ilə həmsərhəddir\n3. Buxarlanma qabiliyyətinin kəmiyyəti Afrika materikinin şimalında cənubuna nisbətən çoxdur\n4. Buxarlanmanın ən böyük qiyməti tropik səhralarda, ən kiçik qiyməti isə okeanların tropik enliklərində müşahidə olunur\n5. Bakı iqtisadi rayonunda ölkə əhalisinin 53 %-i cəmləşmişdir\n6. Ağcabədi və Neftçalada orta illik temperatur Culfa və Xaçmazdan daha yüksəkdir",
+                options: ["1, 3, 6", "1, 3, 5", "2, 4, 6", "2, 4, 5", "1, 2, 3"],
+                correct: 0
+            },
+
+            // 17
+            {
+                q: "Eyler-Venn diaqramına əsasən göllərlə bağlı uyğunluğu müəyyən edin:\n1. Aid olduğu materikin sahəsinə görə ən böyük göldür\n2. Atlantik okeanı hövzəsinə aiddir\n3. Sahillərində üç və daha çox ölkə yerləşir\n4. İki yarımkürədə yerləşir",
+                img: "../img/miq/sual17.png",
                 options: [
-                    "Dərs ilinin əvvəlində, ilkin səviyyəni ölçmək üçün",
-                    "Bir mövzu və ya bölmənin sonunda",
-                    "Yalnız buraxılış sinifində",
-                    "Hər dərsin sonunda mütləq şəkildə"
+                    "I – 4, II – 3, III – 1, IV – 2",
+                    "I – 4, II – 3, III – 2, IV – 1",
+                    "I – 1, II – 3, III – 4, IV – 2",
+                    "I – 3, II – 4, III – 2, IV – 1",
+                    "I – 1, II – 2, III – 3, IV – 4"
                 ],
                 correct: 1
             },
+
+            // 18
             {
-                q: "Böyük summativ qiymətləndirmə (BSQ) tədris ili ərzində adətən neçə dəfə keçirilir?",
-                options: ["1 dəfə", "2 dəfə (yarımillərin sonunda)", "4 dəfə (rüblərin sonunda)", "Hər ay bir dəfə"],
-                correct: 1
-            },
-            {
-                q: "Diaqnostik qiymətləndirmənin əsas məqsədi nədir?",
+                q: "Doğru olmayan fikri müəyyən edin:",
+                img: "../img/miq/sual18.png",
                 options: [
-                    "Yeni mövzuya başlamazdan əvvəl şagirdlərin ilkin bilik səviyyəsini müəyyənləşdirmək",
-                    "Yarımillik yekun qiymət qoymaq",
-                    "Şagirdi intizam qaydalarına görə qiymətləndirmək",
-                    "Yalnız valideynləri məlumatlandırmaq"
+                    "1 rəqəmi ilə göstərilən ölkədə Orisaba və Popokatepetl vulkanları yerləşir",
+                    "2 rəqəmi ilə göstərilən ölkə ALADİ təşkilatının üzvüdür və bu ölkənin ərazisində Ukayali və Maranyon çayları yerləşir",
+                    "3 rəqəmi ilə göstərilən ölkə Fransanın asılı ərazisidir",
+                    "4 rəqəmi ilə göstərilən ölkədə formalaşan təbii zonalardan hər hansı biri Korsika adasında rast gəlir",
+                    "Yerin xəyali oxunun orbit müstəvisinə meylliyi 55° meyilli olsaydı 5 rəqəmi ilə göstərilən ölkədə Günəş zenitdə olardı"
+                ],
+                correct: 2
+            },
+
+            // 19
+            {
+                q: "Ölkə əhalisinin sayı 2014-cü ildə 23 550 min nəfər, 2021-ci ildə isə 24 850 min nəfər olmuşdur. Bu artımın 310 900 nəfəri mexaniki artım hesabına yaranıbsa, hər 1000 nəfərə illik təbii artımı hesablayın (Nəzərə alın ki, keçən dövr ərzində təbii artım sabit qalmışdır).",
+                options: ["12 nəfər", "8 nəfər", "5 nəfər", "6 nəfər", "3 nəfər"],
+                correct: 3
+            },
+
+            // 20
+            {
+                q: "Xəritə-sxemdə rəqəmlərlə verilmiş ölkələrə uyğun gələn əlamətləri müəyyən edin:\na. G-20 ölkələri qrupuna daxildir\nb. Sokotra adası bu ölkəyə məxsusdur\nc. İnzibati-ərazi quruluşuna görə digər üç ölkədən fərqlənir\nd. Ərazisində dünyanın ən dərin çökəkliyi yerləşir\ne. İƏO-lar qrupuna daxildir",
+                img: "../img/miq/sual20.png",
+                options: [
+                    "1-d, 2-a, 3-c, 4-b",
+                    "1-c, 2-a, 3-b, 4-d",
+                    "1-b, 2-d, 3-a, 4-c",
+                    "1-e, 2-c, 3-a, 4-b",
+                    "1-b, 2-a, 3-c, 4-d"
                 ],
                 correct: 0
             },
+
+            // 21
             {
-                q: "Xaçmaz rayonunun sahəsi təxminən neçə km²-dir?",
-                options: ["705 km²", "869 km²", "1 070 km²", "1 730 km²"],
+                q: "Torpaqlara aid doğru fikirləri müəyyən edin:\n1. Torpaqlarda humusun miqdarı səthdən aşağıya doğru artır\n2. Çürüntüsü çox, hissəciklərin ölçüsü iri və məsaməli olan torpaqlar strukturlu torpaqlar adlanır\n3. Torpaqlar zonal təbii komponentlərə daxildir\n4. Dünyanın torpaq fondunun yarıdan çoxunu boz torpaqlar formalaşdırır\n5. Rütubətli və isti iqlim şəraitində, dəmir birləşmələrinin üstün olduğu ərazilərdə torpaqlar qırmızı rəngdədir\n6. Arid zonalarda torpaqların suvarılması prosesi rekultivasiya adlanır",
+                options: ["1, 4, 6", "1, 3, 5", "1, 2, 4", "2, 3, 6", "2, 3, 5"],
+                correct: 4
+            },
+
+            // 22
+            {
+                q: "Kür dağarası çökəkliyi vilayətinə aid olan xüsusiyyətləri müəyyən edin:\n1. Qışı quraq keçən mülayim-isti iqlim yarımtipi yayılmışdır\n2. Şabalıdı və qəhvəyi torpaqlar üstünlük təşkil edir\n3. Gölləri əsasən çay dərə mənşəlidir\n4. Ərazisində yarımsəhra və quru çöl, həmçinin intrazonal landşafta rast gəlinir\n5. Mümbit torpaqlarda sitrus bitkiləri becərilir\n6. İki xarici ölkə ilə həmsərhəddir",
+                options: ["1, 3, 4", "2, 4, 6", "1, 3, 5", "1, 2, 6", "3, 4, 6"],
+                correct: 0
+            },
+
+            // 23
+            {
+                q: "Xəritə-sxemə əsasən uyğunluğu müəyyən edin:\na. Viktoriya, Tanqanika və Nyasa göllərinin hər üçünün sahilində yerləşir\nb. Koysan dil ailəsinə malik olan xalqlar üstünlük təşkil edir\nc. Konstitusiyalı monarxiyadır\nd. Unitar respublikadır\ne. Niger-Kordofan dil ailəsinə mənsub olan xalqlar üstünlük təşkil edir\nf. Zəngin fosfat yataqlarına malikdir",
+                img: "../img/miq/sual23.png",
+                options: [
+                    "1-cf, 2-ae, 3-bd",
+                    "1-ac, 2-ef, 3-bd",
+                    "1-bd, 2-ae, 3-cf",
+                    "1-cf, 2-ab, 3-de",
+                    "1-ab, 2-de, 3-cf"
+                ],
+                correct: 0
+            },
+
+            // 24
+            {
+                q: "ETİ üçün doğru fikirləri müəyyən edin:\n1. Yeni materialların istehsalı ETİ dövründə istehsalın inkişafının istiqamətlərindən biridir\n2. Maşınqayırmada yeni sahələrin yaranması və köhnə sahələrin sıradan çıxması ETİ-nin təsərrüfatın sahəvi strukturuna təsirinin təzahürüdür\n3. Postsənaye ölkələrdə əhalinin çox hissəsi II və III sektorda çalışır\n4. ETİ-nin təsərrüfatın ərazi strukturuna təsiri İƏO-lərdə təkmərkəzli formanın üstün olmasına səbəb olmuşdur\n5. Texnopolis və texnoparkların yaranması ETİ dövrünün təsərrüfatın inkişafına təsirinin nəticəsidir\n6. ETİ dövründə ekstremal şəraitə malik olan ərazilərin mənimsənilməsi zəifləmişdir",
+                options: ["1, 2, 5", "3, 4, 5", "1, 3, 5", "2, 3, 6", "2, 4, 6"],
+                correct: 0
+            },
+
+            // 25
+            {
+                q: "Sxemdə 5 fərqli məntəqədə iki həftə üçün nisbi rütubətliliyin orta göstəriciləri verilmişdir. İkinci həftədə orta nisbi rütubətliliyi nəzərə alaraq, hansı məntəqədə havanın temperaturunun artdığını müəyyən edin:",
+                img: "../img/miq/sual25.png",
+                options: ["III və V", "I və III", "I və II", "II və IV", "IV və V"],
+                correct: 1
+            },
+
+            // 26
+            {
+                q: "8° c.e-də yerləşən düzənliyin şimala meylliyi 5°-dir. Hər dəfə bu düzənliyə Günəş şüaları günorta vaxtı 71,5° bucaqla düşür. Həmin tarixlərdə Günəşin zenitdə olduğu enliklər arasındakı məsafə 1:22 200 000 miqyaslı xəritədə neçə sm olar?",
+                options: ["17,1", "5,8", "18,5", "11,1", "15,8"],
                 correct: 2
             },
+
+            // 27
             {
-                q: "Verilən rayonlardan hansı Naxçıvan MR-ə deyil, Aran iqtisadi rayonuna aiddir?",
-                options: ["Şərur", "Babək", "Mingəçevir", "Culfa"],
+                q: "Valdiz, Ninbo və Kure limanlarının yerləşdiyi ölkələr üçün ümumi əlamətləri müəyyən edin:\n1. Sahillərini yalnız bir okean suları yuyur\n2. İri xammal ixracatçısıdır\n3. Ərazisində musson iqlim tipinə rast gəlir\n4. Çaltık əkin sahələri mövcuddur\n5. Ərazisindən 40° şimal en xətti keçir\n6. Türkdilli ölkələrlə quru sərhədinə malikdir",
+                options: ["1, 2, 3", "1, 2, 6", "2, 3, 6", "1, 4, 5", "3, 4, 5"],
+                correct: 4
+            },
+
+            // 28
+            {
+                q: "Doğru fikirləri müəyyən edin:\n1. Qayalı dağlar və Sixote-Alin dağları Meksika yaylası ilə eyni dağəmələgəlmə mərhələsində yaranmışdır\n2. Xəzər dənizinin sahillərinin mütləq hündürlüyü Eyr gölünün sahillərinin mütləq hündürlüyündən daha çoxdur\n3. Kamçatkada və Yeni Zelandiyanın cənubunda mülayim-dəniz iqlim tipi yayılmışdır\n4. Ölkəmizdə yalnız Kiçik Qafqaz tektonik zonasında landşaft inversiyası müşahidə edilir\n5. Yeraltı sular və bataqlıqlardan qidalanan çayların su sərfi il ərzində kəskin şəkildə dəyişir\n6. Gədəbəy və Yardımlı rayonlarında yura dövrünün çöküntülərinə rast gəlinir",
+                options: ["1, 2, 6", "2, 4, 5", "1, 3, 4", "1, 5, 6", "2, 3, 4"],
+                correct: 0
+            },
+
+            // 29
+            {
+                q: "Cədvələ əsasən uyğunluğu müəyyən edin:",
+                img: "../img/miq/sual29.png",
+                options: ["1, 4, 6", "1, 2, 3", "2, 3, 6", "2, 4, 6", "1, 4, 5"],
+                correct: 0
+            },
+
+            // 30
+            {
+                q: "Doğru variantı müəyyən edin:\n1. Ekvatorial – humid – laterit\n2. Mülayim – arid – çimli-podzol\n3. Subtropik – humid – sarı\n4. Mülayim – humid – tundra-qleyli\n5. Tropik – arid – boz\n6. Arktik – arid – ibtidai",
+                options: ["1, 2, 4", "2, 4, 5", "1, 3, 6", "1, 4, 5", "1, 3, 5"],
                 correct: 2
+            },
+
+            // 31
+            {
+                q: "Verilən məntəqələri illik yağıntının miqdarının azalması ardıcıllığı ilə düzün:\n1. Şpitsbergen\n2. Havay\n3. Mindanao\n4. Korsika",
+                options: ["1, 3, 4, 2", "2, 1, 3, 4", "2, 3, 4, 1", "3, 2, 1, 4", "2, 3, 1, 4"],
+                correct: 2
+            },
+
+            // 32
+            {
+                q: "Qarayazı və Beşitçay qoruqlarının yerləşdiyi iqtisadi rayonlara oxşar xüsusiyyətləri müəyyən edin:\n1. Yay otlaqlarına malikdirlər\n2. Civə yataqları mövcuddur\n3. Bütün inzibati rayonlar xarici ölkə ilə həmsərhəddir\n4. Əlvan metallurgiya xammalına malikdirlər\n5. Qışı quraq keçən mülayim-isti iqlim və mülayim yarımsəhra və quru çöl iqlim yarımtipinə rast gəlinir\n6. Rayon mərkəzi olmayan şəhərə malikdir",
+                options: ["1, 4, 5", "1, 2, 3", "2, 3, 6", "4, 5, 6", "1, 4, 6"],
+                correct: 0
+            },
+
+            // 33
+            {
+                q: "Doğru göstərilməmişdir:",
+                img: "../img/miq/sual33.png",
+                options: ["1, 3, 5", "2, 4, 5", "2, 3, 6", "1, 4, 6", "2, 4, 6"],
+                correct: 2
+            },
+
+            // 34
+            {
+                q: "Xəritə-sxemdə rəqəmlərlə göstərilmiş dənizləri müəyyən edin:",
+                img: "../img/miq/sual34.png",
+                options: [
+                    "1-Dürvil, 2-Amundsen",
+                    "1-Lazarev, 2-Deyvis",
+                    "1-Ueddell, 2-Ross",
+                    "1-Ueddell, 2-Birlik",
+                    "1-Amundsen, 2-Ross"
+                ],
+                correct: 2
+            },
+
+            // 35
+            {
+                q: "Mineral xammal yataqları və istifadə istiqaməti doğru göstərilməmişdir: (Şərti: əlaqə düşü ilə)",
+                options: [
+                    "Ağdaş – kənd təsərrüfatı",
+                    "Şahtaxtı – tikinti",
+                    "Hökməli – şüşələrin hazırlanması",
+                    "İsmayıllı yanar şist – kimya sənayesi",
+                    "Çovdar – neft quyularının qazılması"
+                ],
+                correct: 0
+            },
+
+            // 36
+            {
+                q: "ABŞ (I) və Rusiya Federasiyası (II) və hər ikisi (III) üçün doğru uyğunluğu müəyyən edin:\n1. İki seysmik qurşaqda yerləşir\n2. Ərazisində həm sönmüş, həm də fəaliyyətdə olan vulkanlara rast gəlinir\n3. İri daş kömür ixracatçısıdır\n4. Bir neçə Avropa ölkəsi ilə həmsərhəddir\n5. Havay adaları bir ölkəyə məxsusdur\n6. İƏO-lara daxildir",
+                /* DİQQƏT: variantlar şəkildən tam oxuna bilmədi — yoxla! */
+                options: [
+                    "I – 5, II – 6, III – 3",
+                    "I – 2, II – 3, III – 5",
+                    "I – 1, II – 4, III – 5",
+                    "I – 5, II – 4, III – 2",
+                    "I – 6, II – 4, III – 1"
+                ],
+                correct: 0
+            },
+
+            // 37
+            {
+                q: "Türkdilli xalqları müəyyən edin:",
+                options: [
+                    "Noqaylar, avarlar",
+                    "Çərkəzlər, çeçenlər",
+                    "Tatarlar, şorlar",
+                    "İnquşetlər, kabardinlər",
+                    "Çuvaşlar, taciklər"
+                ],
+                correct: 2
+            },
+
+            // 38
+            {
+                q: "Eyler-Venn diaqramına əsasən uyğunluğu müəyyən edin:\na. Əhalisi roman dil qrupuna daxil olub, Rusiya ilə quru sərhədinə malik deyil\nb. Sahillərini Baltik dənizi suları yuyur\nc. Ərazisindən Dunay çayı keçir\nd. Qara dənizə çıxışı olan ən azı iki ölkə ilə həmsərhəddir\ne. Yalnız mövqeyinə görə daxili dənizə çıxışı var",
+                img: "../img/miq/sual38.png",
+                options: [
+                    "1-c, 2-a, 3-d, 4-e, 5-b",
+                    "1-b, 2-a, 3-c, 4-d, 5-e",
+                    "1-b, 2-d, 3-c, 4-a, 5-e",
+                    "1-b, 2-a, 3-e, 4-d, 5-c",
+                    "1-e, 2-b, 3-a, 4-c, 5-d"
+                ],
+                correct: 2
+            },
+
+            // 39
+            {
+                q: "Doğru olmayan fikirləri müəyyən edin:\n1. Orta Araz vilayətində dağ-kserofit bitkilərinə rast gəlinir\n2. Kalimantan, Tasmaniya və Folkland adalarının sahillərini iki okean suları yuyur\n3. Yamayka, Çili və İndoneziya əlvan metal yataqları ilə zəngindir\n4. Afurca şəlaləsi Böyük Qafqazın şimal-şərqində yerləşir\n5. Atmosferdə olan aerozollar stratosfer təbəqəsində yerləşir\n6. G20 ölkələrinin heç biri \"Qoşulmama hərəkatı\" təşkilatına üzv deyil",
+                options: ["1, 4, 6", "1, 3, 6", "2, 5, 6", "1, 3, 4", "1, 2, 4"],
+                correct: 2
+            },
+
+            // 40
+            {
+                q: "Mülayim dəniz iqlim tipində yerləşən yarımadanı müəyyən edin:",
+                options: ["Keyp-York", "Yukatan", "Kola", "Malakka", "Kamçatka"],
+                correct: 4
             }
+
         ]
     });
 

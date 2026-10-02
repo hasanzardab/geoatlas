@@ -7,8 +7,8 @@
 (function(){
     try{
         var t = localStorage.getItem('geoatlas-theme');
-        if(t === 'light'){
-            document.documentElement.setAttribute('data-theme','light');
+        if(t === 'dark'){
+            document.documentElement.setAttribute('data-theme','dark');
         }
     }catch(e){}
 })();
@@ -16,7 +16,7 @@
 
 <title>Haqqımızda | GeoAtlas</title>
 <meta name="description" content="GeoAtlas — statik, pulsuz və açıq mənbəli interaktiv coğrafiya platformasının məqsədi, dəyərləri və inkişaf yolu.">
-    <link rel="icon" type="image/png" href="icon/favicon.png">
+    <link rel="icon" type="image/png" href="../icon/favicon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -200,14 +200,14 @@
 </div>
 
 
-<div class="info-block" style="margin-bottom:90px;">
+<div class="info-block">
     <div class="info-block-inner">
 
         <div class="info-block-item">
             <strong>🗺️ Xəritə mənbəyi</strong>
             <p>
                 İnzibati sərhədlərin SVG konturları
-                <a href="https://simplemaps.com" target="_blank" rel="noopener" style="color:var(--gold2);text-decoration:none;">SimpleMaps</a>
+                <a href="https://simplemaps.com" target="_blank" rel="noopener" style="color:var(--accent-fg);text-decoration:none;">SimpleMaps</a>
                 mənbəyindən götürülür və sayt daxilində əl ilə formatlanır.
             </p>
         </div>

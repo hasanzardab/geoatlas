@@ -3,17 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){
+    try{
+        var t = localStorage.getItem('geoatlas-theme');
+        if(t === 'dark'){
+            document.documentElement.setAttribute('data-theme','dark');
+        }
+    }catch(e){}
+})();
+</script>
 <title>Rayon Tapmacası | GeoAtlas</title>
 <meta name="description" content="60 saniyədə Azərbaycanın rayonlarının konturlarına klikləyərək nə qədər sürətli tapa bilərsən?">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
 <style>
 :root{
-    --panel:#1c1c1c;--line:#3a3a3a;--muted:#9a9a9a;--text:#eee;
-    --gold:#d8b36a;--gold2:#e8c988;--red:#b52d3c;--green:#7fd5a5;
-    --bg:#111;
+    --panel:#ffffff;--line:rgb(14 20 32 / .10);--muted:#5d6879;--text:#0e1420;
+    --gold:#9d6c17;--gold2:#b8862a;--red:#c42a3c;--green:#1a8a54;
+    --bg:#f4f6f9;--on-gold:#ffffff;
+    --surface-1:rgb(14 20 32 / .045);--surface-2:rgb(14 20 32 / .085);--stage-bg:rgb(14 20 32 / .02);
+    --map-fill:#e8ebf1;--map-stroke:#aeb8c6;--map-hover:rgb(184 134 42 / .24);
+    --found-fill:rgb(26 138 84 / .16);--found-stroke:#6fae8f;
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root[data-theme="dark"]{
+    --panel:#1c1c1c;--line:#3a3a3a;--muted:#9a9a9a;--text:#eee;
+    --gold:#d8b36a;--gold2:#e8c988;--red:#b52d3c;--green:#7fd5a5;
+    --bg:#111;--on-gold:#1a1400;
+    --surface-1:rgba(255,255,255,.06);--surface-2:rgba(255,255,255,.10);--stage-bg:rgba(255,255,255,.02);
+    --map-fill:rgba(255,255,255,.05);--map-stroke:#4a4a4a;--map-hover:rgba(216,179,106,.18);
+    --found-fill:rgba(127,213,165,.16);--found-stroke:#4d7a63;
 }
 *{box-sizing:border-box;}
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
@@ -66,7 +87,7 @@ body{
 
 .start-btn{
     background:linear-gradient(135deg,var(--gold),var(--gold2));
-    color:#1a1400;border:none;padding:9px 20px;border-radius:10px;
+    color:var(--on-gold);border:none;padding:9px 20px;border-radius:10px;
     cursor:pointer;font-size:13.5px;font-weight:600;
     display:inline-block;
 }
@@ -86,7 +107,7 @@ body{
 .hud-stats{display:flex;gap:14px;font-size:9.5px;color:var(--muted);text-align:center;}
 .hud-stats strong{display:block;font-family:Georgia,serif;font-size:14px;color:var(--text);}
 
-.timer-track{height:5px;border-radius:10px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:10px;}
+.timer-track{height:5px;border-radius:10px;background:var(--surface-1);overflow:hidden;margin-bottom:10px;}
 .timer-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:10px;transition:width 1s linear,background .3s;width:100%;}
 .timer-fill.warn{background:linear-gradient(90deg,var(--red),#e78a94);}
 
@@ -95,15 +116,15 @@ body{
 }
 .map-toolbar button{
     width:26px;height:26px;border-radius:7px;border:1px solid var(--line);
-    background:rgba(255,255,255,.04);color:var(--text);font-size:13px;cursor:pointer;
+    background:var(--surface-1);color:var(--text);font-size:13px;cursor:pointer;
     display:grid;place-items:center;line-height:1;
 }
-.map-toolbar button:active{background:rgba(255,255,255,.1);}
+.map-toolbar button:active{background:var(--surface-2);}
 
 .map-stage{
     position:relative;width:100%;
     border:1px solid var(--line);border-radius:12px;
-    background:rgba(255,255,255,.02);
+    background:var(--stage-bg);
     overflow:hidden;
     touch-action:none;
     aspect-ratio:1000/790.71;
@@ -113,17 +134,17 @@ body{
 .map-stage svg.dragging{cursor:grabbing;}
 
 .district{
-    fill:rgba(255,255,255,.05);
-    stroke:#4a4a4a;
+    fill:var(--map-fill);
+    stroke:var(--map-stroke);
     stroke-width:0.9;
     vector-effect:non-scaling-stroke;
     transition:fill .12s;
     cursor:pointer;
 }
-.district:hover{fill:rgba(216,179,106,.18);}
+.district:hover{fill:var(--map-hover);}
 .district.correct-flash{fill:var(--green) !important;stroke:#5fb886;}
 .district.wrong-flash{fill:var(--red) !important;stroke:#8a2230;}
-.district.found{fill:rgba(127,213,165,.16);stroke:#4d7a63;}
+.district.found{fill:var(--found-fill);stroke:var(--found-stroke);}
 
 .hint-row{
     display:flex;justify-content:space-between;align-items:center;
@@ -142,12 +163,6 @@ body{
 .result-verdict.fail{color:var(--red);}
 .result-desc{color:var(--muted);font-size:12px;line-height:1.5;margin:0 0 14px;}
 .result-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
-
-@media(prefers-color-scheme:light){
-    :root:not([data-theme="dark"]){
-        --bg:#111;
-    }
-}
 
 @media(max-width:650px){
     .card{padding:20px;border-radius:18px;}

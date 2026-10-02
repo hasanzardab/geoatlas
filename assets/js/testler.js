@@ -15,6 +15,9 @@
  *   timeLimit     – (opsional) saniyə ilə ümumi vaxt limiti
  *   passMessage   – keçid mesajı
  *   failMessage   – kəsilmə mesajı
+ *   navigator     – (opsional) true olarsa sual qutucuqları çıxır, istənilən suala
+ *                   keçmək və cavabı dəyişmək olar, nəticə yalnız test bitəndə göstərilir
+ *   sual obyektində img – (opsional) sualın altında göstəriləcək şəklin yolu
  */
 
 // Statistika Worker-inin ünvanı (eyni worker "cloudflare-worker.js" faylıdır)
@@ -146,6 +149,9 @@ function initQuiz(config) {
     let current = 0;
     let score = 0;
     let answered = false;
+    let answers = [];
+    const useNav = !!config.navigator;
+    let navEl = null, prevBtn = null, finishBtn = null;
     let timeLeft = config.timeLimit || 0;
     let timerHandle = null;
 
@@ -193,6 +199,10 @@ function initQuiz(config) {
         answered = false;
         nextBtn.classList.remove("ready");
         nextBtn.textContent = (current === config.questions.length - 1) ? "Nəticəni gör →" : "Növbəti sual →";
+        if (useNav) {
+            nextBtn.classList.add("ready");
+            nextBtn.textContent = (current === config.questions.length - 1) ? "Testi bitir ✓" : "Növbəti →";
+        }
 
         const total = config.questions.length;
         const pct = Math.round((current / total) * 100);
@@ -202,6 +212,13 @@ function initQuiz(config) {
 
         const item = config.questions[current];
         questionEl.textContent = item.q;
+        if (item.img) {
+            const im = document.createElement("img");
+            im.src = item.img;
+            im.alt = "Sual şəkli";
+            im.className = "quiz-question-img";
+            questionEl.appendChild(im);
+        }
 
         const letters = ["A", "B", "C", "D", "E", "F"];
 
@@ -215,6 +232,17 @@ function initQuiz(config) {
         }).join("");
 
         optionsEl.querySelectorAll(".quiz-option").forEach(el => {
+
+            if (useNav) {
+                if (answers[current] === parseInt(el.dataset.index, 10)) el.classList.add("selected");
+                el.addEventListener("click", () => {
+                    answers[current] = parseInt(el.dataset.index, 10);
+                    optionsEl.querySelectorAll(".quiz-option").forEach(o => o.classList.remove("selected"));
+                    el.classList.add("selected");
+                    updateNav();
+                });
+                return;
+            }
 
             el.addEventListener("click", () => {
 
@@ -240,11 +268,77 @@ function initQuiz(config) {
 
         });
 
+        if (useNav) {
+            if (prevBtn) prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+            updateNav();
+        }
+
+    }
+
+    // ---- Sual qutucuqları (navigator) ----
+    function buildNav() {
+        if (navEl) navEl.remove();
+        navEl = document.createElement("div");
+        navEl.className = "quiz-nav";
+        navEl.innerHTML = config.questions.map((_, i) =>
+            `<button type="button" class="quiz-nav-box" data-i="${i}">${i + 1}</button>`
+        ).join("");
+        navEl.addEventListener("click", (e) => {
+            const b = e.target.closest(".quiz-nav-box");
+            if (!b) return;
+            current = parseInt(b.dataset.i, 10);
+            renderQuestion();
+        });
+        quizBody.insertBefore(navEl, questionEl);
+
+        if (!prevBtn) {
+            prevBtn = document.createElement("button");
+            prevBtn.type = "button";
+            prevBtn.className = "quiz-prev-btn";
+            prevBtn.textContent = "← Əvvəlki";
+            prevBtn.addEventListener("click", () => {
+                if (current > 0) { current--; renderQuestion(); }
+            });
+            finishBtn = document.createElement("button");
+            finishBtn.type = "button";
+            finishBtn.className = "quiz-finish-btn";
+            finishBtn.textContent = "Testi bitir";
+            finishBtn.addEventListener("click", tryFinish);
+            const row = document.createElement("div");
+            row.className = "quiz-nav-actions";
+            row.appendChild(prevBtn);
+            row.appendChild(nextBtn);
+            row.appendChild(finishBtn);
+            quizBody.appendChild(row);
+        }
+    }
+
+    function updateNav() {
+        if (!navEl) return;
+        navEl.querySelectorAll(".quiz-nav-box").forEach((b, i) => {
+            b.classList.toggle("answered", answers[i] !== null && answers[i] !== undefined);
+            b.classList.toggle("current", i === current);
+        });
+        const left = answers.filter(a => a === null || a === undefined).length;
+        progressLabel.textContent = "Sual " + (current + 1) + " / " + config.questions.length +
+            " · Cavablanan: " + (config.questions.length - left);
+        progressFill.style.width = Math.round(((config.questions.length - left) / config.questions.length) * 100) + "%";
+    }
+
+    function tryFinish() {
+        const left = answers.filter(a => a === null || a === undefined).length;
+        if (left > 0 && !confirm(left + " sual cavablandırılmayıb. Testi bitirmək istəyirsiniz?")) return;
+        finishQuiz();
     }
 
     function finishQuiz() {
 
         if (timerHandle) clearInterval(timerHandle);
+
+        if (useNav) {
+            score = 0;
+            config.questions.forEach((it, i) => { if (answers[i] === it.correct) score++; });
+        }
 
         quizBody.style.display = "none";
         resultEl.classList.add("active");
@@ -309,6 +403,9 @@ function initQuiz(config) {
         quizBody.style.display = "block";
         timerEl.classList.remove("warn");
 
+        answers = config.questions.map(() => null);
+        if (useNav) buildNav();
+
         renderQuestion();
         startTimer();
 
@@ -317,6 +414,8 @@ function initQuiz(config) {
     nextBtn.addEventListener("click", () => {
 
         if (!nextBtn.classList.contains("ready")) return;
+
+        if (useNav && current === config.questions.length - 1) { tryFinish(); return; }
 
         current++;
 

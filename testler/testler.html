@@ -7,8 +7,8 @@
 (function(){
     try{
         var t = localStorage.getItem('geoatlas-theme');
-        if(t === 'light'){
-            document.documentElement.setAttribute('data-theme','light');
+        if(t === 'dark'){
+            document.documentElement.setAttribute('data-theme','dark');
         }
     }catch(e){}
 })();
@@ -16,7 +16,7 @@
 
 <title>Testlər | Coğrafiya Bilik Yoxlaması | GeoAtlas</title>
 <meta name="description" content="Azərbaycan coğrafiyası üzrə KSQ, BSQ və MİQ formatında interaktiv testlər — bilik səviyyəni pulsuz yoxla.">
-    <link rel="icon" type="image/png" href="icon/favicon.png">
+    <link rel="icon" type="image/png" href="../icon/favicon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 <style>
     .test-filter-bar{
@@ -31,22 +31,25 @@
     .test-filter-btn{
         font:inherit;
         cursor:pointer;
-        border:1px solid rgba(0,0,0,.15);
-        background:transparent;
-        color:inherit;
-        padding:.5rem 1.1rem;
+        border:1px solid var(--line-strong);
+        background:var(--panel);
+        color:var(--muted);
+        padding:.42rem 1rem;
         border-radius:999px;
-        font-size:.9rem;
+        font-size:.82rem;
         font-weight:600;
-        transition:background .15s ease, color .15s ease, border-color .15s ease;
+        box-shadow:var(--shadow-sm);
+        transition:background .15s ease,color .15s ease,border-color .15s ease,box-shadow .15s ease;
     }
     .test-filter-btn:hover{
-        border-color:rgba(0,0,0,.35);
+        border-color:rgb(var(--accent-rgb) / .45);
+        color:var(--accent-fg);
     }
     .test-filter-btn.active{
-        background:#1a73e8;
-        border-color:#1a73e8;
-        color:#fff;
+        background:linear-gradient(180deg,rgb(var(--accent-2-rgb)),rgb(var(--accent-rgb)));
+        border-color:transparent;
+        color:var(--on-accent);
+        box-shadow:0 1px 2px rgb(var(--accent-rgb) / .34),0 5px 14px rgb(var(--accent-rgb) / .2);
     }
     .test-type-card.filtered-out{
         display:none !important;
@@ -331,7 +334,7 @@
 
         <div>
             <div class="code">BSQ · Böyük Summativ Qiymətləndirmə</div>
-            <h3>Yarımillik üzrə əhatəli test</h3>
+            <h3>7-ci sinif I yarımil</h3>
         </div>
 
         <!--p>
@@ -346,7 +349,7 @@
             <div><strong>11/16</strong>keçid balı</div>
         </div>
 
-       <a   class="test-type-cta">Testə başla →</a>
+       <a   class="test-type-cta" href="bsq.html">Testə başla →</a>
 
     </div>
 
@@ -375,7 +378,7 @@
             <div><strong>11/15</strong>keçid balı</div>
         </div>
 
-       <a  class="test-type-cta" disabled>Testə başla →</a>
+       <a  class="test-type-cta" href="miq.html">Testə başla →</a>
 
     </div>
 

@@ -425,12 +425,19 @@
             🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
         </div>
         <div class="footer-links">
-            <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
-            <a href="../elaqe/elaqe.html">Əlaqə</a>
-            <a href="https://simplemaps.com" target="_blank" rel="noopener">Xəritə mənbəyi: SimpleMaps</a>
+            <a href="haqqimizda/haqqimizda.html">Haqqımızda</a>
+            <a href="elaqe/elaqe.html">Əlaqə</a>
         </div>
     </div>
+    <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> GeoAtlas. Bütün hüquqlar qorunur.</p>
+        <p>Developed by <strong>Həsən Həsənov</strong></p>
+    </div>
 </footer>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 
 
 <script src="../assets/js/countries-data.js"></script>

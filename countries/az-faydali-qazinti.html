@@ -49,7 +49,7 @@ function render(){
   list().filter(d=>d[0]==='SEA').forEach(d=>{const p=XY[d[1]];if(!p)return;const c=el('circle',{cx:p[0],cy:p[1],r:6,fill:col(d[2]),class:'sea'});c.dataset.s=d[1];dots.appendChild(c);const t=el('text',{x:p[0]+10,y:p[1]+4,class:'lb'});t.textContent=d[1];dots.appendChild(t)})}
 function show(i){paths.forEach(e=>e.classList.toggle('on',e.dataset.i===i));
   const a=list().filter(d=>d[0]===i);
-  info.innerHTML='<b>'+byId[i].n+'</b>'+(a.length?'<ul>'+a.map(d=>'<li><span class="dot" style="background:'+col(d[2])+'"></span><b>'+d[1]+'</b> · '+d[2]+(d[3]?'<br><small>'+d[3].trim()+'</small>':'')+'</li>').join('')+'</ul>':'<p>Açıq mənbələrdə adı çəkilən yataq yoxdur (bu, yataq olmadığı anlamına gəlmir).</p>')}
+  info.innerHTML='<b>'+byId[i].n+'</b>'+(a.length?'<ul>'+a.map(d=>'<li><span class="dot" style="background:'+col(d[2])+'"></span><b>'+d[1]+'</b> · '+d[2]+(d[3]?'<br><small>'+d[3].trim()+'</small>':'')+'</li>').join('')+'</ul>':'<p>Məlumat yoxdur.</p>')}
 function showSea(n){paths.forEach(e=>e.classList.remove('on'));const a=list().filter(d=>d[0]==='SEA'&&d[1]===n);
   info.innerHTML='<b>'+n+'</b> <small>(Xəzər dənizi)</small><ul>'+a.map(d=>'<li><span class="dot" style="background:'+col(d[2])+'"></span><b>'+d[1]+'</b> · '+d[2]+(d[3]?'<br><small>'+d[3]+'</small>':'')+'</li>').join('')+'</ul>'}
 svg.addEventListener('click',e=>{const t=e.target;if(t.dataset&&t.dataset.s)showSea(t.dataset.s);else if(t.dataset&&t.dataset.i)show(t.dataset.i)});

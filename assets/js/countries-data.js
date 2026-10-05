@@ -59,3 +59,49 @@ const SITE_COUNTRIES = [
         status: "ready"
     }
 ];
+
+
+/*
+ * XƏRİTƏ SİYAHISI (mövzu xəritələri)
+ * ================================================================
+ * Ana səhifənin başlığındakı sağ küncdə "🗺️ Xəritələr" açılan siyahısı
+ * bu massivdən qurulur. Yeni xəritə əlavə etmək üçün sadəcə YENİ BİR
+ * OBYEKT əlavə et. Xəritə faylları "countries" qovluğunda saxlanılır.
+ *
+ * Sahələr:
+ *   id      – unikal id
+ *   name    – ekranda görünən ad
+ *   icon    – emoji
+ *   desc    – qısa izah (siyahıda ad altında görünür)
+ *   url     – sayt kökündən yol, məs: "countries/anamorfoz.html"
+ *   status  – "ready" | "soon"
+ */
+
+const SITE_MAPS = [
+    {
+        id: "anamorfoz",
+        name: "Anamorfoz xəritə",
+        icon: "📊",
+        desc: "Sənaye, əhali, kənd təsərrüfatı, məşğulluq",
+        url: "countries/az-iqtisadi-anamorfoz.html",
+        status: "ready"
+    },
+    {
+        id: "faydali-qazinti",
+        name: "Faydalı qazıntı xəritəsi",
+        icon: "⛏️",
+        desc: "Rayonlar üzrə yataqlar",
+        url: "countries/az-faydali-qazinti.html",
+        status: "ready"
+    }
+    /* Yeni xəritə üçün nümunə (vergülü yadda saxla):
+    ,{
+        id: "iqlim",
+        name: "İqlim xəritəsi",
+        icon: "🌦️",
+        desc: "İqlim tipləri",
+        url: "countries/iqlim.html",
+        status: "soon"
+    }
+    */
+];

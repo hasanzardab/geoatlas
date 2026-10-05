@@ -155,6 +155,9 @@
 
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
+            document.querySelectorAll(".switcher.open").forEach(el => {
+                if (el !== switcherEl) el.classList.remove("open");
+            });
             switcherEl.classList.toggle("open");
             if (switcherEl.classList.contains("open")) {
                 searchInput.focus();
@@ -169,6 +172,84 @@
 
         document.addEventListener("click", () => {
             switcherEl.classList.remove("open");
+        });
+    }
+
+    /* ---------------------------------------------------------
+       1b) HEADER "XƏRİTƏLƏR" AÇILAN SİYAHISI (SITE_MAPS)
+    --------------------------------------------------------- */
+
+    function buildMapsMenu() {
+
+        const mount = document.getElementById("mapsSwitcher");
+        if (!mount || typeof SITE_MAPS === "undefined") return;
+
+        mount.innerHTML = `
+            <div class="switcher" id="mapsMenu">
+                <button type="button" class="switcher-btn" id="mapsMenuBtn">
+                    <span>🗺️ Xəritələr</span>
+                    <span class="chev">▾</span>
+                </button>
+                <div class="switcher-panel">
+                    <div class="switcher-search">
+                        <input type="text" id="mapsMenuSearch" placeholder="Xəritə axtar..." autocomplete="off">
+                    </div>
+                    <div class="switcher-list" id="mapsMenuList"></div>
+                </div>
+            </div>
+        `;
+
+        const menuEl = document.getElementById("mapsMenu");
+        const btn = document.getElementById("mapsMenuBtn");
+        const searchInput = document.getElementById("mapsMenuSearch");
+        const list = document.getElementById("mapsMenuList");
+
+        function renderList(query) {
+
+            const q = (query || "").toLowerCase();
+            const items = SITE_MAPS.filter(m => !q || m.name.toLowerCase().includes(q));
+
+            if (items.length === 0) {
+                list.innerHTML = `<div class="switcher-empty">Nəticə tapılmadı</div>`;
+                return;
+            }
+
+            list.innerHTML = items.map(m => {
+                const isReady = m.status === "ready";
+                const href = isReady ? BASE + m.url : "#";
+                return `
+                    <a class="switcher-item ${isReady ? "" : "is-disabled"}" href="${href}">
+                        <span class="flag">${m.icon}</span>
+                        <span class="meta">
+                            <strong>${m.name}</strong>
+                            <small>${m.desc || ""}</small>
+                        </span>
+                        <span class="badge">${isReady ? "Hazır" : "Tezliklə"}</span>
+                    </a>
+                `;
+            }).join("");
+        }
+
+        renderList("");
+
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            /* digər açıq menyuları bağla */
+            document.querySelectorAll(".switcher.open").forEach(el => {
+                if (el !== menuEl) el.classList.remove("open");
+            });
+            menuEl.classList.toggle("open");
+            if (menuEl.classList.contains("open")) searchInput.focus();
+        });
+
+        searchInput.addEventListener("input", function () {
+            renderList(this.value.trim());
+        });
+
+        searchInput.addEventListener("click", (e) => e.stopPropagation());
+
+        document.addEventListener("click", () => {
+            menuEl.classList.remove("open");
         });
     }
 
@@ -273,6 +354,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         buildThemeToggle();
+        buildMapsMenu();
         buildSwitcher();
         buildFullListbox();
         buildBreadcrumb();

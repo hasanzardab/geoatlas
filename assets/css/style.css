@@ -2941,3 +2941,382 @@ footer {
 .footer-bottom p {
     margin: 3px 0;
 }
+
+
+/* =========================================
+   ƏSAS MENYU — açılan alt menyular (SITE_MENU)
+========================================= */
+
+.nav-links .nav-top{
+    display:inline-block;
+}
+
+.nav-dd{
+    position:relative;
+}
+
+.nav-dd-head{
+    display:flex;
+    align-items:center;
+}
+
+.nav-dd-toggle{
+    width:22px;
+    height:28px;
+    margin-left:-6px;
+    padding:0;
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    font-size:10px;
+    cursor:pointer;
+    border-radius:8px;
+    transition:color var(--t),transform var(--t);
+}
+
+.nav-dd-toggle:hover{
+    color:var(--text);
+}
+
+.nav-dd.open .nav-dd-toggle{
+    transform:rotate(180deg);
+}
+
+.nav-dd-panel{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:290px;
+    max-height:min(74vh,560px);
+    overflow-y:auto;
+    padding:8px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:16px;
+    box-shadow:0 25px 50px var(--shadow-color2);
+    z-index:210;
+}
+
+/* hover körpüsü: düymə ilə panel arasında boşluq olmasın */
+.nav-dd::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    height:10px;
+}
+
+.nav-dd.nav-dd-wide .nav-dd-panel{
+    min-width:600px;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+@media(min-width:901px){
+    .nav-dd:hover .nav-dd-panel,
+    .nav-dd:focus-within .nav-dd-panel,
+    .nav-dd.open .nav-dd-panel{
+        display:block;
+    }
+    .nav-dd.nav-dd-wide:hover .nav-dd-panel,
+    .nav-dd.nav-dd-wide:focus-within .nav-dd-panel,
+    .nav-dd.nav-dd-wide.open .nav-dd-panel{
+        display:grid;
+    }
+    .nav-dd:hover .nav-dd-toggle{
+        transform:rotate(180deg);
+    }
+}
+
+.nav-dd-title{
+    padding:8px 10px 6px;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:1.1px;
+    text-transform:uppercase;
+    color:var(--faint);
+}
+
+.nav-links .nav-dd-item{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:9px 10px;
+    border-radius:11px;
+    color:var(--text);
+    font-size:13px;
+    font-weight:500;
+    white-space:normal;
+    background:transparent;
+}
+
+.nav-links .nav-dd-item:hover{
+    background:rgb(var(--accent-rgb) / .08);
+    color:var(--text);
+}
+
+.nav-links .nav-dd-item.current{
+    background:rgb(var(--accent-rgb) / .12);
+    color:var(--text);
+}
+
+.nav-links .nav-dd-item.is-disabled{
+    opacity:.4;
+    pointer-events:none;
+}
+
+.nav-dd-ico{
+    width:30px;
+    height:30px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    border-radius:9px;
+    background:rgb(var(--accent-rgb) / .1);
+    font-size:16px;
+}
+
+.nav-dd-meta{
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+}
+
+.nav-dd-meta strong{
+    font-size:13px;
+    font-weight:600;
+}
+
+.nav-dd-meta small{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.35;
+}
+
+.nav-dd-badge{
+    font-size:9px;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+    padding:3px 7px;
+    border-radius:20px;
+    background:var(--surface-2);
+    color:var(--muted);
+    flex-shrink:0;
+}
+
+.nav-dd-item.current .nav-dd-badge{
+    background:rgb(var(--accent-rgb) / .18);
+    color:var(--accent-fg);
+}
+
+/* Mobil / planşet: menyu hamburger ilə açılır, alt menyular akkordeon kimi */
+@media(max-width:900px){
+
+    header{
+        flex-wrap:wrap;
+    }
+
+    header:has(.mobile-menu-toggle:checked){
+        height:auto;
+        padding-bottom:10px;
+        background:var(--panel);
+        box-shadow:var(--shadow-lg);
+    }
+
+    .mobile-menu-btn{
+        display:flex;
+        margin-left:auto;
+    }
+
+    .mobile-menu-toggle:checked ~ .nav-links{
+        max-height:calc(100vh - 120px);
+        overflow-y:auto;
+    }
+
+    .nav-dd{
+        width:100%;
+    }
+
+    .nav-dd::after{
+        display:none;
+    }
+
+    .nav-dd-head{
+        justify-content:space-between;
+    }
+
+    .nav-dd-head .nav-top{
+        flex:1;
+    }
+
+    .nav-dd-toggle{
+        width:40px;
+        height:38px;
+        margin-left:0;
+        font-size:12px;
+    }
+
+    .nav-dd-panel,
+    .nav-dd.nav-dd-wide .nav-dd-panel{
+        position:static;
+        min-width:0;
+        max-height:none;
+        box-shadow:none;
+        border:none;
+        border-left:2px solid rgb(var(--accent-rgb) / .25);
+        border-radius:0;
+        margin:2px 0 6px 14px;
+        padding:2px 0 2px 6px;
+        background:transparent;
+    }
+
+    .nav-dd.open .nav-dd-panel{
+        display:block;
+    }
+
+    .nav-links .youtube-btn{
+        justify-content:center;
+        margin-top:6px;
+    }
+}
+
+/* =========================================
+   ANA SƏHİFƏ — BÖLMƏ KARTLARI (#homeSections)
+========================================= */
+
+.home-sections{
+    max-width:var(--container);
+    margin:var(--sec-gap) auto 0;
+    padding:0 var(--gut);
+}
+
+.home-block{
+    margin-bottom:34px;
+    scroll-margin-top:calc(var(--header-h) + 14px);
+}
+
+.home-block-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:16px;
+}
+
+.home-block-head h2{
+    font-family:"Playfair Display",serif;
+    font-size:23px;
+    font-weight:600;
+    line-height:1.2;
+}
+
+.home-block-head p{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:13.5px;
+}
+
+.home-block-more{
+    flex-shrink:0;
+    color:var(--accent-fg);
+    font-size:13px;
+    font-weight:600;
+    text-decoration:none;
+    padding:7px 12px;
+    border-radius:999px;
+    transition:background-color var(--t);
+}
+
+.home-block-more:hover{
+    background:rgb(var(--accent-rgb) / .12);
+}
+
+.home-card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    gap:14px;
+}
+
+.home-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:16px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:18px;
+    color:var(--text);
+    text-decoration:none;
+    box-shadow:var(--shadow-sm);
+    transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+
+.home-card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-md);
+    border-color:rgb(var(--accent-rgb) / .34);
+}
+
+.home-card.is-disabled{
+    opacity:.5;
+    pointer-events:none;
+}
+
+.home-card-ico{
+    width:40px;
+    height:40px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:rgb(var(--accent-rgb) / .1);
+    font-size:21px;
+    margin-bottom:10px;
+}
+
+.home-card strong{
+    font-family:"Playfair Display",serif;
+    font-size:16.5px;
+    line-height:1.25;
+}
+
+.home-card small{
+    color:var(--muted);
+    font-size:12.5px;
+    line-height:1.5;
+}
+
+.home-card-badge{
+    position:absolute;
+    top:14px;
+    right:14px;
+    font-size:9px;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+    padding:3px 7px;
+    border-radius:20px;
+    background:var(--surface-2);
+    color:var(--muted);
+}
+
+@media(max-width:650px){
+    .home-card-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+    .home-card{
+        padding:13px;
+    }
+    .home-block-head h2{
+        font-size:20px;
+    }
+}
+
+/* YouTube düyməsinin yazısı menyu linklərinin boz rəngini əvəz etməsin */
+.nav-links .youtube-btn,
+.nav-links .youtube-btn:hover{
+    color:#fff;
+}

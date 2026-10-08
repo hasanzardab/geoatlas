@@ -105,3 +105,96 @@ const SITE_MAPS = [
     }
     */
 ];
+
+
+/*
+ * ƏSAS MENYU (ana naviqasiya)
+ * ================================================================
+ * Saytın yuxarı menyusu və ana səhifədəki bölmə kartları bu massivdən
+ * qurulur. Hər səhifədə ayrıca menyu yazmaq lazım deyil — yeni oyun,
+ * simulyator və ya test əlavə etmək üçün sadəcə uyğun bölmənin
+ * "items" siyahısına bir obyekt əlavə et.
+ *
+ * Bölmə sahələri:
+ *   id     – unikal id
+ *   label  – menyuda görünən ad
+ *   icon   – emoji (ana səhifə kartlarında)
+ *   url    – bölmənin ana səhifəsi (sayt kökündən yol)
+ *   desc   – ana səhifədəki bölmə başlığının altında qısa izah
+ *   items  – alt səhifələr: { name, icon, desc, url, status }
+ *   source – "maps" yazılıbsa, alt menyu SITE_COUNTRIES və SITE_MAPS-dan
+ *            avtomatik qurulur (items yazmaq lazım deyil)
+ *
+ * Alt səhifə sahələri:
+ *   name   – ad
+ *   icon   – emoji
+ *   desc   – qısa izah
+ *   url    – sayt kökündən yol
+ *   status – "ready" | "soon"  (boş buraxılsa "ready" sayılır)
+ */
+
+const SITE_MENU = [
+    {
+        id: "home",
+        label: "Ana səhifə",
+        url: "index.html"
+    },
+    {
+        id: "maps",
+        label: "Xəritələr",
+        icon: "🗺️",
+        url: "index.html#xeriteler",
+        desc: "Ölkələrin inzibati xəritələri və mövzu xəritələri",
+        source: "maps"
+    },
+    {
+        id: "games",
+        label: "Oyunlar",
+        icon: "🎮",
+        url: "oyunlar/oyunlar.html",
+        desc: "Əylənərək öyrən: xəritə tapmacaları, çarx və milyonçu",
+        items: [
+            { name: "Spin the Wheel", icon: "🎡", desc: "Çarxı fırlat, sualı cavablandır", url: "oyunlar/carx.html" },
+            { name: "Azərbaycan xəritə oyunu", icon: "🇦🇿", desc: "Rayonları xəritədə tap", url: "oyunlar/tapmaca.html" },
+            { name: "Avropa xəritə oyunu", icon: "🌍", desc: "Avropa ölkələri", url: "oyunlar/avropa-tapmaca.html" },
+            { name: "Asiya xəritə oyunu", icon: "🌏", desc: "Asiya ölkələri", url: "oyunlar/asiya-tapmaca.html" },
+            { name: "Afrika xəritə oyunu", icon: "🌍", desc: "Afrika ölkələri", url: "oyunlar/afrika-tapmaca.html" },
+            { name: "Amerika xəritə oyunu", icon: "🌎", desc: "Amerika ölkələri", url: "oyunlar/america-tapmaca.html" },
+            { name: "Milyonçu", icon: "💰", desc: "Coğrafiya sualları ilə milyonçu", url: "oyunlar/milyoncu.html" }
+        ]
+    },
+    {
+        id: "sims",
+        label: "Simulyatorlar",
+        icon: "🪐",
+        url: "index.html#sec-sims",
+        desc: "Üç ölçülü simulyasiyalarla hadisələri izlə",
+        items: [
+            { name: "Fəsillərin yaranması", icon: "🍂", desc: "Günəşin hərəkəti və fəsillərin səbəbi", url: "simulyasiya/fesiller.html" },
+            { name: "Günəş sistemi", icon: "🪐", desc: "Planetlərin və peyklərin hərəkəti", url: "simulyasiya/gunes-sistemi.html" },
+            { name: "Günəş və Ay tutulmaları", icon: "🌘", desc: "Tutulmaların necə baş verdiyi", url: "simulyasiya/gunes-ay-tutulmasi.html" }
+        ]
+    },
+    {
+        id: "tests",
+        label: "Testlər",
+        icon: "📝",
+        url: "testler/testler.html",
+        desc: "Sınaq və qiymətləndirmə testləri",
+        items: [
+            { name: "7-ci sinif I yarımil (BSQ)", icon: "📗", desc: "Böyük summativ qiymətləndirmə", url: "testler/bsq.html" },
+            { name: "Müəllimlərin işə qəbulu (MİQ)", icon: "🎓", desc: "Coğrafiya müəllimliyi üzrə sınaq", url: "testler/miq.html" }
+        ]
+    },
+    {
+        id: "about",
+        label: "Haqqımızda",
+        url: "haqqimizda/haqqimizda.html"
+    }
+];
+
+/* Menyunun sağındakı xarici keçid */
+const SITE_EXTERNAL = {
+    label: "YouTube",
+    url: "https://www.youtube.com/@COĞRAFİYAHT"
+};

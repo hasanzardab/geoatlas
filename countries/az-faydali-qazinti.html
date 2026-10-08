@@ -56,4 +56,8 @@ svg.addEventListener('click',e=>{const t=e.target;if(t.dataset&&t.dataset.s)show
 const un=D.filter(d=>!d[0]);
 if(un.length)document.querySelector('.note').insertAdjacentHTML('beforebegin','<p style="margin-top:10px;font-size:13px"><b>Rayonu dəqiqləşdirilməyənlər:</b> '+un.map(d=>d[1]+' ('+d[2]+')').join(', ')+'.</p>');
 render();
-</script></body></html>
+</script><!-- GeoAtlas ortaq menyu (kiçik üzən düymə) -->
+<script>window.SITE_BASE="../";window.CURRENT_COUNTRY=null;window.SITE_MINI=true;</script>
+<script src="../assets/js/countries-data.js"></script>
+<script src="../assets/js/site.js"></script>
+</body></html>

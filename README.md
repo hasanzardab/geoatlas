@@ -74,6 +74,35 @@ Bu qədər. Addım 3-ü etdiyin an:
 çünki bütün bu üç element eyni `countries-data.js` massivindən oxuyur —
 başqa heç bir fayla toxunmaq lazım deyil.
 
+## 🧭 Əsas menyu (açılan alt menyularla)
+
+Yuxarı menyu və ana səhifədəki bölmə kartları **bir yerdən** idarə olunur:
+`assets/js/countries-data.js` faylındakı `SITE_MENU` massivi.
+
+| Bölmə | Alt menyunun mənbəyi |
+|---|---|
+| Xəritələr | `SITE_COUNTRIES` (ölkə xəritələri) + `SITE_MAPS` (mövzu xəritələri) |
+| Oyunlar | `SITE_MENU` → `games.items` |
+| Simulyatorlar | `SITE_MENU` → `sims.items` |
+| Testlər | `SITE_MENU` → `tests.items` |
+
+Yeni oyun / simulyator / test əlavə etmək üçün uyğun `items` siyahısına bir obyekt
+əlavə et — həm yuxarı menyuda, həm ana səhifə kartlarında, həm də menyusuz tam ekran
+səhifələrdəki kiçik üzən menyuda avtomatik görünəcək.
+
+Menyunu `site.js` qurur, ona görə hər səhifədə `<nav class="nav-links">` elementi
+(içi boş ola bilər) və `countries-data.js` + `site.js` skriptləri olmalıdır.
+
+**Öz başlığı olmayan tam ekran səhifələr** (simulyatorlar, tapmaca oyunları, milyonçu,
+mövzu xəritələri) səhifənin sonunda bu 3 sətri saxlayır və kiçik "☰ Menyu" düyməsi
+göstərir (düyməni sürüşdürmək olar):
+
+```html
+<script>window.SITE_BASE="../";window.CURRENT_COUNTRY=null;window.SITE_MINI=true;</script>
+<script src="../assets/js/countries-data.js"></script>
+<script src="../assets/js/site.js"></script>
+```
+
 ## 🧩 Texniki qeydlər
 
 - Xarici kitabxana yoxdur — sadə HTML/CSS/vanil JS.

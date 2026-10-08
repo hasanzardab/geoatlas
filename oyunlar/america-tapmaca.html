@@ -51,4 +51,8 @@ function end(){clr();$('q').textContent='';$('pr').textContent='';$('sc').textCo
  const k=mode=='cap'?1:0;$('rs').innerHTML=`<div class="card res"><b>${score}/${N}</b><p>${score>=9?'Əla! Əsl coğrafiyaçısan 🌍':score>=6?'Yaxşıdır, davam et!':'Bir az da məşq lazımdır'}</p>`+
  (wrong.length?`<ul>${wrong.map(x=>`<li>${D[x][0]}${mode=='cap'?' — '+D[x][1]:''}</li>`).join('')}</ul>`:'')+`<button class="pri" onclick="start()">Yenidən oyna</button></div>`}
 start();
-</script></body></html>
+</script><!-- GeoAtlas ortaq menyu (kiçik üzən düymə) -->
+<script>window.SITE_BASE="../";window.CURRENT_COUNTRY=null;window.SITE_MINI=true;</script>
+<script src="../assets/js/countries-data.js"></script>
+<script src="../assets/js/site.js"></script>
+</body></html>

@@ -78,4 +78,8 @@ function show(i){svg.querySelectorAll('path').forEach(p=>p.classList.toggle('on'
 svg.addEventListener('click',e=>{if(e.target.dataset&&e.target.dataset.i!==undefined)show(+e.target.dataset.i)});
 svg.addEventListener('pointerover',e=>{if(e.pointerType==='mouse'&&e.target.dataset&&e.target.dataset.i!==undefined)show(+e.target.dataset.i)});
 sel.onchange=()=>go(+sel.value);draw(rings);go(0);sel.value=1;go(1);
-</script></body></html>
+</script><!-- GeoAtlas ortaq menyu (kiçik üzən düymə) -->
+<script>window.SITE_BASE="../";window.CURRENT_COUNTRY=null;window.SITE_MINI=true;</script>
+<script src="../assets/js/countries-data.js"></script>
+<script src="../assets/js/site.js"></script>
+</body></html>

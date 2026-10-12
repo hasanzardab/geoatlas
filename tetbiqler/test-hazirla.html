@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test yarat | GeoAtlas</title>
+<style>
+:root{--bg:#eaf2ef;--card:#fff;--tx:#0f2a3d;--mu:#587080;--pr:#0b7285;--prt:#fff;--ok:#1b8a4b;--okb:#dff3e7;--no:#c0392b;--nob:#fbe5e2;--bd:#cfdcd8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1b26;--card:#132a39;--tx:#e6f1f2;--mu:#8fa8b4;--pr:#3bb4c9;--prt:#06222b;--ok:#4cc982;--okb:#14382a;--no:#ff7b6b;--nob:#3d1d1a;--bd:#25465a}}
+:root[data-theme="dark"]{--bg:#0c1b26;--card:#132a39;--tx:#e6f1f2;--mu:#8fa8b4;--pr:#3bb4c9;--prt:#06222b;--ok:#4cc982;--okb:#14382a;--no:#ff7b6b;--nob:#3d1d1a;--bd:#25465a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--pr);color:var(--prt);padding:22px 16px 20px;background-image:repeating-radial-gradient(circle at 85% 120%,transparent 0 14px,rgba(255,255,255,.13) 14px 15px)}
+header a{color:inherit;text-decoration:none;font-size:14px;opacity:.9}
+h1{font:700 26px/1.2 Georgia,"Times New Roman",serif;margin:8px 0 2px}
+header p{margin:0;font-size:14px;opacity:.92}
+main{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+label{display:block;font-size:14px;color:var(--mu);margin:10px 0 4px}
+input[type=text],input[type=number],textarea{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px}
+textarea{min-height:64px;resize:vertical}
+input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--pr);outline-offset:1px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.opt{display:flex;align-items:center;gap:8px;margin-top:8px}
+.opt input[type=radio]{width:22px;height:22px;accent-color:var(--ok);flex:none}
+.opt b{width:18px;color:var(--mu);flex:none}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:12px 16px;cursor:pointer;background:var(--pr);color:var(--prt)}
+button.sec{background:transparent;color:var(--pr);border:1px solid var(--pr)}
+button.del{background:transparent;color:var(--no);padding:6px 8px;font-size:14px}
+.bar{display:flex;justify-content:space-between;align-items:center}
+.hint{font-size:13px;color:var(--mu);margin:4px 0 0}
+.err{color:var(--no);font-size:14px;margin:8px 0}
+.link{word-break:break-all;font-size:13px;background:var(--bg);border:1px dashed var(--bd);border-radius:8px;padding:10px;margin:8px 0}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+#qr{display:flex;justify-content:center;padding:12px;background:#fff;border-radius:10px;margin-top:12px;width:fit-content}
+.ans{display:block;width:100%;text-align:left;background:var(--card);color:var(--tx);border:1px solid var(--bd);margin-top:8px}
+.ans.ok{background:var(--okb);border-color:var(--ok)}
+.ans.no{background:var(--nob);border-color:var(--no)}
+.prog{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.prog i{display:block;height:100%;background:var(--pr)}
+.big{font:700 44px/1 Georgia,serif;margin:6px 0}
+.hide{display:none}
+select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px}
+button.mv{background:transparent;color:var(--pr);padding:6px 8px;font-size:14px}
+.chk{display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--tx);font-size:15px}.chk input{width:20px;height:20px;accent-color:var(--pr)}
+#pv{display:none}
+@media print{body>*:not(#pv){display:none!important}#pv{display:block;color:#000}body{background:#fff!important}}
+.imgbox{margin-top:10px}.imgbox img{display:block;max-width:100%;max-height:200px;border-radius:8px;border:1px solid var(--bd);margin-bottom:4px}.imgbox input[type=file]{font-size:14px;color:var(--mu);max-width:100%}
+</style>
+</head>
+<body>
+<header>
+<a href="index.html">🌍 GeoAtlas</a>
+<h1 id="ttl">Test yarat</h1>
+<p id="sub">Suallarını yaz, şagirdlərə link və ya QR kodla göndər.</p>
+</header>
+<main>
+
+<section id="maker">
+<div class="card">
+<label for="dr">Qaralamalar</label>
+<select id="dr"></select>
+<div class="acts"><button class="sec" id="dn">Yeni test</button><button class="sec" id="dj">JSON-dan aç</button><button class="sec" id="dx">JSON yüklə</button><button class="del" id="dd">Qaralamanı sil</button></div>
+<input type="file" id="di" accept=".json,application/json" class="hide">
+</div>
+<div class="card">
+<label for="mt">Testin adı</label>
+<input type="text" id="mt" maxlength="80" placeholder="Məs: 8-ci sinif, İqlim qurşaqları">
+<div class="row">
+<div><label for="ma">Müəllimin adı (ixtiyari)</label><input type="text" id="ma" maxlength="40"></div>
+<div><label for="mp">Keçid balı, %</label><input type="number" id="mp" min="1" max="100" value="60"></div>
+</div>
+<div><label for="mm">Vaxt limiti, dəq (0 = limitsiz)</label><input type="number" id="mm" min="0" max="300" value="0"></div>
+<label class="chk"><input type="checkbox" id="ms">Sualları və variantları hər şagird üçün qarışdır</label>
+</div>
+<div id="qlist"></div>
+<div class="acts"><button class="sec" id="add">+ Sual əlavə et</button><button id="mk">Link və QR kod yarat</button><button class="sec" id="dw">Word-ə ixrac et</button><button class="sec" id="pr">PDF / Çap</button></div>
+<p class="err" id="merr"></p>
+<div class="card hide" id="out">
+<b>Test hazırdır</b>
+<div class="link" id="lnk"></div>
+<div class="acts">
+<button id="cp">Linki kopyala</button>
+<button class="sec" id="wa">WhatsApp</button>
+<button class="sec" id="try">Özüm yoxla</button>
+</div>
+<div id="qr"></div>
+<p class="hint" id="qrn"></p>
+<p class="hint" id="imn"></p>
+<p class="hint">Test linkin içində saxlanır, ona görə link dəyişməz qalır. Sualı düzəltmək üçün yenidən link yarat.</p>
+</div>
+</section>
+
+<section id="taker" class="hide">
+<p class="hint" id="tm"></p><div class="prog"><i id="pb" style="width:0"></i></div>
+<div class="card" id="tq"></div>
+</section>
+
+</main>
+<div id="pv"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const $=s=>document.querySelector(s), L='ABCD';
+let qs=[], test=null, cur=0, score=0, locked=false;
+
+/* ---------- link kodlaşdırma ---------- */
+const b64=u=>{let s='';u.forEach(x=>s+=String.fromCharCode(x));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64=t=>Uint8Array.from(atob(t.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+async function enc(o){
+  const b=new TextEncoder().encode(JSON.stringify(o));
+  try{const r=new Response(new Blob([b]).stream().pipeThrough(new CompressionStream('gzip')));return 'g'+b64(new Uint8Array(await r.arrayBuffer()))}
+  catch(e){return 'p'+b64(b)}
+}
+async function dec(t){
+  const u=unb64(t.slice(1));
+  if(t[0]==='g')return JSON.parse(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text());
+  return JSON.parse(new TextDecoder().decode(u));
+}
+
+/* ---------- müəllim: test yaratma ---------- */
+const newQ=()=>({q:'',o:['','','',''],c:0});
+const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let curId='';
+const idx=()=>{try{return JSON.parse(gs('ga_idx')||'[]')}catch(e){return[]}};
+const getD=id=>{try{return JSON.parse(gs('ga_d_'+id)||'null')}catch(e){return null}};
+const snap=()=>({t:$('#mt').value,a:$('#ma').value,p:$('#mp').value,m:$('#mm').value,s:$('#ms').checked,qs});
+function put(id,d){try{localStorage.setItem('ga_d_'+id,JSON.stringify(d))}catch(e){ss('ga_d_'+id,JSON.stringify({...d,qs:d.qs.map(({img,...q})=>q)}))}}
+function save(){if(!curId)return;put(curId,snap());ss('ga_cur',curId)}
+function fill(d){qs=d.qs&&d.qs.length?d.qs:[newQ()];$('#mt').value=d.t||'';$('#ma').value=d.a||'';$('#mp').value=d.p||60;$('#mm').value=d.m||0;$('#ms').checked=!!d.s;drawQs()}
+function drawDr(){$('#dr').innerHTML=idx().map(id=>`<option value="${id}"${id===curId?' selected':''}>${esc((getD(id)||{}).t||'Adsız test')}</option>`).join('')}
+function newDraft(d){const id=Date.now().toString(36);ss('ga_idx',JSON.stringify([...idx(),id]));curId=id;fill(d||{});save();drawDr()}
+function load(){
+  try{
+    const old=gs('ga_draft');
+    if(old&&!idx().length){newDraft(JSON.parse(old));try{localStorage.removeItem('ga_draft')}catch(e){}return}
+    const ix=idx();curId=gs('ga_cur');if(!ix.includes(curId))curId=ix[0];
+    if(!curId){newDraft();return}
+    fill(getD(curId)||{});drawDr();
+  }catch(e){}
+}
+function drawQs(){
+  $('#qlist').innerHTML=qs.map((x,i)=>`<div class="card">
+    <div class="bar"><b>Sual ${i+1}</b><span><button class="mv" data-up="${i}" aria-label="Yuxarı">↑</button><button class="mv" data-dn="${i}" aria-label="Aşağı">↓</button><button class="mv" data-cp="${i}">Kopyala</button>${qs.length>1?`<button class="del" data-del="${i}">Sil</button>`:''}</span></div>
+    <textarea data-i="${i}" data-k="q" placeholder="Sualı yaz">${esc(x.q)}</textarea>
+    <div class="imgbox">${x.img?`<img src="${x.img.d}" alt="Sual ${i+1} şəkli"><button class="del" data-rm="${i}">Şəkli sil</button>`:`<input type="file" accept="image/*" data-img="${i}" aria-label="Sual ${i+1} üçün şəkil əlavə et">`}</div>
+    ${x.o.map((o,k)=>`<div class="opt"><b>${L[k]}</b><input type="text" data-i="${i}" data-k="${k}" value="${esc(o)}" placeholder="Variant ${L[k]}" aria-label="Variant ${L[k]}"><input type="radio" name="c${i}" data-i="${i}" data-k="c${k}" ${x.c===k?'checked':''} aria-label="${L[k]} düzgün cavabdır"></div>`).join('')}
+    <textarea data-i="${i}" data-k="e" placeholder="İzah (ixtiyari, cavabdan sonra göstərilir)" style="margin-top:10px">${esc(x.e||'')}</textarea>
+    <p class="hint">Düzgün cavabı sağdakı dairə ilə seç. Boş variantlar nəzərə alınmır.</p></div>`).join('');
+}
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+$('#qlist').addEventListener('input',e=>{
+  const t=e.target,i=+t.dataset.i,k=t.dataset.k;if(isNaN(i))return;
+  if(k==='q')qs[i].q=t.value;
+  else if(k==='e')qs[i].e=t.value;else if(k[0]==='c')qs[i].c=+k[1];
+  else qs[i].o[+k]=t.value;
+  save();
+});
+$('#qlist').addEventListener('click',e=>{
+  const d=e.target.dataset.del,r=e.target.dataset.rm;
+  if(d!==undefined){qs.splice(+d,1);drawQs();save()}
+  if(r!==undefined){delete qs[+r].img;drawQs();save()}
+  const ds=e.target.dataset,u=ds.up,w=ds.dn,y=ds.cp;
+  if(u!==undefined&&+u>0){const i=+u;[qs[i-1],qs[i]]=[qs[i],qs[i-1]];drawQs();save()}
+  if(w!==undefined&&+w<qs.length-1){const i=+w;[qs[i+1],qs[i]]=[qs[i],qs[i+1]];drawQs();save()}
+  if(y!==undefined){qs.splice(+y+1,0,JSON.parse(JSON.stringify(qs[+y])));drawQs();save()}
+});
+function readImg(file){return new Promise((res,rej)=>{
+  const u=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{
+    const s=Math.min(1,900/Math.max(im.width,im.height)),w=Math.round(im.width*s),h=Math.round(im.height*s);
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(im,0,0,w,h);
+    URL.revokeObjectURL(u);res({d:c.toDataURL('image/jpeg',.8),w,h});
+  };
+  im.onerror=()=>{URL.revokeObjectURL(u);rej()};
+  im.src=u;
+})}
+$('#qlist').addEventListener('change',async e=>{
+  const t=e.target;if(t.dataset.img===undefined||!t.files[0])return;
+  const i=+t.dataset.img;
+  try{qs[i].img=await readImg(t.files[0]);$('#merr').textContent='';drawQs();save()}
+  catch(x){$('#merr').textContent='Şəkil oxunmadı. JPG və ya PNG fayl seç.'}
+});
+$('#add').onclick=()=>{qs.push(newQ());drawQs();save();window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})};
+['#mt','#ma','#mp','#mm','#ms'].forEach(s=>{$(s).addEventListener('input',save);$(s).addEventListener('change',save)});
+$('#mt').addEventListener('change',drawDr);
+$('#dr').onchange=()=>{save();curId=$('#dr').value;ss('ga_cur',curId);fill(getD(curId)||{})};
+$('#dn').onclick=()=>{save();newDraft();window.scrollTo({top:0,behavior:'smooth'})};
+$('#dd').onclick=()=>{
+  if(!confirm('Bu qaralama silinsin?'))return;
+  try{localStorage.removeItem('ga_d_'+curId)}catch(e){}
+  const ix=idx().filter(x=>x!==curId);ss('ga_idx',JSON.stringify(ix));
+  if(ix.length){curId=ix[0];ss('ga_cur',curId);fill(getD(curId)||{});drawDr()}else newDraft();
+};
+$('#dx').onclick=()=>{save();const d=snap(),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download=((d.t||'test').replace(/[\/:*?"<>|]+/g,'').trim()||'test')+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
+$('#dj').onclick=()=>$('#di').click();
+$('#di').onchange=async()=>{
+  const f=$('#di').files[0];$('#di').value='';if(!f)return;
+  try{const d=JSON.parse(await f.text());if(!d||!Array.isArray(d.qs))throw 0;save();newDraft(d);$('#merr').textContent=''}
+  catch(e){$('#merr').textContent='JSON fayl düzgün deyil.'}
+};
+
+function collect(){
+  const err=$('#merr');err.textContent='';
+  const title=$('#mt').value.trim();
+  if(!title){err.textContent='Testin adını yaz.';return null}
+  const out=[],imgs=[];
+  for(let i=0;i<qs.length;i++){
+    const x=qs[i],q=x.q.trim(),opts=[];let c=-1;
+    x.o.forEach((o,k)=>{if(o.trim()){if(k===x.c)c=opts.length;opts.push(o.trim())}});
+    if(!q){err.textContent=`Sual ${i+1}: sualın mətni boşdur.`;return null}
+    if(opts.length<2){err.textContent=`Sual ${i+1}: ən azı 2 variant yaz.`;return null}
+    if(c<0){err.textContent=`Sual ${i+1}: düzgün cavab boş variantdadır. Başqa variant seç.`;return null}
+    out.push(x.e&&x.e.trim()?[q,opts,c,x.e.trim()]:[q,opts,c]);imgs.push(x.img||null);
+  }
+  const p=Math.min(100,Math.max(1,parseInt($('#mp').value)||60));
+  return {title,a:$('#ma').value.trim(),p,out,imgs,m:Math.min(300,Math.max(0,parseInt($('#mm').value)||0)),s:$('#ms').checked};
+}
+
+let lastLink='';
+$('#mk').onclick=async()=>{
+  const c=collect();if(!c)return;
+  const {title,p,out}=c;
+  const data=await enc({t:title,a:c.a,p,q:out,...(c.m?{m:c.m}:{}),...(c.s?{s:1}:{})});
+  lastLink=location.origin+location.pathname+'#'+data;
+  $('#lnk').textContent=lastLink;
+  $('#out').classList.remove('hide');
+  const qr=$('#qr');qr.innerHTML='';$('#qrn').textContent='';
+  $('#imn').textContent=c.imgs.some(Boolean)?'Şəkillər linkə və QR koda daxil edilmir (link çox uzun olardı). Şəkilli sualları Word faylında görəcəksən.':'';
+  try{
+    if(lastLink.length>2300)throw 0;
+    new QRCode(qr,{text:lastLink,width:220,height:220,correctLevel:QRCode.CorrectLevel.L});
+  }catch(e){qr.innerHTML='';$('#qrn').textContent='Test QR kod üçün çox uzundur. Linki göndər və ya sualların sayını azalt.'}
+  $('#out').scrollIntoView({behavior:'smooth'});
+};
+$('#cp').onclick=async()=>{try{await navigator.clipboard.writeText(lastLink);$('#cp').textContent='Kopyalandı'}catch(e){$('#cp').textContent='Linki əl ilə seç'}setTimeout(()=>$('#cp').textContent='Linki kopyala',2000)};
+$('#wa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(($('#mt').value.trim()||'Test')+'\n'+lastLink),'_blank');
+$('#try').onclick=()=>{location.href=lastLink;location.reload()};
+
+
+/* ---------- Word (.docx) ixracı ---------- */
+const crcT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=u=>{let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=crcT[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+function zip(files){
+  const te=new TextEncoder(),parts=[],cd=[];let off=0;
+  files.forEach(f=>{
+    const n=te.encode(f.n),len=f.d.length,crc=crc32(f.d);
+    const h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(12,0x21,true);
+    h.setUint32(14,crc,true);h.setUint32(18,len,true);h.setUint32(22,len,true);h.setUint16(26,n.length,true);
+    parts.push(new Uint8Array(h.buffer),n,f.d);
+    const c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(14,0x21,true);
+    c.setUint32(16,crc,true);c.setUint32(20,len,true);c.setUint32(24,len,true);c.setUint16(28,n.length,true);c.setUint32(42,off,true);
+    cd.push(new Uint8Array(c.buffer),n);
+    off+=30+n.length+len;
+  });
+  const cs=cd.reduce((s,x)=>s+x.length,0),e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+const xe=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const R=(t,o={})=>`<w:r><w:rPr>${o.b?'<w:b/>':''}${o.c?`<w:color w:val="${o.c}"/>`:''}<w:sz w:val="${o.s||24}"/></w:rPr><w:t xml:space="preserve">${xe(t).split('\n').join('</w:t><w:br/><w:t xml:space="preserve">')}</w:t></w:r>`;
+const P=(r,o={})=>`<w:p><w:pPr>${o.keep?'<w:keepNext/>':''}<w:spacing w:before="${o.bf||0}" w:after="${o.af??80}"/>${o.ind?`<w:ind w:left="${o.ind}"/>`:''}${o.jc?`<w:jc w:val="${o.jc}"/>`:''}</w:pPr>${r}</w:p>`;
+function imgPara(img,id){
+  const k=Math.min(1,5040000/(img.w*9525),2880000/(img.h*9525));
+  const cx=Math.round(img.w*9525*k),cy=Math.round(img.h*9525*k);
+  return `<w:p><w:pPr><w:keepNext/><w:spacing w:before="60" w:after="100"/></w:pPr><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${id}" name="Şəkil ${id}"/><wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${id}" name="img${id}.jpeg"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId${id}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>`;
+}
+const toBytes=d=>Uint8Array.from(atob(d.split(',')[1]),c=>c.charCodeAt(0));
+$('#dw').onclick=()=>{
+  const c=collect();if(!c)return;
+  const te=new TextEncoder(),media=[],rels=[];let body='',id=0;
+  body+=P(R(c.title,{b:1,s:36}),{af:60,jc:'center'});
+  body+=P(R((c.a?c.a+' · ':'')+c.out.length+' sual · keçid balı '+c.p+'%',{c:'555555',s:22}),{af:240,jc:'center'});
+  c.out.forEach(([q,opts],i)=>{
+    body+=P(R((i+1)+'. ',{b:1})+R(q,{b:1}),{bf:200,keep:1});
+    const im=c.imgs[i];
+    if(im){id++;media.push({n:'word/media/img'+id+'.jpeg',d:toBytes(im.d)});rels.push(`<Relationship Id="rId${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/img${id}.jpeg"/>`);body+=imgPara(im,id)}
+    opts.forEach((o,k)=>{body+=P(R(L[k]+') ')+R(o),{ind:360,keep:k<opts.length-1})});
+  });
+  body+='<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+  body+=P(R('Cavab açarı',{b:1,s:30}),{af:160});
+  body+=P(R(c.out.map(([,,k],i)=>(i+1)+'-'+L[k]).join('     ')));
+  c.out.forEach(([,,,x],i)=>{if(x)body+=P(R((i+1)+'. '+x,{s:20}),{ind:360})});
+  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  const files=[
+    {n:'[Content_Types].xml',d:te.encode(X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>')},
+    {n:'_rels/.rels',d:te.encode(X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdMain" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>')},
+    {n:'word/document.xml',d:te.encode(doc)},
+    {n:'word/_rels/document.xml.rels',d:te.encode(X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+rels.join('')+'</Relationships>')},
+    ...media
+  ];
+  const name=(c.title.replace(/[\\/:*?"<>|]+/g,'').trim()||'test')+'.docx';
+  const url=URL.createObjectURL(zip(files)),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+};
+
+$('#pr').onclick=()=>{
+  const c=collect();if(!c)return;
+  $('#pv').innerHTML=`<h1 style="text-align:center">${esc(c.title)}</h1><p style="text-align:center">${esc((c.a?c.a+' · ':'')+c.out.length+' sual · keçid balı '+c.p+'%')}</p>`+
+   c.out.map(([q,o],i)=>`<div style="break-inside:avoid;margin:14px 0"><b>${i+1}. ${esc(q)}</b>${c.imgs[i]?`<br><img src="${c.imgs[i].d}" style="max-width:60%;max-height:200px">`:''}${o.map((t,k)=>`<div style="margin-left:20px">${L[k]}) ${esc(t)}</div>`).join('')}</div>`).join('')+
+   `<div style="break-before:page"><h2>Cavab açarı</h2><p>${c.out.map(([,,k],i)=>(i+1)+'-'+L[k]).join(' &nbsp; ')}</p>${c.out.map(([,,,x],i)=>x?`<p>${i+1}. ${esc(x)}</p>`:'').join('')}</div>`;
+  window.print();
+};
+
+/* ---------- şagird: testi həll etmə ---------- */
+let tid,endT;
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function tick(){const l=Math.max(0,Math.round((endT-Date.now())/1000));$('#tm').textContent='⏱ '+Math.floor(l/60)+':'+String(l%60).padStart(2,'0');if(!l){clearInterval(tid);finish()}}
+function start(){
+  $('#maker').classList.add('hide');$('#taker').classList.remove('hide');
+  $('#ttl').textContent=test.t;
+  $('#sub').textContent=(test.a?test.a+' · ':'')+test.q.length+' sual · keçid balı '+test.p+'%';
+  if(test.s)test.q=shuf(test.q.map(([q,o,c,e])=>{const ix=shuf(o.map((_,k)=>k));return[q,ix.map(k=>o[k]),ix.indexOf(c),e]}));
+  cur=0;score=0;clearInterval(tid);$('#tm').textContent='';
+  if(test.m){endT=Date.now()+test.m*60000;tick();tid=setInterval(tick,1000)}
+  show();
+}
+function show(){
+  locked=false;
+  const [q,o]=test.q[cur];
+  $('#pb').style.width=(cur/test.q.length*100)+'%';
+  $('#tq').innerHTML=`<p class="hint">Sual ${cur+1} / ${test.q.length}</p><p style="font-size:18px;margin:4px 0 8px"><b>${esc(q)}</b></p>`+
+    o.map((t,k)=>`<button class="ans" data-k="${k}">${L[k]}. ${esc(t)}</button>`).join('')+'<div id="nx"></div>';
+}
+$('#tq').addEventListener('click',e=>{
+  const b=e.target.closest('.ans');
+  if(b&&!locked){
+    locked=true;const k=+b.dataset.k,c=test.q[cur][2];
+    if(k===c)score++;
+    document.querySelectorAll('.ans').forEach((x,i)=>{x.disabled=true;if(i===c)x.classList.add('ok');else if(i===k)x.classList.add('no')});
+    const ex=test.q[cur][3];$('#nx').innerHTML=(ex?`<p class="hint" style="font-size:14px;margin-top:10px">💡 ${esc(ex)}</p>`:'')+`<div class="acts"><button id="go">${cur+1<test.q.length?'Növbəti sual':'Nəticəni gör'}</button></div>`;
+  }
+  if(e.target.id==='go'){cur++;cur<test.q.length?show():finish()}
+  if(e.target.id==='again')start();
+});
+function finish(){clearInterval(tid);
+  $('#pb').style.width='100%';
+  const n=test.q.length,pc=Math.round(score/n*100),ok=pc>=test.p;
+  $('#tq').innerHTML=`<p class="hint">Nəticə</p><div class="big">${score} / ${n}</div>
+    <p style="color:${ok?'var(--ok)':'var(--no)'};font-weight:600">${pc}% · ${ok?'Keçdin':'Keçid balına çatmadın'} (tələb: ${test.p}%)</p>
+    <div class="acts"><button id="again">Yenidən həll et</button><button class="sec" onclick="location.href='testler/testler.html'">Digər testlər</button></div>`;
+}
+
+/* ---------- başlanğıc ---------- */
+(async()=>{
+  const h=location.hash.slice(1);
+  if(h){
+    try{const d=await dec(h);if(!d.q||!d.q.length)throw 0;test=d;start();return}
+    catch(e){$('#merr').textContent='Bu test linki düzgün deyil. Müəllimdən yenisini istə.'}
+  }
+  load();if(!qs.length){qs=[newQ()];drawQs()}
+})();
+</script>
+</body>
+</html>

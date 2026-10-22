@@ -182,7 +182,7 @@ const SITE_MENU = [
         url: "testler/testler.html",
         desc: "Sınaq və qiymətləndirmə testləri",
         items: [
-            { name: "Yeni test yarat", icon: "🞦", desc: "Yeni test yarat", url: "testler/yeni-test.html" },
+            { name: "Yeni test yarat", icon: "🞦", desc: "Yeni test yarat", url: "tetbiqler/test-hazirla.html" },
             { name: "Mövzu Qiymətləndirmə Testləri (MQT)", icon: "📗", desc: "Mövzu qiymətləndirmə testləri", url: "testler/testler.html" },
             { name: "Kiçik Summativ Qiymətləndirmə (KSQ)", icon: "📗", desc: "Kiçik summativ qiymətləndirmə", url: "testler/ksq.html" },
             { name: "Böyük Summativ Qiymətləndirmə (BSQ)", icon: "📗", desc: "Böyük summativ qiymətləndirmə", url: "testler/bsq.html" },

@@ -6,7 +6,7 @@
 <script>
 (function(){
     try{
-        var t = localStorage.getItem('geoatlas-theme');
+        var t = (localStorage.getItem('cografiya-theme')||localStorage.getItem('geoatlas-theme'));
         if(t === 'dark'){
             document.documentElement.setAttribute('data-theme','dark');
         }
@@ -14,7 +14,7 @@
 })();
 </script>
 
-<title>Coğrafiya.org | İnteraktiv Coğrafiya Platforması</title>
+<title>cografiya.org | İnteraktiv Coğrafiya Platforması</title>
 <link rel="icon" type="image/png" href="icon/favicon.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -67,7 +67,7 @@
     </h1>
 
     <p>
-        Coğrafiya.org — Coğrafiyanı Vizual Öyrənin. Tələbələr, müəllimlər
+        cografiya.org — Coğrafiyanı Vizual Öyrənin. Tələbələr, müəllimlər
         və coğrafiya həvəskarları üçün hazırlanmış
         geniş məlumat bazası. Ən son kartoqrafik verilənlər,
         interaktiv xəritələr və faydalı coğrafi resurslar burada.
@@ -169,7 +169,7 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            🌍 <strong>Coğrafiya.org</strong> — İnteraktiv Coğrafiya Platforması
+            🌍 <strong>cografiya.org</strong> — İnteraktiv Coğrafiya Platforması
         </div>
         <div class="footer-links">
             <a href="haqqimizda/haqqimizda.html">Haqqımızda</a>
@@ -177,8 +177,8 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; <span id="year"></span> GeoAtlas. Bütün hüquqlar qorunur.</p>
-        <p>Developed by <strong>H&T</strong></p>
+        <p>&copy; <span id="year"></span> cografiya.org. Bütün hüquqlar qorunur.</p>
+        <p>Developed by <strong>Həsən Həsənov</strong></p>
     </div>
 </footer>
 
@@ -203,7 +203,7 @@
 <script>
     // === SAYT STATİSTİKASI (Cloudflare Web Analytics vasitəçi Worker-dən) ===
     // AŞAĞIDAKI ÜNVANI ÖZ WORKER URL-nizlə əvəz edin, məsələn:
-    // "https://geoatlas-stats.SIZIN-SUBDOMAIN.workers.dev"
+    // "https://cografiya-stats.SIZIN-SUBDOMAIN.workers.dev"
     const STATS_WORKER_URL = "https://blue-tooth-d236.cografiya.workers.dev/";
     const STATS_DAYS = 30;
 

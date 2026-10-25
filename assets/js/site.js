@@ -28,11 +28,12 @@
        0) GECƏ / GÜNDÜZ REJİMİ
     --------------------------------------------------------- */
 
-    const THEME_KEY = "geoatlas-theme";
+    const THEME_KEY = "cografiya-theme";
+    const LEGACY_THEME_KEY = "geoatlas-theme"; /* köhnə açar — istifadəçilərin seçimi itməsin */
 
     function getStoredTheme() {
         try {
-            return localStorage.getItem(THEME_KEY);
+            return localStorage.getItem(THEME_KEY) || localStorage.getItem(LEGACY_THEME_KEY);
         } catch (e) {
             return null;
         }
@@ -682,7 +683,7 @@
 
         const sections = SITE_MENU.map(section => {
             if (section.id === "home") {
-                return `<div class="gm-sec"><a class="gm-link gm-home" href="${esc(BASE + section.url)}">🌍 GeoAtlas — ana səhifə</a></div>`;
+                return `<div class="gm-sec"><a class="gm-link gm-home" href="${esc(BASE + section.url)}">🌍 cografiya.org — ana səhifə</a></div>`;
             }
             const groups = getSectionGroups(section);
             if (!groups.length) {

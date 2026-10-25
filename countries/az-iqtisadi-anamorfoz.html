@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="az"><head><meta charset="utf-8"><title>Azərbaycanın iqtisadi rayonları: anamorfoz xəritə</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
-(function(){try{var t=localStorage.getItem('geoatlas-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
+(function(){try{var t=(localStorage.getItem('cografiya-theme')||localStorage.getItem('geoatlas-theme'));if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
 </script>
 <style>
 :root{--bg:#f4f6fa;--panel:#ffffff;--fg:#14203a;--mu:#5d6b86;--bd:#d5dbe6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -78,7 +78,7 @@ function show(i){svg.querySelectorAll('path').forEach(p=>p.classList.toggle('on'
 svg.addEventListener('click',e=>{if(e.target.dataset&&e.target.dataset.i!==undefined)show(+e.target.dataset.i)});
 svg.addEventListener('pointerover',e=>{if(e.pointerType==='mouse'&&e.target.dataset&&e.target.dataset.i!==undefined)show(+e.target.dataset.i)});
 sel.onchange=()=>go(+sel.value);draw(rings);go(0);sel.value=1;go(1);
-</script><!-- GeoAtlas ortaq menyu (kiçik üzən düymə) -->
+</script><!-- cografiya.org ortaq menyu (kiçik üzən düymə) -->
 <script>window.SITE_BASE="../";window.CURRENT_COUNTRY=null;window.SITE_MINI=true;</script>
 <script src="../assets/js/countries-data.js"></script>
 <script src="../assets/js/site.js"></script>

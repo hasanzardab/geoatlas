@@ -6,7 +6,7 @@
 <script>
 (function(){
     try{
-        var t = localStorage.getItem('geoatlas-theme');
+        var t = (localStorage.getItem('cografiya-theme')||localStorage.getItem('geoatlas-theme'));
         if(t === 'dark'){
             document.documentElement.setAttribute('data-theme','dark');
         }
@@ -14,8 +14,8 @@
 })();
 </script>
 
-<title>Haqqımızda | GeoAtlas</title>
-<meta name="description" content="GeoAtlas — statik, pulsuz və açıq mənbəli interaktiv coğrafiya platformasının məqsədi, dəyərləri və inkişaf yolu.">
+<title>Haqqımızda | cografiya.org</title>
+<meta name="description" content="cografiya.org — statik, pulsuz və açıq mənbəli interaktiv coğrafiya platformasının məqsədi, dəyərləri və inkişaf yolu.">
     <link rel="icon" type="image/png" href="../icon/favicon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -26,7 +26,7 @@
   <div class="logo">
         <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
         <div class="logo-text">
-            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">cografiya.org</a></strong>
             <span>Coğrafiya platforması</span>
         </div>
     </div>
@@ -69,7 +69,7 @@
     </h1>
 
     <p>
-        GeoAtlas — ölkələrin inzibati xəritələrini interaktiv şəkildə
+        cografiya.org — ölkələrin inzibati xəritələrini interaktiv şəkildə
         göstərən, tamamilə pulsuz və açıq mənbəli statik bir platformadır.
         Məqsədimiz sadədir: hər bir ərazi haqqında məlumatı bir kliklə
         əlçatan etmək.
@@ -85,7 +85,7 @@
         <h2>Hekayəmiz</h2>
 
         <p>
-            GeoAtlas Azərbaycanın inzibati xəritəsi ilə başladı — 77 rayon
+            cografiya.org Azərbaycanın inzibati xəritəsi ilə başladı — 77 rayon
             və şəhərin sərhədlərini, mərkəzlərini, sahəsini və əhalisini
             bir yerə toplayan sadə bir vizual layihə kimi. Fikir aydın idi:
             dərslikdə və ya axtarış motorunda dağınıq şəkildə yerləşən
@@ -102,7 +102,7 @@
         </p>
 
         <p>
-            Bu gün GeoAtlas Azərbaycanla məhdudlaşmır — məqsədimiz
+            Bu gün cografiya.org Azərbaycanla məhdudlaşmır — məqsədimiz
             tədricən qonşu və digər ölkələrin inzibati xəritələrini də
             eyni dərinlikdə əlavə edərək platformanı bölgənin ən geniş
             açıq coğrafiya resursuna çevirməkdir.
@@ -235,7 +235,7 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+            🌍 <strong>cografiya.org</strong> — İnteraktiv Coğrafiya Platforması
         </div>
         <div class="footer-links">
             <a href="haqqimizda.html">Haqqımızda</a>

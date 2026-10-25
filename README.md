@@ -1,4 +1,4 @@
-# GeoAtlas — İnteraktiv Coğrafiya Platforması
+# cografiya.org — İnteraktiv Coğrafiya Platforması
 
 Bu, ölkələrin inzibati xəritələrini interaktiv şəkildə göstərən statik saytdır.
 Sadəcə HTML/CSS/JS ilə qurulub — server tələb etmir, birbaşa **GitHub Pages**
@@ -7,7 +7,7 @@ Sadəcə HTML/CSS/JS ilə qurulub — server tələb etmir, birbaşa **GitHub Pa
 ## 📁 Qovluq strukturu
 
 ```
-geoatlas-site/
+cografiya-site/
 ├── index.html                        → Ana səhifə (ölkə siyahısı və axtarış)
 ├── README.md                         → Bu fayl
 ├── countries/

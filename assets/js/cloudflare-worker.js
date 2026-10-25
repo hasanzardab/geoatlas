@@ -1,5 +1,5 @@
 /**
- * GeoAtlas — Sayt Statistikası Worker
+ * cografiya.org — Sayt Statistikası Worker
  * ================================================================
  * Bu Worker sizin Cloudflare Web Analytics (RUM) məlumatınızı
  * GraphQL Analytics API vasitəsilə çəkir və saytınıza JSON kimi

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
-(function(){try{var t=localStorage.getItem('geoatlas-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
+(function(){try{var t=(localStorage.getItem('cografiya-theme')||localStorage.getItem('geoatlas-theme'));if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
 </script>
 <title>3D Günəş Sistemi</title>
 <style>
@@ -387,7 +387,7 @@ function animate(now) {
 }
 requestAnimationFrame(animate);
 </script>
-<!-- GeoAtlas ortaq menyu (kiçik üzən düymə) -->
+<!-- cografiya.org ortaq menyu (kiçik üzən düymə) -->
 <script>window.SITE_BASE="../";window.CURRENT_COUNTRY=null;window.SITE_MINI=true;</script>
 <script src="../assets/js/countries-data.js"></script>
 <script src="../assets/js/site.js"></script>

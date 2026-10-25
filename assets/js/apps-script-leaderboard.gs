@@ -1,6 +1,6 @@
 /**
  * ============================================================
- * GeoAtlas — MİQ nəticələri üçün Google Apps Script Web App
+ * cografiya.org — MİQ nəticələri üçün Google Apps Script Web App
  * ============================================================
  *
  * NƏ ÜÇÜNDÜR?

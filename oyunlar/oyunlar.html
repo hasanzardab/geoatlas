@@ -6,7 +6,7 @@
 <script>
 (function(){
     try{
-        var t = localStorage.getItem('geoatlas-theme');
+        var t = (localStorage.getItem('cografiya-theme')||localStorage.getItem('geoatlas-theme'));
         if(t === 'dark'){
             document.documentElement.setAttribute('data-theme','dark');
         }
@@ -14,7 +14,7 @@
 })();
 </script>
 
-<title>İnteraktiv Oyunlar | Coğrafiya Bilik Yoxlaması | GeoAtlas</title>
+<title>İnteraktiv Oyunlar | Coğrafiya Bilik Yoxlaması | cografiya.org</title>
 <meta name="description" content="Azərbaycan coğrafiyası üzrə quiz, fırlanan çarx və xəritə tapmacası formatında interaktiv oyunlar — əylənərək öyrən, biliyini sına.">
     <link rel="icon" type="image/png" href="../icon/favicon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
@@ -26,7 +26,7 @@
    <div class="logo">
         <div class="logo-icon"><a href="../index.html" style="color: inherit; text-decoration: none;">🌍</a  ></div>
         <div class="logo-text">
-            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">GeoAtlas</a></strong>
+            <strong><a href="../index.html" style="color: inherit; text-decoration: none;">cografiya.org</a></strong>
             <span>Coğrafiya platforması</span>
         </div>
     </div>
@@ -290,7 +290,7 @@
        <div class="info-block-item">
             <strong>📚 Sual bankı haradandır?</strong>
             <p>
-                Suallar GeoAtlas-ın Azərbaycan xəritəsindəki 77 inzibati
+                Suallar cografiya.org-un Azərbaycan xəritəsindəki 77 inzibati
                 ərazi üzrə real coğrafi məlumatlar (mərkəz, sahə, əhali,
                 təbii xüsusiyyətlər) əsasında tərtib olunub.
             </p>
@@ -312,7 +312,7 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            🌍 <strong>GeoAtlas</strong> — İnteraktiv Coğrafiya Platforması
+            🌍 <strong>cografiya.org</strong> — İnteraktiv Coğrafiya Platforması
         </div>
         <div class="footer-links">
             <a href="../haqqimizda/haqqimizda.html">Haqqımızda</a>
